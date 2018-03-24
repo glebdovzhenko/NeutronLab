@@ -1,0 +1,7 @@
+celery
+numpy
+bokeh
+redis
+scipy
+matplotlib
+pillow

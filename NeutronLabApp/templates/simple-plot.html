@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table style="width:100%">
+    <tr>
+        <td>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+            <p>
+                {{ form.xs.label }}
+                {{ form.xs(size=32) }}
+            </p>
+            <p>{{ form.submit() }}</p>
+            </form>
+        </td>
+        <td>
+            {{ script|safe }}
+            {{ div|safe }}
+        </td>
+    </tr>
+    </table>
+{% endblock %}

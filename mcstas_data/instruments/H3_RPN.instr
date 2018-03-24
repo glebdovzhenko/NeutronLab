@@ -1,0 +1,310 @@
+/*******************************************************************************
+*         McStas instrument definition URL=http://www.mcstas.org
+*
+* Instrument: test (rename also the example and DEFINE lines below)
+*
+* %Identification
+* Written by: Peter Konik
+* Edited by: Konstantin Pavlov
+* Date: 13.01.2018
+* Origin: Your institution
+* Release: McStas CVS-080208
+* Version: 0.2
+* %INSTRUMENT_SITE: Templates (replace with Institution_name_as_a_single_word)
+*
+* Instrument short description
+* Cold reflectometer model adapted for school teaching lab
+* %Description
+* Instrument longer description (type, elements, usage...)
+*
+* Example: mcrun test.instr <parameters=values>
+*
+* %Parameters
+* Par1: [unit] Parameter1 description
+*
+* %Link
+* A reference/HTML link for more information
+*
+* %End
+*******************************************************************************/
+
+DEFINE INSTRUMENT RPN (monok_lambda = 5.2, scat_angle = 0)
+
+DECLARE
+%{
+
+//source parameters
+double source_width = 0.03, source_height = 0.15;
+double source_intensity = 1.6e13; //this is in 4PI, need to be divided
+double source_temp = 30;
+double lambda_min, lambda_max, cat_angle;
+
+//collimator parameters
+double source_coll_dist = 1.042;
+double guide_width = 0.015, guide_height = 0.12;
+double coll_length = 1.005;
+double coll_length_uncoated = 0.305, coll_length_coated;
+double m_left_right = 2, m_top_bottom = 2;
+double wavy = 0.182, R0 = 0.995, Rm2 = 0.93, slope, shutter_length = 0.2;
+
+//bender parameters
+double bender_guide_gap = 0.3, guide_before_length = 4.0, bender_length = 1.5, bender_chan_num = 3;
+double source_bender_dist;
+double bender_wall_thick = 0.0004;
+double bender_rot = 0.0252;
+int bender_piece_num = 6, guide_before_piece_num = 4;//number of bender pieces
+double m_overall = 1, bender_m_left = 2, bender_m_right = 2;
+
+//guide parameters
+double guide_length = 8;
+double final_height = 0.05, focusator_m = 2.5;
+
+double monok_d = 3.355, monok_angle, monok_mos = 30, monok_rad = 0, mon_samp_dist = 4.8;
+
+%}
+
+INITIALIZE
+%{
+lambda_min = 0.985*monok_lambda;
+lambda_max = 1.015*monok_lambda;
+
+cat_angle = 0.00173*lambda_min*2.0*RAD2DEG;
+wavy = wavy*1e-3*sqrt(8*log(2))*RAD2DEG; //translate mrad to rad and then to degs
+slope = (1 - Rm2/R0)/0.0218; //slope calculation from reflectivity values
+
+source_intensity = source_intensity/4/PI; //normilize source intensity in 1 sr
+
+coll_length_coated = coll_length - coll_length_uncoated;
+
+source_bender_dist = source_coll_dist + coll_length + shutter_length;
+bender_length = bender_length/bender_piece_num; //now bender length is one piece length
+bender_rot = bender_rot*RAD2DEG/bender_piece_num; //now bender piece rotation
+
+monok_angle = asin(monok_lambda/2.0/monok_d)*RAD2DEG;
+%}
+
+TRACE
+
+COMPONENT Origin = Progress_bar()
+  AT (0,0,0) ABSOLUTE
+
+//Source
+
+COMPONENT Source = Source_gen(
+    xwidth = source_width, yheight = source_height, dist = source_coll_dist,
+    focus_xw = guide_width, focus_yh = guide_height,
+    I1 = source_intensity, T1 = source_temp,
+    Lmin = lambda_min, Lmax = lambda_max,
+    focus_aw = cat_angle, focus_ah = cat_angle)
+  AT (0, 0, 0) RELATIVE Origin
+
+//Channel collimator
+
+COMPONENT Collimator_uncoated = Guide_gravity(
+    w1 = guide_width, h1 = guide_height, l = coll_length_uncoated, m = 0)
+  AT (0, 0, source_coll_dist) RELATIVE Origin
+  ROTATED (0, 0, 0) RELATIVE Origin
+
+COMPONENT Collimator_coated = Guide_gravity(
+    w1 = guide_width, h1 = guide_height, l = coll_length_coated, mleft = m_left_right, mright = m_left_right, mtop = m_top_bottom, mbottom = m_top_bottom, wavy = wavy, R0 = R0, alpha = slope)
+  AT (0, 0, coll_length_uncoated) RELATIVE PREVIOUS
+
+//Shutter 200mm
+
+//Bender
+
+COMPONENT Bender_Arm_0 = Arm(
+    )
+  AT (0, 0, source_bender_dist) RELATIVE Origin
+
+COMPONENT Guide_before = Guide_gravity(
+    w1 = guide_width, h1 = guide_height, l = guide_before_length, mleft = m_left_right, mright = m_left_right, mtop = m_top_bottom, mbottom = m_top_bottom, wavy = wavy, R0 = R0, alpha = slope)
+  AT (0, 0, 0) RELATIVE Bender_Arm_0
+  ROTATED (0, 0, 0) RELATIVE Bender_Arm_0
+
+COMPONENT Bender_Arm_1 = Arm(
+    )
+  AT (0, 0, guide_before_length) RELATIVE Bender_Arm_0
+  ROTATED (0, bender_rot, 0) RELATIVE Bender_Arm_0
+
+COMPONENT Bender = Guide_gravity(
+    w1 = guide_width, h1 = guide_height, l = bender_length, mleft = bender_m_left, mright = bender_m_right, mtop = m_top_bottom, mbottom = m_top_bottom, nslit = bender_chan_num, d = bender_wall_thick, wavy = wavy, R0 = R0, alpha = slope)
+  AT (0, 0, 0) RELATIVE Bender_Arm_1
+  ROTATED (0, 0, 0) RELATIVE Bender_Arm_1
+
+COMPONENT Bender_Arm_2 = Arm(
+    )
+  AT (0, 0, bender_length) RELATIVE Bender_Arm_1
+  ROTATED (0, bender_rot, 0) RELATIVE Bender_Arm_1
+
+COMPONENT COPY(Bender) = COPY(Bender)()
+  AT (0, 0, 0) RELATIVE Bender_Arm_2
+  ROTATED (0, 0, 0) RELATIVE Bender_Arm_2
+
+COMPONENT Bender_Arm_3 = Arm(
+    )
+  AT (0, 0, bender_length) RELATIVE Bender_Arm_2
+  ROTATED (0, bender_rot, 0) RELATIVE Bender_Arm_2
+
+COMPONENT COPY(Bender) = COPY(Bender)()
+  AT (0, 0, 0) RELATIVE Bender_Arm_3
+  ROTATED (0, 0, 0) RELATIVE Bender_Arm_3
+
+COMPONENT Bender_Arm_4 = Arm(
+    )
+  AT (0, 0, bender_length) RELATIVE Bender_Arm_3
+  ROTATED (0, bender_rot, 0) RELATIVE Bender_Arm_3
+
+COMPONENT COPY(Bender) = COPY(Bender)()
+  AT (0, 0, 0) RELATIVE Bender_Arm_4
+  ROTATED (0, 0, 0) RELATIVE Bender_Arm_4
+
+COMPONENT Bender_Arm_5 = Arm(
+    )
+  AT (0, 0, bender_length) RELATIVE Bender_Arm_4
+  ROTATED (0, bender_rot, 0) RELATIVE Bender_Arm_4
+
+COMPONENT COPY(Bender) = COPY(Bender)()
+  AT (0, 0, 0) RELATIVE Bender_Arm_5
+  ROTATED (0, 0, 0) RELATIVE Bender_Arm_5
+
+COMPONENT Bender_Arm_6 = Arm(
+    )
+  AT (0, 0, bender_length) RELATIVE Bender_Arm_5
+  ROTATED (0, bender_rot, 0) RELATIVE Bender_Arm_5
+
+COMPONENT COPY(Bender) = COPY(Bender)()
+  AT (0, 0, 0) RELATIVE Bender_Arm_6
+  ROTATED (0, 0, 0) RELATIVE Bender_Arm_6
+
+COMPONENT Gap_Arm = Arm(
+    )
+  AT (0, 0, bender_length) RELATIVE Bender_Arm_6
+
+
+//Gap 300mm
+
+//Guide
+
+COMPONENT Guide_Arm_1 = Arm(
+    )
+  AT (0, 0, bender_guide_gap) RELATIVE Gap_Arm
+
+COMPONENT Guide_1 = Guide_gravity(
+    w1 = guide_width, h1 = guide_height, l = guide_length, m = m_overall, wavy = wavy, R0 = R0, alpha = slope)
+  AT (0, 0, 0) RELATIVE Guide_Arm_1
+  ROTATED (0, 0, 0) RELATIVE Guide_Arm_1
+
+ COMPONENT Monok_Arm = Arm(
+     )
+   AT (0, 0, guide_length + 0.03) RELATIVE Guide_Arm_1
+ 
+ 
+ SPLIT COMPONENT Monok = Monochromator_curved(
+     zwidth = 0.03, yheight = 0.01, NH = 1, NV = 20,
+     RV = monok_rad, mosaic = monok_mos, DM = monok_d, verbose = 1)
+   AT (0, 0, 0) RELATIVE Monok_Arm
+   ROTATED (0, monok_angle, 0) RELATIVE Monok_Arm
+
+ COMPONENT Monok_Arm_2 = Arm(
+     )
+   AT (0, 0, 0) RELATIVE Monok_Arm
+   ROTATED (0, 2*monok_angle, 0) RELATIVE Monok_Arm
+ 
+ 
+ COMPONENT Monok_mon = Monitor_nD(
+     options = "x y", xwidth = 0.01,
+     yheight = 0.2, bins = 100, restore_neutron = 1)
+   AT (0, 0, 0.0095) RELATIVE Monok_Arm_2
+ 
+ 
+ COMPONENT Guide_after = Guide_gravity(
+     w1 = guide_width, h1 = guide_height, h2 = final_height, l = 4.3, m = focusator_m, R0 = R0, alpha = slope)
+   AT (0, 0, 0.1) RELATIVE Monok_Arm_2
+ 
+
+COMPONENT Sample_Arm = Arm(
+    )
+  AT (0, 0, mon_samp_dist) RELATIVE Monok_Arm_2
+
+/*
+SPLIT COMPONENT Sample = Multilayer_Sample(
+    xwidth = 0.2, zlength = 0.2,
+    nlayer=1,sldPar={0.0,2.0e-6,0.0e-6},dPar={20.0},
+    sigmaPar={5.0,5.0}, frac_inc=0, ythick=0, mu_inc=5.62, target_index=0, focus_xw=0, focus_yh=0)
+  AT (0,0,0) RELATIVE Sample_Arm
+  ROTATED (0, scat_angle, 90) RELATIVE Sample_Arm
+EXTEND
+%{
+     if (!SCATTERED) ABSORB;
+%}
+*/
+
+
+COMPONENT Dia_sample = Slit(
+    xwidth = 0.015, yheight = 0.12)
+  AT (0, 0, -0.11) RELATIVE Sample_Arm
+
+COMPONENT Sample = Mirror(
+    xwidth = 0.2, yheight = 0.2, R0 = R0, Qc = 0.0219,
+    alpha = 6.07, m = 6.0, W = 0.003, transmit = 0)
+  AT (0, 0, 0) RELATIVE Sample_Arm
+  ROTATED (0, scat_angle, 0) RELATIVE Sample_Arm
+
+
+COMPONENT Beanstop = Beamstop(
+    xwidth = 0.02, yheight = 0.2)
+  AT (0, 0, 0.4) RELATIVE Sample_Arm
+
+COMPONENT Det_Arm = Arm(
+    )
+  AT (0, 0, 0) RELATIVE Sample_Arm
+  ROTATED (0, 2.0*scat_angle, 0) RELATIVE Sample_Arm
+
+COMPONENT Dia_exit = Slit(
+    xwidth = 0.015, yheight = 0.12)
+  AT (0, 0, 0.11) RELATIVE Det_Arm
+
+COMPONENT Detector = Monitor_nD(
+    xwidth = 0.1, yheight = 0.2, restore_neutron = 1,
+    options = "x limits=[-0.05 0.05] bins = 100 y limits=[-0.1 0.1] bins=200",
+    filename = "Detector.xy")
+  AT (0, 0, 0.5) RELATIVE Det_Arm
+
+
+/*
+ COMPONENT Sample = Monitor_nD(
+     options = "x y", xwidth = 0.01,
+     yheight = 0.01, bins = 100, restore_neutron = 1)
+   AT (0, 0, mon_samp_dist) RELATIVE Monok_Arm_2
+ 
+ COMPONENT Sample_big = Monitor_nD(
+     options = "x y", xwidth = 0.01,
+     yheight = 0.2, bins = 100, restore_neutron = 1)
+   AT (0, 0, mon_samp_dist) RELATIVE Monok_Arm_2
+ 
+ COMPONENT Sample_very_big = Monitor_nD(
+     options = "x y", xwidth = 0.01,
+     yheight = 1, bins = 100, restore_neutron = 1)
+   AT (0, 0, mon_samp_dist) RELATIVE Monok_Arm_2
+*/
+
+FINALLY
+%{
+%}
+
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+

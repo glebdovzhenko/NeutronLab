@@ -27,11 +27,11 @@ app_config = {
     'MPI nodes': '8', 'Figure size X': ' 12', 'Figure size Y': ' 7'
 }
 
+pinhole_sans_app = TLabApp(name='Pinhole SANS',
+                           env_config=app_config,
+                           instr_params=instrument_params,
+                           gui=True, dummy=True)
 
 if __name__ == '__main__':
-    app = TLabApp(name='Pinhole SANS',
-                  env_config=app_config,
-                  instr_params=instrument_params,
-                  gui=True, dummy=False)
-    app.run()
+    pinhole_sans_app.run()
 

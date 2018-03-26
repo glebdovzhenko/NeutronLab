@@ -18,7 +18,7 @@ class TLabApp:
         self.configuration.update(env_config)
         self.instr_params = instr_params
         self.gui = gui
-        self.dummy = dummy
+        self.dummy = True
 
         # initialising variables for storing plotted data
         self.configuration['Simulation Data Directory'] = os.path.join(self.configuration['Simulation Data Directory'],
@@ -28,6 +28,8 @@ class TLabApp:
                                   ycolumn=self.configuration['1D detector y'],
                                   yerrcolumn=self.configuration['1D detector yerr'])
         self.result2d = McArray()
+        self.update_sim_results()
+        self.dummy = dummy
 
         if not gui:
             return
@@ -65,6 +67,14 @@ class TLabApp:
 
         self.figure.canvas.mpl_connect('button_press_event', self.on_mouse_event)
         self.figure.canvas.mpl_connect('key_press_event', self.on_key_press_event)
+
+    def update_instr_param(self, sim_name, new_val):
+        for p in self.instr_params:
+            if p.sim_name == sim_name:
+                p.update(new_val)
+                return
+        else:
+            raise ValueError('No parameter %s' % str(sim_name))
 
     def on_btn_log(self, *args):
         self.log_scale = not self.log_scale
@@ -184,6 +194,7 @@ class TLabApp:
         if self.gui:
             plt.show()
         else:
-            self.simulate()
+            if not self.dummy:
+                self.simulate()
             self.update_sim_results()
         self._cleanup()

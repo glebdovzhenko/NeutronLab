@@ -1,6 +1,8 @@
 import numpy as np
 import random
 import time
+from PIL import Image
+from matplotlib import cm
 
 from bokeh.plotting import figure
 from bokeh.embed import components
@@ -11,6 +13,12 @@ from flask import render_template, url_for, jsonify
 from NeutronLabApp.forms import SimplePlotForm, PinholeSANSForm
 from NeutronLabApp import celery
 from NeutronLabApp import app
+
+from executables.pinhole_sans import pinhole_sans_app
+
+
+pinhole_sans_app.gui = False
+pinhole_sans_app.dummy = True
 
 
 @app.route('/')
@@ -119,8 +127,55 @@ def taskstatus(task_id):
 @app.route('/pinhole-sans', methods=['GET', 'POST'])
 def pinhole_sans():
     form = PinholeSANSForm()
-    if form.validate_on_submit():
-        for k in form.data.keys():
-            print(k, form.data[k])
 
-    return render_template("pinhole-sans.html", form=form)
+    if form.validate_on_submit():
+        pinhole_sans_app.dummy = False
+        for k in filter(lambda x: x not in ('submit', 'csrf_token'), form.data.keys()):
+            pinhole_sans_app.update_instr_param(k, form.data[k])
+        pinhole_sans_app.run()
+
+    panels = []
+
+    img = np.array(pinhole_sans_app.result2d.data)
+    img /= img.max()
+    img = Image.fromarray(np.uint8(cm.plasma(img) * 255))
+    fig = figure(title=pinhole_sans_app.result2d.title, x_range=pinhole_sans_app.result2d.extent[0:2],
+                 y_range=pinhole_sans_app.result2d.extent[2:], x_axis_label=pinhole_sans_app.result2d.xlabel,
+                 y_axis_label=pinhole_sans_app.result2d.ylabel)
+    fig.image_rgba(image=[np.array(img)], x=pinhole_sans_app.result2d.extent[0],
+                   y=pinhole_sans_app.result2d.extent[2],
+                   dw=pinhole_sans_app.result2d.extent[1] - pinhole_sans_app.result2d.extent[0],
+                   dh=pinhole_sans_app.result2d.extent[3] - pinhole_sans_app.result2d.extent[2])
+    panels.append(Panel(child=fig, title='2D linear'))
+
+    img = np.array(pinhole_sans_app.result2d.data)
+    img /= img[img > 0].min()
+    img = np.log(img)
+    img[np.isnan(img)] = 0.
+    img /= img.max()
+    img = Image.fromarray(np.uint8(cm.plasma(img) * 255))
+    fig = figure(title=pinhole_sans_app.result2d.title, x_range=pinhole_sans_app.result2d.extent[0:2],
+                 y_range=pinhole_sans_app.result2d.extent[2:], x_axis_label=pinhole_sans_app.result2d.xlabel,
+                 y_axis_label=pinhole_sans_app.result2d.ylabel)
+    fig.image_rgba(image=[np.array(img)], x=pinhole_sans_app.result2d.extent[0],
+                   y=pinhole_sans_app.result2d.extent[2],
+                   dw=pinhole_sans_app.result2d.extent[1] - pinhole_sans_app.result2d.extent[0],
+                   dh=pinhole_sans_app.result2d.extent[3] - pinhole_sans_app.result2d.extent[2])
+    panels.append(Panel(child=fig, title='2D log'))
+
+    for axis_type in ["linear", "log"]:
+        fig = figure(title=pinhole_sans_app.result1d.title, x_axis_label=pinhole_sans_app.result1d.xlabel,
+                     y_axis_label=pinhole_sans_app.result1d.ylabel, y_axis_type=axis_type)
+        fig.line(pinhole_sans_app.result1d.xdata, pinhole_sans_app.result1d.ydata, line_width=2)
+        panel = Panel(child=fig, title="1D " + axis_type)
+        panels.append(panel)
+
+    tabs = Tabs(tabs=panels)
+    script, div = components(tabs)
+
+    return render_template(
+        "pinhole-sans.html",
+        form=form,
+        script=script,
+        div=div
+    )

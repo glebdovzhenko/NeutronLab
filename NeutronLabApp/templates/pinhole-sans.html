@@ -1,42 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <h1>Pinhole SANS (test)</h1>
     <table style="width:100%">
     <tr>
         <td>
             <form action="" method="post">
                 {{ form.hidden_tag() }}
             <p>
-                {{ form.wl.label }}
-                {{ form.wl(size=32) }}
+                {{ form.Lambda.label }}
+                {{ form.Lambda(size=32) }}
             </p>
             <p>
-                {{ form.wl_std.label }}
-                {{ form.wl_std(size=32) }}
+                {{ form.DLambda.label }}
+                {{ form.DLambda(size=32) }}
             </p>
             <p>
-                {{ form.d1.label }}
-                {{ form.d1(size=32) }}
+                {{ form.DistSrcPin1.label }}
+                {{ form.DistSrcPin1(size=32) }}
             </p>
             <p>
-                {{ form.d2.label }}
-                {{ form.d2(size=32) }}
+                {{ form.DistSrcPin2.label }}
+                {{ form.DistSrcPin2(size=32) }}
             </p>
             <p>
-                {{ form.d3.label }}
-                {{ form.d3(size=32) }}
+                {{ form.DistPinSamp.label }}
+                {{ form.DistPinSamp(size=32) }}
             </p>
             <p>
-                {{ form.d4.label }}
-                {{ form.d4(size=32) }}
+                {{ form.DistSampDet.label }}
+                {{ form.DistSampDet(size=32) }}
             </p>
             <p>
-                {{ form.r.label }}
-                {{ form.r(size=32) }}
+                {{ form.DetRadius.label }}
+                {{ form.DetRadius(size=32) }}
             </p>
             <p>
-                {{ form.n.label }}
-                {{ form.n(size=32) }}
+                {{ form.n_count.label }}
+                {{ form.n_count(size=32) }}
             </p>
             <p>{{ form.submit() }}</p>
             </form>
@@ -47,4 +48,63 @@
         </td>
     </tr>
     </table>
+    <button id="start-bg-job">Start Long Calculation</button><br><br>
+
+<div id="progress"></div>
+
+<script>
+    function start_long_task() {
+        // add task status elements
+        div = $('<div class="progress"><div></div><div>0%</div><div>...</div><div>&nbsp;</div></div><hr>');
+        $('#progress').append(div);
+
+        // create a progress bar
+        var nanobar = new Nanobar({
+            bg: '#44f',
+            target: div[0].childNodes[0]
+        });
+
+        // send ajax POST request to start background job
+        $.ajax({
+            type: 'POST',
+            url: '/longtask',
+            success: function(data, status, request) {
+                status_url = request.getResponseHeader('Location');
+                update_progress(status_url, nanobar, div[0]);
+            },
+            error: function() {
+                alert('Unexpected error');
+            }
+        });
+    }
+    function update_progress(status_url, nanobar, status_div) {
+        // send GET request to status URL
+        $.getJSON(status_url, function(data) {
+            // update UI
+            percent = parseInt(data['current'] * 100 / data['total']);
+            nanobar.go(percent);
+            $(status_div.childNodes[1]).text(percent + '%');
+            $(status_div.childNodes[2]).text(data['status']);
+            if (data['state'] != 'PENDING' && data['state'] != 'PROGRESS') {
+                if ('result' in data) {
+                    // show result
+                    $(status_div.childNodes[3]).text('Result: ' + data['result']);
+                }
+                else {
+                    // something unexpected happened
+                    $(status_div.childNodes[3]).text('Result: ' + data['state']);
+                }
+            }
+            else {
+                // rerun in 2 seconds
+                setTimeout(function() {
+                    update_progress(status_url, nanobar, status_div);
+                }, 2000);
+            }
+        });
+    }
+    $(function() {
+        $('#start-bg-job').click(start_long_task);
+    });
+</script>
 {% endblock %}

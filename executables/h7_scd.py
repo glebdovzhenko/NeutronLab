@@ -21,19 +21,19 @@ app_config = {
     'Backup Data Directory': os.path.join(config.results_path, 'h7_scd'),
     '2D detector file name': 'psd.dat',
     'instrument scheme': os.path.join(config.img_path, 'h7_scd_scheme.tiff'),
-    'Figure size X': ' 12', 'Figure size Y': ' 7'
+    'Figure size X': 12, 'Figure size Y': 7
 }
 
 if platform.system() == 'Darwin':
     app_config.update({
         'Mcrun executable path': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/bin',
         'Mcstas PYTHONHOME': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/miniconda3',
-        'MPI nodes': '8'
+        'MPI nodes': 8
     })
 elif platform.system() == 'Linux':
     app_config.update({
         'Mcrun executable path': '/usr/share/mcstas/2.4.1/bin',
-        'MPI nodes': '4'
+        'MPI nodes': 4
     })
 
 if __name__ == '__main__':

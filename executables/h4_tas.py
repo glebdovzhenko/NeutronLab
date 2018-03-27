@@ -21,19 +21,19 @@ app_config = {
     '1D detector file name': 'mccode.dat', '1D detector x': 'an_angle',
     '1D detector y': 'befanL_I', '1D detector yerr': 'befanL_ERR',
     'instrument scheme': os.path.join(config.img_path, 'h4_tas_scheme.tiff'),
-    'Figure size X': ' 12', 'Figure size Y': ' 7'
+    'Figure size X': 12, 'Figure size Y': 7
 }
 
 if platform.system() == 'Darwin':
     app_config.update({
         'Mcrun executable path': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/bin',
         'Mcstas PYTHONHOME': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/miniconda3',
-        'MPI nodes': '8'
+        'MPI nodes': 8
     })
 elif platform.system() == 'Linux':
     app_config.update({
         'Mcrun executable path': '/usr/share/mcstas/2.4.1/bin',
-        'MPI nodes': '4'
+        'MPI nodes': 4
     })
 
 if __name__ == '__main__':

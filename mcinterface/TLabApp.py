@@ -5,10 +5,12 @@ from matplotlib.widgets import Button, TextBox
 import numpy as np
 from PIL import Image
 import os
-import subprocess
+from subprocess import Popen, PIPE, run
 import shutil
 import random
 import string
+import time
+import re
 
 
 class TLabApp:
@@ -38,8 +40,8 @@ class TLabApp:
         self.accept_coordinates = False
 
         # setting up GUI window
-        self.figure = plt.figure(name, figsize=(int(self.configuration['Figure size X']),
-                                                int(self.configuration['Figure size Y'])))
+        self.figure = plt.figure(name, figsize=(self.configuration['Figure size X'],
+                                                self.configuration['Figure size Y']))
 
         # plotting the instrument scheme
         self.figure.add_axes([0.05, 0.0, 0.9, 0.25]).imshow(Image.open(self.configuration['instrument scheme']))
@@ -166,7 +168,7 @@ class TLabApp:
         s_count = [x for x in self.instr_params if x.sim_name == 'N_count']
         model_params = [x for x in self.instr_params if ((x.sim_name != 'n_count') and (x.sim_name != 'N_count'))]
 
-        exec_params = '-c --mpi=%s %s -d %s -n %d' % (self.configuration['MPI nodes'],
+        exec_params = '-c --mpi=%d %s -d %s -n %d' % (self.configuration['MPI nodes'],
                                                       self.configuration['Instr filename'],
                                                       'sim',
                                                       int(*p_count))
@@ -184,8 +186,21 @@ class TLabApp:
         self._cleanup()
         os.mkdir(self.configuration['Simulation Data Directory'])
 
-        subprocess.run([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params], env=env,
-                       cwd=self.configuration['Simulation Data Directory'])
+        # run([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params], env=env,
+        #     cwd=self.configuration['Simulation Data Directory'])
+        # # Trace ETA 1.06667 [min] % 17
+        # # Trace ETA 1.72028 [h] % 0
+
+        with Popen([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params], env=env,
+                   cwd=self.configuration['Simulation Data Directory'], stdout=PIPE) as process:
+            while True:
+                line = process.stdout.readline()
+                if not line and not process.poll():
+                    break
+                elif line:
+                    print('#', line.decode())
+                else:
+                    time.sleep(1)
 
     def _cleanup(self):
         shutil.rmtree(self.configuration['Simulation Data Directory'], ignore_errors=True)

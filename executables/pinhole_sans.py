@@ -24,13 +24,13 @@ app_config = {
     'Mcrun executable path': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/bin',
     'Mcstas PYTHONHOME': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/miniconda3',
     'instrument scheme': os.path.join(config.img_path, '00_pinhole_SANS.tiff'),
-    'MPI nodes': '8', 'Figure size X': ' 12', 'Figure size Y': ' 7'
+    'MPI nodes': 8, 'Figure size X': 12, 'Figure size Y': 7
 }
 
 pinhole_sans_app = TLabApp(name='Pinhole SANS',
                            env_config=app_config,
                            instr_params=instrument_params,
-                           gui=True, dummy=True)
+                           gui=True, dummy=False)
 
 if __name__ == '__main__':
     pinhole_sans_app.run()

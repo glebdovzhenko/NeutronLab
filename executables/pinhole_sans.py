@@ -13,7 +13,7 @@ instrument_params = (
     GUIParameter('2nd slit to sample [m]', 'DistPinSamp', float, 1),
     GUIParameter('Sample to detector [m]', 'DistSampDet', float, 10),
     GUIParameter('Detector radius [m]', 'DetRadius', float, 4),
-    GUIParameter('Neutron count [n]', 'n_count', int, 1E7),
+    GUIParameter('Neutron count [n]', 'n_count', int, 1E8),
 )
 
 app_config = {

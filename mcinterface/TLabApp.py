@@ -192,15 +192,28 @@ class TLabApp:
         # # Trace ETA 1.72028 [h] % 0
 
         with Popen([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params], env=env,
-                   cwd=self.configuration['Simulation Data Directory'], stdout=PIPE) as process:
+                   cwd=self.configuration['Simulation Data Directory'], stdout=PIPE, stderr=PIPE) as process:
+            expr = re.compile(r'Trace ETA (?P<mes>[\d.]+) \[(?P<scale>min|s|h)\]')
+            eta = []
             while True:
                 line = process.stdout.readline()
                 if not line and not process.poll():
                     break
                 elif line:
-                    print('#', line.decode())
+                    m = expr.match(line.decode())
+                    if m:
+                        if m.group('scale') == 's':
+                            eta.append(float(m.group('mes')))
+                        elif m.group('scale') == 'min':
+                            eta.append(float(m.group('mes')) * 60.)
+                        elif m.group('scale') == 'h':
+                            eta.append(float(m.group('mes')) * 3600.)
+                    if len(eta) == self.configuration['MPI nodes'] - 1:
+                        eta = np.mean(eta)
+                        break
                 else:
                     time.sleep(1)
+            print('# ETA %f sec' % eta)
 
     def _cleanup(self):
         shutil.rmtree(self.configuration['Simulation Data Directory'], ignore_errors=True)

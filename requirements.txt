@@ -6,3 +6,4 @@ redis
 scipy
 matplotlib
 pillow
+pandas

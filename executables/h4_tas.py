@@ -39,5 +39,5 @@ elif platform.system() == 'Linux':
 if __name__ == '__main__':
     app = TLabApp(name='Triple Axis Spectrometer',
                   env_config=app_config,
-                  instr_params=instrument_params, dummy=True)
+                  instr_params=instrument_params, dummy=False)
     app.run()

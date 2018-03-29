@@ -112,7 +112,8 @@ class TLabApp:
             else:
                 self.axes_1d_detector.set_yscale('linear')
 
-            self.axes_1d_detector.errorbar(self.result1d.xdata, self.result1d.ydata, yerr=self.result1d.yerrdata, zorder=1)
+            self.axes_1d_detector.errorbar(self.result1d.xdata, self.result1d.ydata, yerr=self.result1d.yerrdata,
+                                           zorder=1)
 
         if self.axes_2d_detector:
             self.axes_2d_detector.clear()
@@ -192,7 +193,7 @@ class TLabApp:
         # # Trace ETA 1.72028 [h] % 0
 
         with Popen([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params], env=env,
-                   cwd=self.configuration['Simulation Data Directory'], stdout=PIPE, stderr=PIPE) as process:
+                   cwd=self.configuration['Simulation Data Directory'], stdout=PIPE) as process:
             expr = re.compile(r'Trace ETA (?P<mes>[\d.]+) \[(?P<scale>min|s|h)\]')
             eta = []
             while True:
@@ -200,6 +201,7 @@ class TLabApp:
                 if not line and not process.poll():
                     break
                 elif line:
+                    print(line)
                     m = expr.match(line.decode())
                     if m:
                         if m.group('scale') == 's':
@@ -214,6 +216,7 @@ class TLabApp:
                 else:
                     time.sleep(1)
             print('# ETA %f sec' % eta)
+            process.wait()
 
     def _cleanup(self):
         shutil.rmtree(self.configuration['Simulation Data Directory'], ignore_errors=True)

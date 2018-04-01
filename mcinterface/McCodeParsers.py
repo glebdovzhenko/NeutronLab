@@ -125,6 +125,9 @@ class McColumns(McCodeData):
         return (np.linspace(self.xdata[lb], self.xdata[rb], 100),
                 f(np.linspace(self.xdata[lb], self.xdata[rb], 100), *popt)), popt[1], np.sqrt(pcov[1][1])
 
+    def __bool__(self):
+        return True
+
 
 class McArray(McCodeData):
     def __init__(self, *args, **kwargs):
@@ -156,3 +159,6 @@ class McArray(McCodeData):
         super().fill(f_name)
         self['extent'] = tuple(map(float, self['xylimits'].split(' ')))
         return self
+
+    def __bool__(self):
+        return True

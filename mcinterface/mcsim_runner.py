@@ -108,7 +108,7 @@ class McSimulationRunner:
                         eta.append(float(m.group('mes')) * 60.)
                     elif m.group('scale') == 'h':
                         eta.append(float(m.group('mes')) * 3600.)
-                if len(eta) == self.configuration['MPI nodes'] - 1:
+                if len(eta) > 0.5 * self.configuration['MPI nodes'] - 1:
                     eta = np.mean(eta)
                     break
             else:
@@ -132,6 +132,13 @@ class McSimulationRunner:
                 break
         else:
             self.sim_process.wait()
+
+    def kill_simulation(self):
+        if self.sim_process is not None:
+            if self.sim_process.poll() is None:
+                self.sim_process.kill()
+                self.sim_process.kill()
+        self._cleanup()
 
     def _cleanup(self):
         shutil.rmtree(self.configuration['Simulation Data Directory'], ignore_errors=True)

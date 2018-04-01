@@ -15,9 +15,10 @@ import time
 import os
 import re
 
+from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
-from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel, QInputDialog
+from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel, QInputDialog, QProgressDialog
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -246,6 +247,9 @@ class TLabAppQt(QDialog, McSimulationRunner):
         QDialog.__init__(self, env_config=env_config, instr_params=instr_params)
         self.gui = gui
         self.dummy = dummy
+        self.progress_dialog = None
+        self.timer = None
+        self.time_passed = 0
 
         if not gui:
             return
@@ -338,17 +342,46 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.figure.tight_layout()
         self.figure.canvas.draw()
 
-    def on_btn_run(self, *args, **kwargs):
-        if not self.dummy:
-            self.open_simulation(*args, **kwargs)
-
-        self.await_simulation()
-        if not self.dummy:
-            self.update_sim_results()
+    def update_pb(self):
+        status = self.sim_process.poll()
+        if status is None:
+            self.time_passed += 1
+            self.progress_dialog.setValue(self.time_passed)
+            self.progress_dialog.setLabelText("Simulation ETA %d sec" % (self.sim_eta - self.time_passed))
         else:
+            print('Child process returned', status)
+            self.progress_dialog.setValue(self.sim_eta)
+
+    def await_simulation(self):
+        if self.sim_process is None:
+            return
+
+        self.progress_dialog = QProgressDialog('Simulation', 'Stop', 0, self.sim_eta)
+        self.progress_dialog.canceled.connect(self.kill_simulation)
+        self.time_passed = 0
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_pb)
+        self.timer.start(1000)
+        self.progress_dialog.exec()
+        self.timer.stop()
+
+        self.sim_process.wait()
+
+    def on_btn_run(self, *args, **kwargs):
+        if self.dummy:
             self.update_sim_results(self.configuration['Backup Data Directory'])
-        self._create_plot_axes()
-        self._update_plot_axes()
+            self._create_plot_axes()
+            self._update_plot_axes()
+            return
+
+        self.open_simulation(*args, **kwargs)
+        self.await_simulation()
+
+        if self.sim_process.poll() >= 0:
+            self.update_sim_results()
+            self._create_plot_axes()
+            self._update_plot_axes()
+            self._cleanup()
 
     def on_btn_log(self, *args):
         self.log_scale = not self.log_scale

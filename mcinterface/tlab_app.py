@@ -1,5 +1,6 @@
 from .value_range import ValueRange
 from .mccode_parsers import McArray, McColumns
+from .mcsim_runner import McSimulationRunner
 
 from matplotlib.widgets import Button, TextBox
 from matplotlib import pyplot as plt
@@ -239,26 +240,11 @@ class TLabApp:
         self._cleanup()
 
 
-class TLabAppQt(QDialog):
+class TLabAppQt(QDialog, McSimulationRunner):
     """"""
     def __init__(self, name, env_config, instr_params, gui=True, dummy=False):
-        super().__init__()
-        # reading config file
-        self.configuration = defaultdict(lambda: None)
-        self.configuration.update(env_config)
-        self.instr_params = instr_params
+        QDialog.__init__(self, env_config=env_config, instr_params=instr_params)
         self.gui = gui
-        self.dummy = True
-
-        # initialising variables for storing plotted data
-        self.configuration['Simulation Data Directory'] = os.path.join(self.configuration['Simulation Data Directory'],
-                                                                       ''.join(random.choices(string.ascii_uppercase +
-                                                                                              string.digits, k=10)))
-        self.result1d = McColumns(xcolumn=self.configuration['1D detector x'],
-                                  ycolumn=self.configuration['1D detector y'],
-                                  yerrcolumn=self.configuration['1D detector yerr'])
-        self.result2d = McArray()
-        self.update_sim_results()
         self.dummy = dummy
 
         if not gui:
@@ -318,28 +304,6 @@ class TLabAppQt(QDialog):
         self.setLayout(layout)
         self.setWindowTitle(name)
 
-    def update_instr_param(self, sim_name, new_val):
-        for p in self.instr_params:
-            if p.sim_name == sim_name:
-                p.update(new_val)
-                return
-        else:
-            raise ValueError('No parameter %s' % str(sim_name))
-
-    def update_sim_results(self):
-        if self.dummy:
-            directory = self.configuration['Backup Data Directory']
-            print('# Dummy mode, getting pre-simulated data...')
-        else:
-            directory = os.path.join(self.configuration['Simulation Data Directory'], 'sim')
-
-        if '1D detector file name' in self.configuration:
-            self.result1d.clear()
-            self.result1d.fill(os.path.join(directory, self.configuration['1D detector file name']))
-        if '2D detector file name' in self.configuration:
-            self.result2d.clear()
-            self.result2d.fill(os.path.join(directory, self.configuration['2D detector file name']))
-
     def _create_plot_axes(self):
         if self.axes_2d_detector:
             self.axes_2d_detector.set_axis_off()
@@ -376,9 +340,13 @@ class TLabAppQt(QDialog):
 
     def on_btn_run(self, *args, **kwargs):
         if not self.dummy:
-            self.simulate(*args, **kwargs)
+            self.open_simulation(*args, **kwargs)
 
-        self.update_sim_results()
+        self.await_simulation()
+        if not self.dummy:
+            self.update_sim_results()
+        else:
+            self.update_sim_results(self.configuration['Backup Data Directory'])
         self._create_plot_axes()
         self._update_plot_axes()
 
@@ -391,70 +359,3 @@ class TLabAppQt(QDialog):
             self.log_b.setText('Log Scale Off')
 
         self._update_plot_axes()
-
-    def simulate(self, *args, **kwargs):
-        """
-        """
-        p_count = [x for x in self.instr_params if x.sim_name == 'n_count']
-        s_count = [x for x in self.instr_params if x.sim_name == 'N_count']
-        model_params = [x for x in self.instr_params if ((x.sim_name != 'n_count') and (x.sim_name != 'N_count'))]
-
-        exec_params = '-c --mpi=%d %s -d %s -n %d' % (self.configuration['MPI nodes'],
-                                                      self.configuration['Instr filename'],
-                                                      'sim',
-                                                      int(*p_count))
-
-        if any(map(lambda x: isinstance(x.dtype, ValueRange), model_params)):
-            exec_params += ' -N %d' % int(*s_count)
-
-        for param in model_params:
-            exec_params += ' ' + param.console_repr
-
-        env = os.environ.copy()
-        if 'Mcstas PYTHONHOME' in self.configuration:
-            env['PYTHONHOME'] = self.configuration['Mcstas PYTHONHOME']
-
-        self._cleanup()
-        os.mkdir(self.configuration['Simulation Data Directory'])
-        print(env)
-        print([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params])
-        with Popen([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params], env=env,
-                   cwd=self.configuration['Simulation Data Directory'], stdout=PIPE) as process:
-            expr = re.compile(r'Trace ETA (?P<mes>[\d.]+) \[(?P<scale>min|s|h)\]')
-            eta = []
-            while True:
-                line = process.stdout.readline()
-                if not line and not process.poll():
-                    break
-                elif line:
-                    line = line.decode()
-                    print(line)
-                    m = expr.match(line)
-                    if m:
-                        if m.group('scale') == 's':
-                            eta.append(float(m.group('mes')))
-                        elif m.group('scale') == 'min':
-                            eta.append(float(m.group('mes')) * 60.)
-                        elif m.group('scale') == 'h':
-                            eta.append(float(m.group('mes')) * 3600.)
-                    if len(eta) == self.configuration['MPI nodes'] - 1:
-                        eta = np.mean(eta)
-                        break
-                else:
-                    time.sleep(1)
-            if not eta:
-                eta = 0.
-            print('# ETA %f sec' % eta)
-            process.wait()
-
-    def _cleanup(self):
-        shutil.rmtree(self.configuration['Simulation Data Directory'], ignore_errors=True)
-
-    def run(self):
-        if self.gui:
-            self.show()
-        else:
-            if not self.dummy:
-                self.simulate()
-            self.update_sim_results()
-        self._cleanup()

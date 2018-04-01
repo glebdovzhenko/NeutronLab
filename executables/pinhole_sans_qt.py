@@ -35,6 +35,6 @@ if __name__ == '__main__':
                                  env_config=app_config,
                                  instr_params=instrument_params,
                                  gui=True, dummy=False)
-    pinhole_sans_app.run()
+    pinhole_sans_app.show()
     sys.exit(app.exec_())
 

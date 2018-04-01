@@ -56,8 +56,9 @@ class McSimulationRunner:
         else:
             raise ValueError('No parameter %s' % str(sim_name))
 
-    def update_sim_results(self):
-        data_d = os.path.join(self.configuration['Simulation Data Directory'], 'sim')
+    def update_sim_results(self, data_d=None):
+        if not data_d:
+            data_d = os.path.join(self.configuration['Simulation Data Directory'], 'sim')
 
         if self.result1d:
             self.result1d.clear()

@@ -1,13 +1,15 @@
-from mcinterface import ValueRange, McColumns, McArray
+from .value_range import ValueRange
+from .mccode_parsers import McArray, McColumns
+
 from collections import defaultdict
-import numpy as np
-import re
-import time
 from subprocess import PIPE, Popen
+import numpy as np
 import random
 import string
-import os
 import shutil
+import time
+import re
+import os
 
 
 class McSimulationRunner:

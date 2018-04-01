@@ -1,10 +1,10 @@
-from collections import OrderedDict
-import re
-import pandas as pd
-import io
-from scipy.optimize import curve_fit
 from scipy.signal import argrelextrema
+from scipy.optimize import curve_fit
+from collections import OrderedDict
+import pandas as pd
 import numpy as np
+import re
+import io
 
 
 class McCodeData(OrderedDict):

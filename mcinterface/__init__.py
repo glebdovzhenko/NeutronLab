@@ -1,5 +1,5 @@
-from mcinterface.GuiParameter import GUIParameter
-from mcinterface.ValueRange import ValueRange
-from mcinterface.McCodeParsers import McArray, McColumns
-from mcinterface.TLabApp import TLabApp, TLabAppQt
-from mcinterface.McSimulationRunner import McSimulationRunner
+from .gui_parameter import GUIParameter
+from .value_range import ValueRange
+from .mccode_parsers import McArray, McColumns
+from .tlab_app import TLabApp, TLabAppQt
+from .mcsim_runner import McSimulationRunner

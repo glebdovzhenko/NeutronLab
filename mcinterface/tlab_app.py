@@ -1,15 +1,17 @@
-from mcinterface import ValueRange, McColumns, McArray
+from .value_range import ValueRange
+from .mccode_parsers import McArray, McColumns
+
+from matplotlib.widgets import Button, TextBox
 from matplotlib import pyplot as plt
 from collections import defaultdict
-from matplotlib.widgets import Button, TextBox
-import numpy as np
+from subprocess import Popen, PIPE
 from PIL import Image
-import os
-from subprocess import Popen, PIPE, run
+import numpy as np
 import shutil
 import random
 import string
 import time
+import os
 import re
 
 from PyQt5.QtWidgets import QDialog

@@ -1,5 +1,5 @@
 from mcinterface import GUIParameter, TLabAppQt
-from instance import config
+from config import config
 import os
 import sys
 from PyQt5.QtWidgets import QApplication

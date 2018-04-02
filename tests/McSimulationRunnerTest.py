@@ -1,5 +1,5 @@
 from mcinterface import McSimulationRunner, GUIParameter
-from instance import config
+from config import config
 import os
 from matplotlib import pyplot as plt
 import numpy as np

@@ -7,7 +7,7 @@ https://www.anaconda.com/download/#linux - скачать и запустить 
 cd /etc/apt/sources.list.d
 sudo wget http://packages.mccode.org/debian/mccode.list
 sudo apt-get update
-sudo apt-get install mcstas-2.4
+sudo apt-get install mcstas-2.4.1
 
 # NeutronLab
 sudo apt-get upgrade

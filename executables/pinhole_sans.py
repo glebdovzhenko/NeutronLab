@@ -1,8 +1,9 @@
 from mcinterface import GUIParameter, TLabAppQt
-from config import config
-import os
-import sys
 from PyQt5.QtWidgets import QApplication
+from config import config
+import platform
+import sys
+import os
 
 """  
 """
@@ -23,11 +24,21 @@ app_config = {
     'Simulation Data Directory': config.results_path,
     'Backup Data Directory': os.path.join(config.results_path, '00_pinhole_SANS'),
     '2D detector file name': 'PSDMonitor.dat', '1D detector file name': 'QDetector.dat',
-    'Mcrun executable path': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/bin',
-    'Mcstas PYTHONHOME': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/miniconda3',
     'instrument scheme': os.path.join(config.img_path, '00_pinhole_SANS.tiff'),
-    'MPI nodes': 8, 'Figure size X': 12, 'Figure size Y': 7
+    'Figure size X': 12, 'Figure size Y': 7
 }
+
+if platform.system() == 'Darwin':
+    app_config.update({
+        'Mcrun executable path': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/bin',
+        'Mcstas PYTHONHOME': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/miniconda3',
+        'MPI nodes': 8
+    })
+elif platform.system() == 'Linux':
+    app_config.update({
+        'Mcrun executable path': '/usr/share/mcstas/2.4.1/bin',
+        'MPI nodes': 4
+    })
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

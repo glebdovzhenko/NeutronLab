@@ -1,15 +1,21 @@
 Установка (Ubuntu / Debian):
-#Python:
+
+# Python:
 https://www.anaconda.com/download/#linux - скачать и запустить установочный скрипт для Python 3.*
 
-sudo apt-get upgrade
-sudo apt-get install git
-git clone -b master https://github.com/glebdovzhenko/NeutronLab.git
-cd NeutronLab
-export PYTHONPATH=$(pwd)':'${PYTHONPATH}
-
-#McStas
+# McStas
 cd /etc/apt/sources.list.d
 sudo wget http://packages.mccode.org/debian/mccode.list
 sudo apt-get update
-sudo apt-get install mcstas-suite-python
+sudo apt-get install mcstas-2.4
+
+# NeutronLab
+sudo apt-get upgrade
+sudo apt-get install git
+git clone -b master https://github.com/glebdovzhenko/NeutronLab.git
+
+# Запуск
+cd NeutronLab
+export PYTHONPATH=$(pwd)':'${PYTHONPATH}
+cd executables
+~/anaconda3/bin/python h1_sans.py

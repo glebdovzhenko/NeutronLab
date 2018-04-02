@@ -1,6 +1,8 @@
-from mcinterface import GUIParameter, TLabApp
-import platform
+from mcinterface import GUIParameter, TLabAppQt
 from instance import config
+import sys
+from PyQt5.QtWidgets import QApplication
+import platform
 import os
 
 """
@@ -39,7 +41,10 @@ elif platform.system() == 'Linux':
 
 
 if __name__ == '__main__':
-    app = TLabApp(name='H1 SANS',
-                  env_config=app_config,
-                  instr_params=instrument_params)
-    app.run()
+    app = QApplication(sys.argv)
+    pinhole_sans_app = TLabAppQt(name='H1 SANS',
+                                 env_config=app_config,
+                                 instr_params=instrument_params)
+    pinhole_sans_app.show()
+    sys.exit(app.exec_())
+

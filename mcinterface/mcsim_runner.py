@@ -136,7 +136,7 @@ class McSimulationRunner:
     def kill_simulation(self):
         if self.sim_process is not None:
             if self.sim_process.poll() is None:
-                self.sim_process.kill()
+                # TODO: processes don't really die
                 self.sim_process.kill()
         self._cleanup()
 

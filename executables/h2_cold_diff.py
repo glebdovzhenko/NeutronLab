@@ -1,6 +1,8 @@
-from mcinterface import GUIParameter, TLabApp
-import platform
+from mcinterface import GUIParameter, TLabAppQt
 from instance import config
+import sys
+from PyQt5.QtWidgets import QApplication
+import platform
 import os
 
 """
@@ -8,7 +10,7 @@ import os
 
 instrument_params = (
     GUIParameter('Wavelength $\lambda$ [AA]', 'lambda', float, 3),
-    GUIParameter('Collimator  \ndivergence [deg. min.]', 'div_col', float, 45),
+    GUIParameter('Collimator divergence [deg. min.]', 'div_col', float, 45),
     GUIParameter('Neutron count [n]', 'n_count', int, 1E9),
 )
 
@@ -35,8 +37,9 @@ elif platform.system() == 'Linux':
 
 
 if __name__ == '__main__':
-
-    app = TLabApp(name='Cold Neutron Diffractometer',
+    app = QApplication(sys.argv)
+    pinhole_sans_app = TLabAppQt(name='Cold Neutron Diffractometer',
                   env_config=app_config,
                   instr_params=instrument_params, dummy=False)
-    app.run()
+    pinhole_sans_app.show()
+    sys.exit(app.exec_())

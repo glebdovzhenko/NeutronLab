@@ -1,13 +1,15 @@
-from mcinterface import GUIParameter, TLabApp
+from mcinterface import GUIParameter, TLabAppQt
 from instance import config
 import os
+import sys
+from PyQt5.QtWidgets import QApplication
 
 """  
 """
 
 instrument_params = (
-    GUIParameter('Wavelength $\lambda$ [AA]', 'Lambda', float, 4.5),
-    GUIParameter('Wavelength STD $\delta\lambda/\lambda$ [AA]', 'DLambda', float, 0.1),
+    GUIParameter('Wavelength [AA]', 'Lambda', float, 4.5),
+    GUIParameter('Wavelength STD [AA]', 'DLambda', float, 0.1),
     GUIParameter('Source to 1st slit [m]', 'DistSrcPin1', float, 1),
     GUIParameter('Source to 2nd slit [m]', 'DistSrcPin2', float, 10),
     GUIParameter('2nd slit to sample [m]', 'DistPinSamp', float, 1),
@@ -27,11 +29,12 @@ app_config = {
     'MPI nodes': 8, 'Figure size X': 12, 'Figure size Y': 7
 }
 
-pinhole_sans_app = TLabApp(name='Pinhole SANS',
-                           env_config=app_config,
-                           instr_params=instrument_params,
-                           gui=True, dummy=False)
-
 if __name__ == '__main__':
-    pinhole_sans_app.run()
+    app = QApplication(sys.argv)
+    pinhole_sans_app = TLabAppQt(name='Pinhole SANS',
+                                 env_config=app_config,
+                                 instr_params=instrument_params,
+                                 gui=True, dummy=False)
+    pinhole_sans_app.show()
+    sys.exit(app.exec_())
 

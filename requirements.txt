@@ -4,7 +4,3 @@ matplotlib
 pillow
 pandas
 pyqt5
-flask
-celery
-bokeh
-redis

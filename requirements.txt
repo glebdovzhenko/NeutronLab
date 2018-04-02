@@ -1,10 +1,10 @@
-flask
-celery
 numpy
-bokeh
-redis
 scipy
 matplotlib
 pillow
 pandas
-PyQt5
+pyqt5
+flask
+celery
+bokeh
+redis

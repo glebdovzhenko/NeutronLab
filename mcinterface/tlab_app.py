@@ -286,15 +286,12 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.log_b.clicked.connect(self.on_btn_log)
 
         # adding parameter text boxes and registering update callbacks
-        self.param_requests, self.param_values = [], []
+        self.param_buttons, self.param_labels = [], []
+        self.setup_instr_params()
+
         for i, param in enumerate(self.instr_params):
-            self.param_requests.append(QPushButton(param.gui_name))
-            self.param_values.append(QLabel(str(param)))
-            self.param_values[-1].setFrameStyle(QFrame.Sunken | QFrame.Panel)
-            l_left.addWidget(self.param_requests[-1], i, 0)
-            l_left.addWidget(self.param_values[-1], i, 1)
-            # TODO: implement
-            # self.text_boxes[-1].on_submit(param.update)
+            l_left.addWidget(self.param_buttons[i], i, 0)
+            l_left.addWidget(self.param_labels[i], i, 1)
 
         self.axes_1d_detector = None
         self.axes_2d_detector = None
@@ -307,6 +304,12 @@ class TLabAppQt(QDialog, McSimulationRunner):
         layout.addLayout(l_right, 1)
         self.setLayout(layout)
         self.setWindowTitle(name)
+
+    def setup_instr_params(self):
+        for i, param in enumerate(self.instr_params):
+            self.param_buttons.append(QPushButton(param.gui_name))
+            self.param_labels.append(QLabel(str(param)))
+            self.param_labels[-1].setFrameStyle(QFrame.Sunken | QFrame.Panel)
 
     def _create_plot_axes(self):
         if self.axes_2d_detector:

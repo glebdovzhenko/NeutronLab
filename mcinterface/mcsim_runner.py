@@ -6,6 +6,7 @@ from subprocess import PIPE, Popen
 import numpy as np
 import random
 import string
+import signal
 import shutil
 import time
 import re
@@ -88,7 +89,8 @@ class McSimulationRunner:
         os.mkdir(self.configuration['Simulation Data Directory'])
 
         self.sim_process = Popen([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params],
-                                 env=env, cwd=self.configuration['Simulation Data Directory'], stdout=PIPE)
+                                 env=env, cwd=self.configuration['Simulation Data Directory'], stdout=PIPE,
+                                 preexec_fn=os.setsid)
 
         expr = re.compile(r'Trace ETA (?P<mes>[\d.]+) \[(?P<scale>min|s|h)\]')
         eta = []
@@ -137,7 +139,7 @@ class McSimulationRunner:
         if self.sim_process is not None:
             if self.sim_process.poll() is None:
                 # TODO: processes don't really die
-                self.sim_process.kill()
+                os.killpg(os.getpgid(self.sim_process.pid), signal.SIGTERM)
         self._cleanup()
 
     def _cleanup(self):

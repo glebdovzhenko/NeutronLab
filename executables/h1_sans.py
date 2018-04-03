@@ -9,13 +9,13 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Wavelength $\lambda$ [AA]', 'lambda', float, 15),
-    GUIParameter('Slit 1 width [m]', 'slit1_w', float, 0.008),
-    GUIParameter('Slit 2 width [m]', 'slit2_w', float, 0.008),
-    GUIParameter('Slit 3 width [m]', 'slit3_w', float, 0.008),
-    GUIParameter('Detector position', 'det_position', int, 3),
-    GUIParameter('Sample #', 'sample_num', int, 1),
-    GUIParameter('Neutron count [n]', 'n_count', int, 1E8),
+    GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 15),
+    GUIParameter('Ширина щели 1 [м]', 'slit1_w', float, 0.008),
+    GUIParameter('Ширина щели 2 [м]', 'slit2_w', float, 0.008),
+    GUIParameter('Ширина щели 3 [м]', 'slit3_w', float, 0.008),
+    GUIParameter('Положение детектора', 'det_position', int, 3),
+    GUIParameter('Номер образца', 'sample_num', int, 1),
+    GUIParameter('Статистика нейтронов', 'n_count', int, 1E8),
 )
 
 app_config = {

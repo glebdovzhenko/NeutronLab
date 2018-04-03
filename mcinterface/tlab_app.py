@@ -264,13 +264,13 @@ class TLabAppQt(QDialog, McSimulationRunner):
         # plt.axis('off')
 
         # adding "Simulate" button and registering click callback
-        self.sim_b = QPushButton('Simulate!')
+        self.sim_b = QPushButton('Запуск симуляции')
         l_left.addWidget(self.sim_b, len(self.instr_params), 1)
         self.sim_b.clicked.connect(self.on_btn_run)
 
         # adding plot scale button and registering click callback
         self.log_scale = True
-        self.log_b = QPushButton('Log Scale On')
+        self.log_b = QPushButton('Логарифмическая интенсивность')
         l_right.addWidget(self.log_b, 2)
         self.log_b.clicked.connect(self.on_btn_log)
 
@@ -365,7 +365,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
         if status is None:
             self.time_passed += 1
             self.progress_dialog.setValue(self.time_passed)
-            self.progress_dialog.setLabelText("Simulation ETA %d sec" % (self.sim_eta - self.time_passed))
+            self.progress_dialog.setLabelText("Симуляция: %d сек" % (self.sim_eta - self.time_passed))
         else:
             print('Child process returned', status)
             self.progress_dialog.setValue(self.sim_eta)
@@ -374,7 +374,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
         if self.sim_process is None:
             return
 
-        self.progress_dialog = QProgressDialog('Simulation', 'Stop', 0, self.sim_eta)
+        self.progress_dialog = QProgressDialog('Симуляция', 'Стоп', 0, self.sim_eta)
         self.progress_dialog.canceled.connect(self.kill_simulation)
         self.time_passed = 0
         self.timer = QTimer()
@@ -405,8 +405,8 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.log_scale = not self.log_scale
 
         if self.log_scale:
-            self.log_b.setText('Log Scale On')
+            self.log_b.setText('Логарифмическая интенсивность')
         else:
-            self.log_b.setText('Log Scale Off')
+            self.log_b.setText('Линейная интенсивность')
 
         self._update_plot_axes()

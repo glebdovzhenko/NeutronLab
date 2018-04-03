@@ -9,12 +9,12 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Wavelength $\lambda$ [AA]', 'lambda', float, 1.5),
-    GUIParameter('Collimator 1', 'col1', float, 10),
-    GUIParameter('Collimator 2', 'col2', float, 20),
-    GUIParameter('Collimator 3', 'col3', float, 10),
-    GUIParameter('Monochr. mosaicity [min]', 'mon_mos', float, 40),
-    GUIParameter('Neutron count [n]', 'n_count', int, 1E9),
+    GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 1.5),
+    GUIParameter('Коллиматор 1', 'col1', float, 10),
+    GUIParameter('Коллиматор 2', 'col2', float, 20),
+    GUIParameter('Коллиматор 3', 'col3', float, 10),
+    GUIParameter('Мозаичность монохроматора [угл. мин.]', 'mon_mos', float, 40),
+    GUIParameter('Статистика нейтронов', 'n_count', int, 1E9),
 )
 
 app_config = {

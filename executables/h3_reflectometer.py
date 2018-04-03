@@ -9,9 +9,9 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Wavelength $\lambda$ [AA]', 'monok_lambda', float, 5.2),
-    GUIParameter('Scattering angle [deg.]', 'scat_angle', float, 0),
-    GUIParameter('Neutron count [n]', 'n_count', int, 1E9),
+    GUIParameter('Длина волны источника [\u212B]', 'monok_lambda', float, 5.2),
+    GUIParameter('Угол рассеяния [град.]', 'scat_angle', float, 0),
+    GUIParameter('Статистика нейтронов', 'n_count', int, 1E9),
 )
 
 app_config = {

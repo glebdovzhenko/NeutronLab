@@ -9,9 +9,9 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Wavelength $\lambda$ [AA]', 'lambda', float, 3),
-    GUIParameter('Collimator divergence [deg. min.]', 'div_col', float, 45),
-    GUIParameter('Neutron count [n]', 'n_count', int, 1E9),
+    GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 3),
+    GUIParameter('Расходимость коллиматора [угл. мин.]', 'div_col', float, 45),
+    GUIParameter('Статистика нейтронов', 'n_count', int, 1E9),
 )
 
 app_config = {

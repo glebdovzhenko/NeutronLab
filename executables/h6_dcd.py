@@ -9,11 +9,11 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Wavelength $\lambda$ [AA]', 'lambda', float, 2.2),
-    GUIParameter('Rocking angle [deg.]', 'rock_angle', ValueRange(float), (0, 1)),
-    GUIParameter('Rocking angle steps', 'N_count', int, 100),
-    GUIParameter('Sample present (0/1)', 'is_sample', int, 1),
-    GUIParameter('Neutron count [n]', 'n_count', int, 1E7),
+    GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 2.2),
+    GUIParameter('Угол качания [град.]', 'rock_angle', ValueRange(float), (0, 1)),
+    GUIParameter('Шаги угла качания', 'N_count', int, 100),
+    GUIParameter('Образец', 'is_sample', int, 1),
+    GUIParameter('Статистика нейтронов', 'n_count', int, 1E7),
 )
 
 app_config = {

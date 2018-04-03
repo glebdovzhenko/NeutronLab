@@ -9,9 +9,9 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Wavelength $\lambda$ [AA]', 'lambda', float, 1.727),
-    GUIParameter('Sample #', 'sample_index', int, 0),
-    GUIParameter('Neutron count [n]', 'n_count', int, 1E8),
+    GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 1.727),
+    GUIParameter('Номер образца', 'sample_index', int, 0),
+    GUIParameter('Статистика нейтронов', 'n_count', int, 1E8),
 )
 
 app_config = {

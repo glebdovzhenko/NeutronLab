@@ -4,7 +4,7 @@ from .mcsim_runner import McSimulationRunner
 import numpy as np
 
 from PyQt5.QtCore import QTimer
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QKeyEvent
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
@@ -42,13 +42,10 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.canvas.setFixedWidth(self.configuration['Plot Width'])
         self.canvas.setFixedHeight(self.configuration['Plot Height'])
 
+        self.canvas.mpl_connect('button_press_event', self.on_mouse_mpl_event)
+
         l_right.addWidget(self.toolbar, 0)
         l_right.addWidget(self.canvas, 1)
-
-        # TODO: implement
-        # plotting the instrument scheme
-        # self.figure.add_axes([0.05, 0.0, 0.9, 0.25]).imshow(Image.open(self.configuration['instrument scheme']))
-        # plt.axis('off')
 
         # adding "Simulate" button and registering click callback
         self.sim_b = QPushButton('Запуск эксперимента')
@@ -72,10 +69,6 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.axes_1d_detector = None
         self.axes_2d_detector = None
 
-        # TODO: implement
-        # self.figure.canvas.mpl_connect('button_press_event', self.on_mouse_event)
-        # self.figure.canvas.mpl_connect('key_press_event', self.on_key_press_event)
-
         p_map = QPixmap(self.configuration['instrument scheme'])
         p_map = p_map.scaledToHeight(250, Qt.SmoothTransformation)
         scheme_label = QLabel()
@@ -86,6 +79,23 @@ class TLabAppQt(QDialog, McSimulationRunner):
         layout.addLayout(l_right, 1)
         self.setLayout(layout)
         self.setWindowTitle(name)
+
+    def keyPressEvent(self, event):
+        if type(event) == QKeyEvent:
+            if event.key() == 65:
+                self.accept_coordinates = not self.accept_coordinates
+        else:
+            event.ignore()
+
+    def on_mouse_mpl_event(self, event):
+        if (event.inaxes == self.axes_1d_detector) and (event.button == 1) and self.accept_coordinates:
+            coordinates, tth, dtth = self.result1d.run_gaussian_fit((event.xdata, event.ydata))
+            self._update_plot_axes()
+            self.axes_1d_detector.plot(coordinates[0], coordinates[1], color='r', zorder=2)
+            self.axes_1d_detector.text(event.xdata, event.ydata, 'Центр: %.3f +- %.3f' % (tth, dtth),
+                                       backgroundcolor='w')
+            self.figure.canvas.draw()
+            self.accept_coordinates = not self.accept_coordinates
 
     def setup_instr_params(self):
         for i, param in enumerate(self.instr_params):

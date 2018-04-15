@@ -47,7 +47,7 @@ if __name__ == '__main__':
     pinhole_sans_app = TLabAppQt(name='Pinhole SANS',
                                  env_config=app_config,
                                  instr_params=instrument_params,
-                                 gui=True, dummy=False)
+                                 gui=True, dummy=True)
     pinhole_sans_app.show()
     sys.exit(app.exec_())
 

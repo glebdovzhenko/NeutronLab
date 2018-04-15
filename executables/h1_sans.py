@@ -13,8 +13,10 @@ instrument_params = (
     GUIParameter('Ширина диафрагмы 1 [мм]', 'slit1_w', int, 32),
     GUIParameter('Ширина диафрагмы 2 [мм]', 'slit2_w', int, 16),
     GUIParameter('Ширина диафрагмы 3 [мм]', 'slit3_w', int, 16),
-    GUIParameter('Положение детектора', 'det_position', int, 3),
-    GUIParameter('Номер образца', 'sample_num', int, 1),
+    GUIParameter('Положение детектора', 'det_position', int, 3, values=(1, 2, 3),
+                 value_names=('Ближнее', 'Среднее', 'Дальнее')),
+    GUIParameter('Образец', 'sample_num', int, 1, values=(1, 2, 3, 4),
+                 value_names=('Большие сферы', 'Малые сферы 1', 'Малые сферы 2', 'Малые сферы 3')),
     GUIParameter('Статистика нейтронов', 'n_count', int, 1E8),
 )
 

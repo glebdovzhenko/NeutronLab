@@ -10,7 +10,7 @@ import os
 
 instrument_params = (
     GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 1.2),
-    GUIParameter('Номер образца', 'sample_index', int, 1),
+    GUIParameter('Номер образца', 'sample_index', int, 1, values=(1, 2)),
     GUIParameter('Вращение образца вокруг x', 'rot_x', float, 90),
     GUIParameter('Вращение образца вокруг y', 'rot_y', float, 0),
     GUIParameter('Вращение образца вокруг z', 'rot_z', float, 0),

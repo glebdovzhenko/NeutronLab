@@ -10,7 +10,7 @@ import os
 
 instrument_params = (
     GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 1.727),
-    GUIParameter('Номер образца', 'sample_index', int, 0),
+    GUIParameter('Номер образца', 'sample_index', int, 0, values=(0, 1, 2, 3, 4, 5, 6)),
     GUIParameter('Статистика нейтронов', 'n_count', int, 1E8),
 )
 
@@ -40,6 +40,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     pinhole_sans_app = TLabAppQt(name='Stress Diffractometer',
                                  env_config=app_config,
-                                 instr_params=instrument_params, dummy=True)
+                                 instr_params=instrument_params)
     pinhole_sans_app.show()
     sys.exit(app.exec_())

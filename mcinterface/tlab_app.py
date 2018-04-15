@@ -96,24 +96,31 @@ class TLabAppQt(QDialog, McSimulationRunner):
 
     def make_callback(self, ii):
         def callback():
-            if self.instr_params[ii].dtype == int:
+            if self.instr_params[ii].value_names:
+                item, ok = QInputDialog.getItem(self, self.instr_params[ii].gui_name, self.instr_params[ii].gui_name,
+                                                self.instr_params[ii].value_names,
+                                                self.instr_params[ii].values.index(self.instr_params[ii].value), False)
+                if ok:
+                    self.instr_params[ii].update_by_name(item)
+                    self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
+            elif self.instr_params[ii].dtype == int:
                 res, ok = QInputDialog.getInt(self, self.instr_params[ii].gui_name, self.instr_params[ii].gui_name,
                                               self.instr_params[ii].value)
                 if ok:
                     self.instr_params[ii].update(res)
-                    self.param_labels[ii].setText("%d" % res)
+                    self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
             elif self.instr_params[ii].dtype == float:
                 d, ok = QInputDialog.getDouble(self, self.instr_params[ii].gui_name, self.instr_params[ii].gui_name,
                                                self.instr_params[ii].value)
                 if ok:
                     self.instr_params[ii].update(d)
-                    self.param_labels[ii].setText("%g" % d)
+                    self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
             elif self.instr_params[ii].dtype == ValueRange:
                 text, ok = QInputDialog.getText(self, self, self.instr_params[ii].gui_name,
                                                 self.instr_params[ii].gui_name, str(self.instr_params[ii]))
                 if ok and text != '':
                     self.instr_params[ii].update(text)
-                    self.param_labels[ii].setText(text)
+                    self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
             else:
                 pass
         return callback

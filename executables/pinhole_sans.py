@@ -27,7 +27,7 @@ app_config = {
     '2D title': 'Детектор', '2D xlabel': 'x [см]', '2D ylabel': 'y [см]',
     '1D title': 'I(q)', '1D xlabel': 'Волн. вектор q [1/\u212B]', '1D ylabel': 'Интенсивность [усл. ед.]',
     'instrument scheme': os.path.join(config.img_path, '00_pinhole_SANS.tiff'),
-    'Plot Width': 900
+    'Plot Width': 900, 'Plot Height': 400,
 }
 
 if platform.system() == 'Darwin':

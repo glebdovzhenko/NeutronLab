@@ -24,7 +24,7 @@ app_config = {
     '2D detector file name': 'psd.dat',
     '2D title': 'проверка 4', '2D xlabel': 'проверка 5', '2D ylabel': 'проверка 6',
     'instrument scheme': os.path.join(config.img_path, 'h7_scd_scheme.tiff'),
-    'Plot Width': 900
+    'Plot Width': 900, 'Plot Height': 400,
 }
 
 if platform.system() == 'Darwin':

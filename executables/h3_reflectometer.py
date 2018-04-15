@@ -20,8 +20,8 @@ app_config = {
     'Backup Data Directory': os.path.join(config.results_path, 'h3_rpn'),
     '2D detector file name': 'Detector.xy',
     '2D title': 'проверка 4', '2D xlabel': 'проверка 5', '2D ylabel': 'проверка 6',
-    'instrument scheme': os.path.join(config.img_path, 'h3_rpn_scheme.tiff'),
-    'Plot Width': 900
+    'instrument scheme': os.path.join(config.img_path, 'h3_rpn.tiff'),
+    'Plot Width': 900, 'Plot Height': 400,
 }
 
 if platform.system() == 'Darwin':

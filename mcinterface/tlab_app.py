@@ -4,6 +4,8 @@ from .mcsim_runner import McSimulationRunner
 import numpy as np
 
 from PyQt5.QtCore import QTimer
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
 from PyQt5.QtWidgets import QPushButton, QLabel, QInputDialog, QProgressDialog
@@ -38,6 +40,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.canvas = FigureCanvas(self.figure)
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.canvas.setFixedWidth(self.configuration['Plot Width'])
+        self.canvas.setFixedHeight(self.configuration['Plot Height'])
 
         l_right.addWidget(self.toolbar, 0)
         l_right.addWidget(self.canvas, 1)
@@ -72,6 +75,12 @@ class TLabAppQt(QDialog, McSimulationRunner):
         # TODO: implement
         # self.figure.canvas.mpl_connect('button_press_event', self.on_mouse_event)
         # self.figure.canvas.mpl_connect('key_press_event', self.on_key_press_event)
+
+        p_map = QPixmap(self.configuration['instrument scheme'])
+        p_map = p_map.scaledToHeight(250, Qt.SmoothTransformation)
+        scheme_label = QLabel()
+        scheme_label.setPixmap(p_map)
+        l_right.addWidget(scheme_label, 3, Qt.AlignCenter)
 
         layout.addLayout(l_left, 0)
         layout.addLayout(l_right, 1)

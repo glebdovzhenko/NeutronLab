@@ -21,7 +21,7 @@ app_config = {
     '1D detector file name': 'Detector.dat',
     '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
     'instrument scheme': os.path.join(config.img_path, 'h8_sd_scheme.tiff'),
-    'Plot Width': 900
+    'Plot Width': 900, 'Plot Height': 400,
 }
 
 if platform.system() == 'Darwin':

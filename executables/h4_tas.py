@@ -23,8 +23,8 @@ app_config = {
     '1D detector file name': 'mccode.dat', '1D detector x': 'an_angle',
     '1D detector y': 'befanL_I', '1D detector yerr': 'befanL_ERR',
     '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
-    'instrument scheme': os.path.join(config.img_path, 'h4_tas_scheme.tiff'),
-    'Plot Width': 900
+    'instrument scheme': os.path.join(config.img_path, 'h4_tas.tiff'),
+    'Plot Width': 900, 'Plot Height': 400,
 }
 
 if platform.system() == 'Darwin':

@@ -23,8 +23,8 @@ app_config = {
     'Backup Data Directory': os.path.join(config.results_path, 'h5_tnd'),
     '1D detector file name': 'Detector1.th',
     '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
-    'instrument scheme': os.path.join(config.img_path, 'h5_tnd_scheme.tiff'),
-    'Plot Width': 900
+    'instrument scheme': os.path.join(config.img_path, 'h5_tnd.tiff'),
+    'Plot Width': 900, 'Plot Height': 400,
 }
 
 if platform.system() == 'Darwin':

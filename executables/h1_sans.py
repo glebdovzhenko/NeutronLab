@@ -25,8 +25,8 @@ app_config = {
     '2D detector file name': 'Detector2D.dat', '1D detector file name': 'QDetector.dat',
     '2D title': 'проверка 4', '2D xlabel': 'проверка 5', '2D ylabel': 'проверка 6',
     '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
-    'instrument scheme': os.path.join(config.img_path, 'h1_sans_scheme.tiff'),
-    'Plot Width': 900
+    'instrument scheme': os.path.join(config.img_path, 'h1_sans.tiff'),
+    'Plot Width': 900, 'Plot Height': 400,
 }
 
 if platform.system() == 'Darwin':

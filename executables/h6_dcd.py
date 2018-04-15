@@ -22,8 +22,9 @@ app_config = {
     'Backup Data Directory': os.path.join(config.results_path, 'h6_dcd'),
     '1D detector file name': 'mccode.dat', '1D detector x': 'rock_angle', '1D detector y': 'Detector_I',
     '1D detector yerr': 'Detector_ERR',
+    '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
     'instrument scheme': os.path.join(config.img_path, 'h6_dcd_scheme.tiff'),
-    'Figure size X': 12, 'Figure size Y': 7
+    'Plot Width': 900
 }
 
 if platform.system() == 'Darwin':

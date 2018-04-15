@@ -9,8 +9,8 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Wavelength [AA]', 'Lambda', float, 4.5),
-    GUIParameter('Wavelength STD [AA]', 'DLambda', float, 0.1),
+    GUIParameter('Wavelength [\u212B]', 'Lambda', float, 4.5),
+    GUIParameter('Wavelength STD [\u212B]', 'DLambda', float, 0.1),
     GUIParameter('Source to 1st slit [m]', 'DistSrcPin1', float, 1),
     GUIParameter('Source to 2nd slit [m]', 'DistSrcPin2', float, 10),
     GUIParameter('2nd slit to sample [m]', 'DistPinSamp', float, 1),
@@ -24,8 +24,10 @@ app_config = {
     'Simulation Data Directory': config.results_path,
     'Backup Data Directory': os.path.join(config.results_path, '00_pinhole_SANS'),
     '2D detector file name': 'PSDMonitor.dat', '1D detector file name': 'QDetector.dat',
+    '2D title': 'Детектор', '2D xlabel': 'x [см]', '2D ylabel': 'y [см]',
+    '1D title': 'I(q)', '1D xlabel': 'Волн. вектор q [1/\u212B]', '1D ylabel': 'Интенсивность [усл. ед.]',
     'instrument scheme': os.path.join(config.img_path, '00_pinhole_SANS.tiff'),
-    'Figure size X': 12, 'Figure size Y': 7
+    'Plot Width': 900
 }
 
 if platform.system() == 'Darwin':

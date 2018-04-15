@@ -31,14 +31,27 @@ class McSimulationRunner:
         )
 
         if '1D detector file name' in self.configuration:
-            self.result1d = McColumns(xcolumn=self.configuration['1D detector x'],
-                                      ycolumn=self.configuration['1D detector y'],
-                                      yerrcolumn=self.configuration['1D detector yerr'])
+            prms = dict(xcolumn=self.configuration['1D detector x'], ycolumn=self.configuration['1D detector y'],
+                        yerrcolumn=self.configuration['1D detector yerr'])
+            if '1D title' in self.configuration:
+                prms['title'] = self.configuration['1D title']
+            if '1D xlabel' in self.configuration:
+                prms['xlabel'] = self.configuration['1D xlabel']
+            if '1D ylabel' in self.configuration:
+                prms['ylabel'] = self.configuration['1D ylabel']
+            self.result1d = McColumns(**prms)
         else:
             self.result1d = None
 
         if '2D detector file name' in self.configuration:
-            self.result2d = McArray()
+            prms = dict()
+            if '2D title' in self.configuration:
+                prms['title'] = self.configuration['2D title']
+            if '2D xlabel' in self.configuration:
+                prms['xlabel'] = self.configuration['2D xlabel']
+            if '2D ylabel' in self.configuration:
+                prms['ylabel'] = self.configuration['2D ylabel']
+            self.result2d = McArray(**prms)
         else:
             self.result2d = None
 

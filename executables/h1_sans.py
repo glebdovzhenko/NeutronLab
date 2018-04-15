@@ -10,9 +10,9 @@ import os
 
 instrument_params = (
     GUIParameter('Длина волны селектора [\u212B]', 'lambda', float, 15),
-    GUIParameter('Ширина щели 1 [мм]', 'slit1_w', int, 32),
-    GUIParameter('Ширина щели 2 [мм]', 'slit2_w', int, 16),
-    GUIParameter('Ширина щели 3 [мм]', 'slit3_w', int, 16),
+    GUIParameter('Ширина диафрагмы 1 [мм]', 'slit1_w', int, 32),
+    GUIParameter('Ширина диафрагмы 2 [мм]', 'slit2_w', int, 16),
+    GUIParameter('Ширина диафрагмы 3 [мм]', 'slit3_w', int, 16),
     GUIParameter('Положение детектора', 'det_position', int, 3),
     GUIParameter('Номер образца', 'sample_num', int, 1),
     GUIParameter('Статистика нейтронов', 'n_count', int, 1E8),
@@ -23,8 +23,10 @@ app_config = {
     'Simulation Data Directory': config.results_path,
     'Backup Data Directory': os.path.join(config.results_path, 'h1_SANS'),
     '2D detector file name': 'Detector2D.dat', '1D detector file name': 'QDetector.dat',
+    '2D title': 'проверка 4', '2D xlabel': 'проверка 5', '2D ylabel': 'проверка 6',
+    '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
     'instrument scheme': os.path.join(config.img_path, 'h1_sans_scheme.tiff'),
-    'Figure size X': 12, 'Figure size Y': 7
+    'Plot Width': 900
 }
 
 if platform.system() == 'Darwin':

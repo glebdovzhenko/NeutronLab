@@ -37,6 +37,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.figure = plt.figure()
         self.canvas = FigureCanvas(self.figure)
         self.toolbar = NavigationToolbar(self.canvas, self)
+        self.canvas.setFixedWidth(self.configuration['Plot Width'])
 
         l_right.addWidget(self.toolbar, 0)
         l_right.addWidget(self.canvas, 1)
@@ -53,7 +54,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
 
         # adding plot scale button and registering click callback
         self.log_scale = True
-        self.log_b = QPushButton('Логарифмическая интенсивность')
+        self.log_b = QPushButton('Показать линейную интенсивность')
         l_right.addWidget(self.log_b, 2)
         self.log_b.clicked.connect(self.on_btn_log)
 

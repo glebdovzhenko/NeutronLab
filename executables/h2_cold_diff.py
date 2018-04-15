@@ -19,8 +19,9 @@ app_config = {
     'Simulation Data Directory': config.results_path,
     'Backup Data Directory': os.path.join(config.results_path, 'h1_SANS'),
     '1D detector file name': 'detector.dat',
+    '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
     'instrument scheme': os.path.join(config.img_path, 'h2_diff_scheme.tiff'),
-    'Figure size X': 12, 'Figure size Y': 7
+    'Plot Width': 900
 }
 
 if platform.system() == 'Darwin':

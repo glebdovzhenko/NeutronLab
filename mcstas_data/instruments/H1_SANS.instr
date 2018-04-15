@@ -28,7 +28,7 @@
 * %End
 *******************************************************************************/
 
-DEFINE INSTRUMENT H1(lambda = 4.5, slit1_w = 0.032, slit2_w = 0.016, slit3_w = 0.016, int det_position = 3, int sample_num = 1)
+DEFINE INSTRUMENT H1(lambda = 4.5, slit1_w = 32, slit2_w = 16, slit3_w = 16, int det_position = 3, int sample_num = 1)
 
 DECLARE
 %{
@@ -91,6 +91,10 @@ bender_length = bender_length/bender_piece_num; //now bender length is one piece
 bender_rot = bender_rot*RAD2DEG/bender_piece_num; //now bender piece rotation
 
 selector_nu = 3956.0*48.3*DEG2RAD/2/PI/lambda/0.25;
+
+slit1_w = slit1_w / 1000.0;
+slit2_w = slit2_w / 1000.0;
+slit3_w = slit3_w / 1000.0;
 
 sample_dim = slit3_w * 1.2;
 
@@ -415,6 +419,7 @@ FINALLY
 %}
 
 END
+
 
 
 

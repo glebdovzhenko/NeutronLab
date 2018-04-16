@@ -1,5 +1,6 @@
 from .value_range import ValueRange
 from .mcsim_runner import McSimulationRunner
+from .tfit_app import TFitAppQt
 
 import numpy as np
 
@@ -42,8 +43,6 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.canvas.setFixedWidth(self.configuration['Plot Width'])
         self.canvas.setFixedHeight(self.configuration['Plot Height'])
 
-        self.canvas.mpl_connect('button_press_event', self.on_mouse_mpl_event)
-
         l_right.addWidget(self.toolbar, 0)
         l_right.addWidget(self.canvas, 1)
 
@@ -57,6 +56,11 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.log_b = QPushButton('Показать линейную интенсивность')
         l_right.addWidget(self.log_b, 2)
         self.log_b.clicked.connect(self.on_btn_log)
+
+        # adding the button to run the fit app
+        self.fit_b = QPushButton('Анализ результатов')
+        l_right.addWidget(self.fit_b, 3)
+        self.fit_b.clicked.connect(self.on_btn_fit)
 
         # adding parameter text boxes and registering update callbacks
         self.param_buttons, self.param_labels = [], []
@@ -79,23 +83,6 @@ class TLabAppQt(QDialog, McSimulationRunner):
         layout.addLayout(l_right, 1)
         self.setLayout(layout)
         self.setWindowTitle(name)
-
-    def keyPressEvent(self, event):
-        if type(event) == QKeyEvent:
-            if event.key() == 65:
-                self.accept_coordinates = not self.accept_coordinates
-        else:
-            event.ignore()
-
-    def on_mouse_mpl_event(self, event):
-        if (event.inaxes == self.axes_1d_detector) and (event.button == 1) and self.accept_coordinates:
-            coordinates, tth, dtth = self.result1d.run_gaussian_fit((event.xdata, event.ydata))
-            self._update_plot_axes()
-            self.axes_1d_detector.plot(coordinates[0], coordinates[1], color='r', zorder=2)
-            self.axes_1d_detector.text(event.xdata, event.ydata, 'Центр: %.3f +- %.3f' % (tth, dtth),
-                                       backgroundcolor='w')
-            self.figure.canvas.draw()
-            self.accept_coordinates = not self.accept_coordinates
 
     def setup_instr_params(self):
         for i, param in enumerate(self.instr_params):
@@ -175,7 +162,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
         if status is None:
             self.time_passed += 1
             self.progress_dialog.setValue(self.time_passed)
-            self.progress_dialog.setLabelText("Симуляция: %d сек" % (self.sim_eta - self.time_passed))
+            self.progress_dialog.setLabelText("Осталось: %d сек" % (self.sim_eta - self.time_passed))
         else:
             print('Child process returned', status)
             self.progress_dialog.setValue(self.sim_eta)
@@ -184,7 +171,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
         if self.sim_process is None:
             return
 
-        self.progress_dialog = QProgressDialog('Симуляция', 'Стоп', 0, self.sim_eta)
+        self.progress_dialog = QProgressDialog('Ход эксперимента', 'Стоп', 0, self.sim_eta)
         self.progress_dialog.canceled.connect(self.kill_simulation)
         self.time_passed = 0
         self.timer = QTimer()
@@ -220,3 +207,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
             self.log_b.setText('Показать логарифмическую интенсивность')
 
         self._update_plot_axes()
+
+    def on_btn_fit(self, *args):
+        fit_app = TFitAppQt(self.result1d)
+        fit_app.show()

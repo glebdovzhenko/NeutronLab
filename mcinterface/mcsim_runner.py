@@ -126,6 +126,9 @@ class McSimulationRunner:
                 if len(eta) > 0.5 * self.configuration['MPI nodes'] - 1:
                     eta = np.mean(eta)
                     break
+                if 'Finally' in line:
+                    eta = 0.
+                    break
             else:
                 time.sleep(1)
         if not eta:

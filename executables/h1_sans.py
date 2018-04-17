@@ -51,4 +51,3 @@ if __name__ == '__main__':
                                  instr_params=instrument_params, dummy=True)
     pinhole_sans_app.show()
     sys.exit(app.exec_())
-

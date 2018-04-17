@@ -8,3 +8,4 @@ flask
 celery
 bokeh
 redis
+lmfit

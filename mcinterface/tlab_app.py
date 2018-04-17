@@ -20,6 +20,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
     """"""
     def __init__(self, name, env_config, instr_params, gui=True, dummy=False):
         QDialog.__init__(self, env_config=env_config, instr_params=instr_params)
+
         self.gui = gui
         self.dummy = dummy
         self.progress_dialog = None
@@ -29,9 +30,6 @@ class TLabAppQt(QDialog, McSimulationRunner):
 
         if not gui:
             return
-
-        # initialising mode of reacting to mouse events
-        self.accept_coordinates = False
 
         # setting up the figure and its canvas for plots
         self.figure = plt.figure()
@@ -90,7 +88,6 @@ class TLabAppQt(QDialog, McSimulationRunner):
         tbr_layout.addWidget(self.log_b, 1)
         plot_layout.addLayout(tbr_layout, 0)
         plot_layout.addWidget(self.canvas, 1)
-        plot_layout.addWidget(self.log_b, 2)
         plot_layout.addWidget(self.fit_b, 3, Qt.AlignCenter)
         plot_layout.addWidget(scheme_label, 4, Qt.AlignCenter)
 
@@ -212,6 +209,6 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self._update_plot_axes()
 
     def on_btn_fit(self, *args):
-        if self.axes_1d_detector is not None:
+        if self.axes_1d_detector is not None and len(self.result1d.xdata) > 0:
             fit_app = TFitAppQt(self.result1d)
             fit_app.show()

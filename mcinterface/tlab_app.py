@@ -5,7 +5,7 @@ from .tfit_app import TFitAppQt
 import numpy as np
 
 from PyQt5.QtCore import QTimer
-from PyQt5.QtGui import QPixmap, QKeyEvent
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
@@ -25,71 +25,85 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.progress_dialog = None
         self.timer = None
         self.time_passed = 0
+        self.log_scale = True
 
         if not gui:
             return
 
-        layout = QHBoxLayout()
-        l_left = QGridLayout()
-        l_right = QVBoxLayout()
-
         # initialising mode of reacting to mouse events
         self.accept_coordinates = False
 
-        # setting up the figures for plots
+        # setting up the figure and its canvas for plots
         self.figure = plt.figure()
         self.canvas = FigureCanvas(self.figure)
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.canvas.setFixedWidth(self.configuration['Plot Width'])
         self.canvas.setFixedHeight(self.configuration['Plot Height'])
 
-        l_right.addWidget(self.toolbar, 0)
-        l_right.addWidget(self.canvas, 1)
-
-        # adding "Simulate" button and registering click callback
-        self.sim_b = QPushButton('Запуск эксперимента')
-        l_left.addWidget(self.sim_b, len(self.instr_params), 1)
-        self.sim_b.clicked.connect(self.on_btn_run)
+        # setting up plot axes
+        if ('1D detector file name' in self.configuration) and ('2D detector file name' in self.configuration):
+            self.axes_1d_detector = self.figure.add_subplot(121)
+            self.axes_2d_detector = self.figure.add_subplot(122)
+        elif '1D detector file name' in self.configuration:
+            self.axes_1d_detector = self.figure.add_subplot(111)
+            self.axes_2d_detector = None
+        elif '2D detector file name' in self.configuration:
+            self.axes_1d_detector = None
+            self.axes_2d_detector = self.figure.add_subplot(111)
+        self.figure.tight_layout()
 
         # adding plot scale button and registering click callback
-        self.log_scale = True
-        self.log_b = QPushButton('Показать линейную интенсивность')
-        l_right.addWidget(self.log_b, 2)
+        self.log_b = QPushButton('Лин. интенсивность')
+        self.log_b.setFixedWidth(0.2 * self.configuration['Plot Width'])
         self.log_b.clicked.connect(self.on_btn_log)
 
         # adding the button to run the fit app
         self.fit_b = QPushButton('Анализ результатов')
-        l_right.addWidget(self.fit_b, 3)
+        self.fit_b.setFixedWidth(0.2 * self.configuration['Plot Width'])
         self.fit_b.clicked.connect(self.on_btn_fit)
 
-        # adding parameter text boxes and registering update callbacks
+        # adding simulation parameters buttons and labels
         self.param_buttons, self.param_labels = [], []
-        self.setup_instr_params()
-
         for i, param in enumerate(self.instr_params):
-            l_left.addWidget(self.param_buttons[i], i, 0)
-            l_left.addWidget(self.param_labels[i], i, 1)
+            self.param_buttons.append(QPushButton(param.gui_name))
+            self.param_labels.append(QLabel(str(param)))
+            self.param_labels[i].setFrameStyle(QFrame.Sunken | QFrame.Panel)
+            self.param_buttons[i].clicked.connect(self.make_callback(i))
 
-        self.axes_1d_detector = None
-        self.axes_2d_detector = None
+        # adding "Simulate" button and registering click callback
+        self.run_b = QPushButton('Запуск эксперимента')
+        self.run_b.clicked.connect(self.on_btn_run)
 
+        # adding instrument scheme picture
         p_map = QPixmap(self.configuration['instrument scheme'])
         p_map = p_map.scaledToHeight(250, Qt.SmoothTransformation)
         scheme_label = QLabel()
         scheme_label.setPixmap(p_map)
-        l_right.addWidget(scheme_label, 3, Qt.AlignCenter)
 
-        layout.addLayout(l_left, 0)
-        layout.addLayout(l_right, 1)
-        self.setLayout(layout)
-        self.setWindowTitle(name)
+        # setting up Qt window layout
+        main_layout = QHBoxLayout()
+        param_layout = QGridLayout()
+        plot_layout = QVBoxLayout()
+        tbr_layout = QHBoxLayout()
 
-    def setup_instr_params(self):
+        tbr_layout.addWidget(self.toolbar, 0)
+        tbr_layout.addWidget(self.log_b, 1)
+        plot_layout.addLayout(tbr_layout, 0)
+        plot_layout.addWidget(self.canvas, 1)
+        plot_layout.addWidget(self.log_b, 2)
+        plot_layout.addWidget(self.fit_b, 3, Qt.AlignCenter)
+        plot_layout.addWidget(scheme_label, 4, Qt.AlignCenter)
+
         for i, param in enumerate(self.instr_params):
-            self.param_buttons.append(QPushButton(param.gui_name))
-            self.param_labels.append(QLabel(str(param)))
-            self.param_labels[-1].setFrameStyle(QFrame.Sunken | QFrame.Panel)
-            self.param_buttons[-1].clicked.connect(self.make_callback(i))
+            param_layout.addWidget(self.param_buttons[i], i, 0)
+            param_layout.addWidget(self.param_labels[i], i, 1)
+        param_layout.addWidget(self.run_b, len(self.instr_params), 1)
+
+        main_layout.addLayout(param_layout, 0)
+        main_layout.addLayout(plot_layout, 1)
+        self.setLayout(main_layout)
+
+        self.setWindowTitle(name)
 
     def make_callback(self, ii):
         def callback():
@@ -122,15 +136,6 @@ class TLabAppQt(QDialog, McSimulationRunner):
                 pass
         return callback
 
-    def _create_plot_axes(self):
-        if ('1D detector file name' in self.configuration) and ('2D detector file name' in self.configuration):
-            self.axes_1d_detector = self.figure.add_subplot(121)
-            self.axes_2d_detector = self.figure.add_subplot(122)
-        elif '1D detector file name' in self.configuration:
-            self.axes_1d_detector = self.figure.add_subplot(111)
-        elif '2D detector file name' in self.configuration:
-            self.axes_2d_detector = self.figure.add_subplot(111)
-
     def _update_plot_axes(self):
         if self.axes_1d_detector:
             self.axes_1d_detector.clear()
@@ -155,7 +160,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
             else:
                 self.axes_2d_detector.imshow(self.result2d.data, extent=self.result2d.extent)
         self.figure.tight_layout()
-        self.figure.canvas.draw()
+        self.canvas.draw()
 
     def update_pb(self):
         status = self.sim_process.poll()
@@ -185,7 +190,6 @@ class TLabAppQt(QDialog, McSimulationRunner):
     def on_btn_run(self, *args, **kwargs):
         if self.dummy:
             self.update_sim_results(self.configuration['Backup Data Directory'])
-            self._create_plot_axes()
             self._update_plot_axes()
             return
 
@@ -194,7 +198,6 @@ class TLabAppQt(QDialog, McSimulationRunner):
 
         if self.sim_process.poll() >= 0:
             self.update_sim_results()
-            self._create_plot_axes()
             self._update_plot_axes()
             self._cleanup()
 
@@ -202,12 +205,13 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.log_scale = not self.log_scale
 
         if self.log_scale:
-            self.log_b.setText('Показать линейную интенсивность')
+            self.log_b.setText('Лин. интенсивность')
         else:
-            self.log_b.setText('Показать логарифмическую интенсивность')
+            self.log_b.setText('Лог. интенсивность')
 
         self._update_plot_axes()
 
     def on_btn_fit(self, *args):
-        fit_app = TFitAppQt(self.result1d)
-        fit_app.show()
+        if self.axes_1d_detector is not None:
+            fit_app = TFitAppQt(self.result1d)
+            fit_app.show()

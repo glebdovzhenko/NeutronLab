@@ -8,7 +8,6 @@ import io
 
 
 class McCodeData(OrderedDict):
-    # TODO: make better?
     def __init__(self, *args, **kwargs):
         self._protected = kwargs.keys()
         super().__init__(*args, **kwargs)
@@ -86,21 +85,27 @@ class McColumns(McCodeData):
 
     @property
     def xdata(self):
-        if self['xcolumn']:
+        if 'variables' not in self.keys():
+            return np.empty(0)
+        elif self['xcolumn']:
             return self['variables'][self['xcolumn']]
         else:
             return self['variables'].iloc[:, 0]
 
     @property
     def ydata(self):
-        if self['ycolumn']:
+        if 'variables' not in self.keys():
+            return np.empty(0)
+        elif self['ycolumn']:
             return self['variables'][self['ycolumn']]
         else:
             return self['variables'].iloc[:, 1]
 
     @property
     def yerrdata(self):
-        if self['yerrcolumn']:
+        if 'variables' not in self.keys():
+            return np.empty(0)
+        elif self['yerrcolumn']:
             return self['variables'][self['yerrcolumn']]
         else:
             return self['variables'].iloc[:, 2]
@@ -135,14 +140,14 @@ class McArray(McCodeData):
             if k not in kwargs:
                 kwargs[k] = None
         super().__init__(*args, **kwargs)
-        self['extent'] = ()
+        self['extent'] = (0, 1, 0, 1)
 
     @property
     def data(self):
         if self['dataname']:
             return self[self['dataname']]
         else:
-            return self.locate('Data')
+            return self.locate('Data') if self.locate('Data')is not None else np.empty((0, 0))
 
     @property
     def err(self):

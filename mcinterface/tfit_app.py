@@ -1,3 +1,4 @@
+import numpy as np
 
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -5,8 +6,8 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 
 from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QDialog
-from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
-from PyQt5.QtWidgets import QPushButton, QLabel, QInputDialog, QProgressDialog
+from PyQt5.QtWidgets import QGridLayout, QVBoxLayout
+from PyQt5.QtWidgets import QPushButton, QLabel, QInputDialog
 
 
 class TFitAppQt(QDialog):
@@ -19,6 +20,11 @@ class TFitAppQt(QDialog):
         self.accept_coordinates = False
         self.axes_1d_detector = self.figure.add_subplot(111)
         self.data1d = data
+        self.peak_c = 0.
+        self.peak_w = 0.
+        self.peak_a = 0.
+        self.peak_x_min = 0.
+        self.peak_x_max = 0.
 
         self.b_fit = QPushButton('Оптимизировать')
 
@@ -32,12 +38,69 @@ class TFitAppQt(QDialog):
         layout.addWidget(self.toolbar)
         layout.addWidget(self.canvas)
         layout.addWidget(self.log_b)
+
+        l2 = QGridLayout()
+        self.c_button = QPushButton('Центр')
+        self.w_button = QPushButton('Ширина')
+        self.a_button = QPushButton('Высота')
+        self.x_min_button = QPushButton('Левая граница')
+        self.x_max_button = QPushButton('Правая граница')
+        self.c_label = QLabel('-')
+        self.w_label = QLabel('-')
+        self.a_label = QLabel('-')
+        self.x_min_label = QLabel('-')
+        self.x_max_label = QLabel('-')
+
+        self.c_button.clicked.connect(self.set_c)
+        self.w_button.clicked.connect(self.set_w)
+        self.a_button.clicked.connect(self.set_a)
+        self.x_min_button.clicked.connect(self.set_x_min)
+        self.x_max_button.clicked.connect(self.set_x_max)
+
+        l2.addWidget(self.c_button, 0, 0)
+        l2.addWidget(self.w_button, 1, 0)
+        l2.addWidget(self.a_button, 2, 0)
+        l2.addWidget(self.x_min_button, 3, 0)
+        l2.addWidget(self.x_max_button, 4, 0)
+        l2.addWidget(self.c_label, 0, 1)
+        l2.addWidget(self.w_label, 1, 1)
+        l2.addWidget(self.a_label, 2, 1)
+        l2.addWidget(self.x_min_label, 3, 1)
+        l2.addWidget(self.x_max_label, 4, 1)
+        layout.addLayout(l2)
+
         layout.addWidget(self.b_fit)
+
         self.setLayout(layout)
 
         self.canvas.mpl_connect('button_press_event', self.on_mouse_mpl_event)
         self._update_plot_axes()
         self.setWindowTitle('Анализ кривой')
+
+    def set_c(self):
+        self.peak_c, ok = QInputDialog.getDouble(self, 'Центр пика', "Центр:", 37.56, -10000, 10000, 2)
+        if ok:
+            self.c_label.setText(str(self.peak_c))
+
+    def set_w(self):
+        self.peak_w, ok = QInputDialog.getDouble(self, 'Ширина пика', "Ширина:", 37.56, -10000, 10000, 2)
+        if ok:
+            self.w_label.setText(str(self.peak_w))
+
+    def set_a(self):
+        self.peak_a, ok = QInputDialog.getDouble(self, 'Высота пика', "Высота:", 37.56, -10000, 10000, 2)
+        if ok:
+            self.a_label.setText(str(self.peak_a))
+
+    def set_x_min(self):
+        self.peak_x_min, ok = QInputDialog.getDouble(self, 'Левая граница', "Значение:", 37.56, -10000, 10000, 2)
+        if ok:
+            self.x_min_label.setText(str(self.peak_x_min))
+
+    def set_x_max(self):
+        self.peak_x_max, ok = QInputDialog.getDouble(self, 'Правая граница', "Значение:", 37.56, -10000, 10000, 2)
+        if ok:
+            self.x_max_label.setText(str(self.peak_x_max))
 
     def keyPressEvent(self, event):
         if type(event) == QKeyEvent:
@@ -46,8 +109,14 @@ class TFitAppQt(QDialog):
         else:
             event.ignore()
 
+    @staticmethod
+    def f(x, *args):
+        return args[0] * np.exp(-0.5 * ((x - args[1]) / args[2]) ** 2)
+
     def on_mouse_mpl_event(self, event):
         if (event.inaxes == self.axes_1d_detector) and (event.button == 1) and self.accept_coordinates:
+            self.peak_c = event.xdata
+            self.peak_w = event.ydata
             coordinates, tth, dtth = self.data1d.run_gaussian_fit((event.xdata, event.ydata))
             self._update_plot_axes()
             self.axes_1d_detector.plot(coordinates[0], coordinates[1], color='r', zorder=2)

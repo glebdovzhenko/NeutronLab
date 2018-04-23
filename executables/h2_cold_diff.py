@@ -11,6 +11,8 @@ import os
 instrument_params = (
     GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 3),
     GUIParameter('Расходимость коллиматора [угл. мин.]', 'div_col', float, 45),
+    GUIParameter('Образец', 'sample_num', int, 0, values=(0, ),
+                 value_names=('Na2Ca3Al2F14', )),
     GUIParameter('Статистика нейтронов', 'n_count', int, 1E9),
 )
 
@@ -41,6 +43,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     pinhole_sans_app = TLabAppQt(name='Cold Neutron Diffractometer',
                   env_config=app_config,
-                  instr_params=instrument_params, dummy=True)
+                  instr_params=instrument_params, dummy=False)
     pinhole_sans_app.show()
     sys.exit(app.exec_())

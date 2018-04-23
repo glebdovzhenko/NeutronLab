@@ -27,7 +27,7 @@
 *
 * %End
 *******************************************************************************/
-DEFINE INSTRUMENT H2_CD(lambda=3, div_col = 45)
+DEFINE INSTRUMENT H2_CD(lambda=3, div_col = 45, sample_num = 0)
 
 DECLARE
 %{

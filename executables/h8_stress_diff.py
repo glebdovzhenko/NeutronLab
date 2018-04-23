@@ -10,7 +10,8 @@ import os
 
 instrument_params = (
     GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 1.727),
-    GUIParameter('Номер образца', 'sample_index', int, 0, values=(0, 1, 2, 3, 4, 5, 6)),
+    GUIParameter('Нагрузка на образец', 'sample_index', int, 0, values=(0, 1, 2, 3, 4, 5, 6),
+                 value_names=('0 МПа', '75 МПа', '145 МПа', '220 МПа', '290 МПа', '365 МПа', '440 МПа')),
     GUIParameter('Статистика нейтронов', 'n_count', int, 1E8),
 )
 

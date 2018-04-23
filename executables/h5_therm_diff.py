@@ -9,11 +9,11 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 1.5),
-    GUIParameter('Коллиматор 1', 'col1', float, 10),
-    GUIParameter('Коллиматор 2', 'col2', float, 20),
-    GUIParameter('Коллиматор 3', 'col3', float, 10),
-    GUIParameter('Мозаичность монохроматора [угл. мин.]', 'mon_mos', float, 40),
+    GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 1.2),
+    GUIParameter('Диаметр диафрагмы [мм]', 'dia_dia', int, 3, values=(3, 6, 10),
+                 value_names=('3', '6', '10')),
+    GUIParameter('Образец', 'sample_num', int, 1, values=(1, 2, 3, 4, 5),
+                 value_names=('Cu', 'Si', 'Ge', 'Al2O3', 'Na2Ca3Al2F14')),
     GUIParameter('Статистика нейтронов', 'n_count', int, 1E9),
 )
 
@@ -43,6 +43,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     pinhole_sans_app = TLabAppQt(name='Thermal Powder Diffractometer',
                                  env_config=app_config,
-                                 instr_params=instrument_params, dummy=True)
+                                 instr_params=instrument_params, dummy=False)
     pinhole_sans_app.show()
     sys.exit(app.exec_())

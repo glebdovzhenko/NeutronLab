@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 /* Change name of instrument and input parameters with default values */
-DEFINE INSTRUMENT PD (lambda = 1.2, col1 = 10, mon_mos = 40, col2=20, col3 = 10)
+DEFINE INSTRUMENT PD (lambda = 1.2, int sample_num = 1, int dia_dia = 6)
 
 /* The DECLARE section allows us to declare variables or  small      */
 /* functions in C syntax. These may be used in the whole instrument. */
@@ -45,6 +45,8 @@ double lambda_min, lambda_max;
 double monok_d = 1.714;
 double monok_angle;
 
+double col1 = 10, mon_mos = 40, col2=20, col3 = 10;
+
 double det_R = 2.0;
 const char * sample;
 %}
@@ -53,11 +55,56 @@ const char * sample;
 /* (C code). You may use them as component parameter values.         */
 INITIALIZE
 %{
-sample = "Cu.laz";
 lambda_min = 0.985*lambda;
 lambda_max = 1.015*lambda;
 divx_source = 2.0 * col1 / 60.0;
 monok_angle = asin(lambda / 2.0 / monok_d) * RAD2DEG;
+
+switch( dia_dia )   
+{  
+    case 3:  
+        col1 = col1 / 1.5;
+        mon_mos = mon_mos / 1.5;
+        col2 = col2 / 1.5;
+        col3 = col3 / 1.5;
+        break;  
+    case 6 :  
+        break;  
+    case 10 :  
+        col1 = col1 * 1.5;
+        mon_mos = mon_mos * 1.5;
+        col2 = col2 * 1.5;
+        col3 = col3 *1.5;
+        break;  
+
+    default :
+        printf("Wrong diaphragm_radius! Operating at 6mm.\n");
+        break; 
+}
+
+switch( sample_num )   
+{  
+    case 1:  
+        sample = "Cu.laz";
+        break;  
+    case 2 :  
+        sample = "Si.laz";
+        break;  
+    case 3 :  
+        sample = "Ge.laz";
+        break;  
+    case 4 :  
+        sample = "Al2O3.laz";
+        break;  
+    case 5 :  
+        sample = "Na2Ca3Al2F14.laz";
+        break;  
+
+    default :
+        printf("Wrong sample choice! Operating at #1 - Cu.\n");
+        sample = "Cu.laz";
+        break; 
+}
 %}
 
 /* Here comes the TRACE section, where the actual      */
@@ -183,6 +230,8 @@ FINALLY
 %}
 /* The END token marks the instrument definition end */
 END
+
+
 
 
 

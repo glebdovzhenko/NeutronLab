@@ -146,5 +146,3 @@ class TFitAppQt(QDialog):
             'Центр: %0.6f +- %0.6f' % (
             self.fit_result[1].params['center'].value, self.fit_result[1].params['center'].stderr))
         self._update_plot_axes()
-
-

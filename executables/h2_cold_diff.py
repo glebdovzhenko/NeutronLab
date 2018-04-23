@@ -17,7 +17,7 @@ instrument_params = (
 app_config = {
     'Instr filename': os.path.join(config.instr_path, 'H2_ColdDif.instr'),
     'Simulation Data Directory': config.results_path,
-    'Backup Data Directory': os.path.join(config.results_path, 'h1_SANS'),
+    'Backup Data Directory': os.path.join(config.results_path, 'h2_cnd'),
     '1D detector file name': 'detector.dat',
     '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
     'instrument scheme': os.path.join(config.img_path, 'h2_cpd.tiff'),
@@ -41,6 +41,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     pinhole_sans_app = TLabAppQt(name='Cold Neutron Diffractometer',
                   env_config=app_config,
-                  instr_params=instrument_params, dummy=False)
+                  instr_params=instrument_params, dummy=True)
     pinhole_sans_app.show()
     sys.exit(app.exec_())

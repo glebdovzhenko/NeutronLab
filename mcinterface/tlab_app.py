@@ -26,7 +26,8 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.progress_dialog = None
         self.timer = None
         self.time_passed = 0
-        self.log_scale = True
+        self.log_scale_y = False
+        self.log_scale_x = False
 
         if not gui:
             return
@@ -51,9 +52,12 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.figure.tight_layout()
 
         # adding plot scale button and registering click callback
-        self.log_b = QPushButton('Лин. интенсивность')
-        self.log_b.setFixedWidth(0.2 * self.configuration['Plot Width'])
-        self.log_b.clicked.connect(self.on_btn_log)
+        self.log_by = QPushButton('Лог. ось y')
+        self.log_by.setFixedWidth(0.2 * self.configuration['Plot Width'])
+        self.log_by.clicked.connect(self.on_btn_log_y)
+        self.log_bx = QPushButton('Лог. ось x')
+        self.log_bx.setFixedWidth(0.2 * self.configuration['Plot Width'])
+        self.log_bx.clicked.connect(self.on_btn_log_x)
 
         # adding the button to run the fit app
         self.fit_b = QPushButton('Анализ результатов')
@@ -83,9 +87,12 @@ class TLabAppQt(QDialog, McSimulationRunner):
         param_layout = QGridLayout()
         plot_layout = QVBoxLayout()
         tbr_layout = QHBoxLayout()
+        log_layout = QVBoxLayout()
 
         tbr_layout.addWidget(self.toolbar, 0)
-        tbr_layout.addWidget(self.log_b, 1)
+        log_layout.addWidget(self.log_by, 0)
+        log_layout.addWidget(self.log_bx, 1)
+        tbr_layout.addLayout(log_layout, 1)
         plot_layout.addLayout(tbr_layout, 0)
         plot_layout.addWidget(self.canvas, 1)
         plot_layout.addWidget(self.fit_b, 3, Qt.AlignCenter)
@@ -139,10 +146,14 @@ class TLabAppQt(QDialog, McSimulationRunner):
             self.axes_1d_detector.set_title(self.result1d.title)
             self.axes_1d_detector.set_xlabel(self.result1d.xlabel)
             self.axes_1d_detector.set_ylabel(self.result1d.ylabel)
-            if self.log_scale:
+            if self.log_scale_y:
                 self.axes_1d_detector.set_yscale('log', nonposy='clip')
             else:
                 self.axes_1d_detector.set_yscale('linear')
+            if self.log_scale_x:
+                self.axes_1d_detector.set_xscale('log', nonposx='clip')
+            else:
+                self.axes_1d_detector.set_xscale('linear')
 
             self.axes_1d_detector.errorbar(self.result1d.xdata, self.result1d.ydata, yerr=self.result1d.yerrdata,
                                            zorder=1)
@@ -152,7 +163,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
             self.axes_2d_detector.set_title(self.result2d.title)
             self.axes_2d_detector.set_xlabel(self.result2d.xlabel)
             self.axes_2d_detector.set_ylabel(self.result2d.ylabel)
-            if self.log_scale:
+            if self.log_scale_y:
                 self.axes_2d_detector.imshow(np.log(self.result2d.data), extent=self.result2d.extent)
             else:
                 self.axes_2d_detector.imshow(self.result2d.data, extent=self.result2d.extent)
@@ -198,13 +209,23 @@ class TLabAppQt(QDialog, McSimulationRunner):
             self._update_plot_axes()
             self._cleanup()
 
-    def on_btn_log(self, *args):
-        self.log_scale = not self.log_scale
+    def on_btn_log_y(self, *args):
+        self.log_scale_y = not self.log_scale_y
 
-        if self.log_scale:
-            self.log_b.setText('Лин. интенсивность')
+        if self.log_scale_y:
+            self.log_by.setText('Лин. ось y')
         else:
-            self.log_b.setText('Лог. интенсивность')
+            self.log_by.setText('Лог. ось y')
+
+        self._update_plot_axes()
+
+    def on_btn_log_x(self, *args):
+        self.log_scale_x = not self.log_scale_x
+
+        if self.log_scale_x:
+            self.log_bx.setText('Лин. ось x')
+        else:
+            self.log_bx.setText('Лог. ось x')
 
         self._update_plot_axes()
 

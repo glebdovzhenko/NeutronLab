@@ -7,7 +7,7 @@ import numpy as np
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog, QFileDialog
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
 from PyQt5.QtWidgets import QPushButton, QLabel, QInputDialog, QProgressDialog
 
@@ -64,6 +64,10 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.fit_b.setFixedWidth(0.2 * self.configuration['Plot Width'])
         self.fit_b.clicked.connect(self.on_btn_fit)
 
+        self.save_b = QPushButton('Сохранить результаты')
+        self.save_b.setFixedWidth(0.2 * self.configuration['Plot Width'])
+        self.save_b.clicked.connect(self.on_btn_save)
+
         # adding simulation parameters buttons and labels
         self.param_buttons, self.param_labels = [], []
         for i, param in enumerate(self.instr_params):
@@ -88,6 +92,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
         plot_layout = QVBoxLayout()
         tbr_layout = QHBoxLayout()
         log_layout = QVBoxLayout()
+        u_plot_layout = QHBoxLayout()
 
         tbr_layout.addWidget(self.toolbar, 0)
         log_layout.addWidget(self.log_by, 0)
@@ -95,7 +100,9 @@ class TLabAppQt(QDialog, McSimulationRunner):
         tbr_layout.addLayout(log_layout, 1)
         plot_layout.addLayout(tbr_layout, 0)
         plot_layout.addWidget(self.canvas, 1)
-        plot_layout.addWidget(self.fit_b, 3, Qt.AlignCenter)
+        u_plot_layout.addWidget(self.fit_b, 0, Qt.AlignRight)
+        u_plot_layout.addWidget(self.save_b, 1, Qt.AlignLeft)
+        plot_layout.addLayout(u_plot_layout, 3)
         plot_layout.addWidget(scheme_label, 4, Qt.AlignCenter)
 
         for i, param in enumerate(self.instr_params):
@@ -233,3 +240,12 @@ class TLabAppQt(QDialog, McSimulationRunner):
         if self.axes_1d_detector is not None and len(self.result1d.xdata) > 0:
             fit_app = TFitAppQt(self.result1d)
             fit_app.show()
+
+    def on_btn_save(self, *args):
+        options = QFileDialog.Options() | QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getSaveFileName(self, "Сохранить файл", "",
+                                                  "All Files (*);;Text Files (*.txt)", options=options)
+        if fileName:
+            print('Results saved to %s' % fileName)
+            arr = np.stack((self.result1d.xdata, self.result1d.ydata, self.result1d.yerrdata))
+            np.savetxt(fileName, np.stack((self.result1d.xdata, self.result1d.ydata, self.result1d.yerrdata)).T)

@@ -247,5 +247,4 @@ class TLabAppQt(QDialog, McSimulationRunner):
                                                   "All Files (*);;Text Files (*.txt)", options=options)
         if fileName:
             print('Results saved to %s' % fileName)
-            arr = np.stack((self.result1d.xdata, self.result1d.ydata, self.result1d.yerrdata))
             np.savetxt(fileName, np.stack((self.result1d.xdata, self.result1d.ydata, self.result1d.yerrdata)).T)

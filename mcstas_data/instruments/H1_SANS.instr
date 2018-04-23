@@ -28,7 +28,7 @@
 * %End
 *******************************************************************************/
 
-DEFINE INSTRUMENT H1(lambda = 4.5, slit1_w = 32, slit2_w = 16, slit3_w = 16, int det_position = 3, int sample_num = 1)
+DEFINE INSTRUMENT H1(lambda = 4.5, slit1_w = 32, slit2_w = 16, slit3_w = 16, int det_position = 3, int sample_num = 1, dia_type = 0)
 
 DECLARE
 %{

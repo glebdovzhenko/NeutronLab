@@ -143,6 +143,8 @@ class TFitAppQt(QDialog):
         self.xleft_b.setText('Левая граница: %f' % self.x_borders[0])
         self.xright_b.setText('Правая граница: %f' % self.x_borders[1])
         self.center_label.setText(
-            'Центр: %0.6f +- %0.6f' % (
-            self.fit_result[1].params['center'].value, self.fit_result[1].params['center'].stderr))
+            'Центр: %0.6f +- %0.6f, Ширина: %0.6f +- %0.6f, Интенсивность: %0.6f +- %0.6f' % (
+            self.fit_result[1].params['center'].value, self.fit_result[1].params['center'].stderr,
+            2. * self.fit_result[1].params['fwhm'].value, 2. * self.fit_result[1].params['fwhm'].stderr,
+            self.fit_result[1].params['amplitude'].value, self.fit_result[1].params['amplitude'].stderr))
         self._update_plot_axes()

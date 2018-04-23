@@ -10,7 +10,7 @@ import os
 
 instrument_params = (
     GUIParameter('Длина волны селектора [\u212B]', 'lambda', float, 15),
-    GUIParameter('Тип диафрагмы', 'dia_type', int, 1, values=(0, 1),
+    GUIParameter('Тип диафрагм', 'dia_type', int, 1, values=(0, 1),
                  value_names=('Квадратная', 'Круглая')),
     GUIParameter('Ширина диафрагмы 1 [мм]', 'slit1_w', int, 32),
     GUIParameter('Ширина диафрагмы 2 [мм]', 'slit2_w', int, 16),

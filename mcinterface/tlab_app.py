@@ -8,7 +8,7 @@ import re
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QFileDialog
+from PyQt5.QtWidgets import QDialog, QFileDialog, QLineEdit
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
 from PyQt5.QtWidgets import QPushButton, QLabel, QInputDialog, QProgressDialog
 
@@ -27,9 +27,11 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.dummy = dummy
         self.progress_dialog = None
         self.timer = None
-        self.time_passed = 0
+        self.time_passed = 0.
+        self.steps_passed = 0
         self.log_scale_y = False
         self.sq_scale_x = False
+        self.sim_status = 'Подготовка'
 
         if not gui:
             return
@@ -139,14 +141,14 @@ class TLabAppQt(QDialog, McSimulationRunner):
                 if ok:
                     self.instr_params[ii].update(d)
                     self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
-            elif self.instr_params[ii].dtype == ValueRange:
-                text, ok = QInputDialog.getText(self, self, self.instr_params[ii].gui_name,
-                                                self.instr_params[ii].gui_name, str(self.instr_params[ii]))
+            elif type(self.instr_params[ii].dtype) == ValueRange:
+                text, ok = QInputDialog.getText(self, self.instr_params[ii].gui_name,
+                                                self.instr_params[ii].gui_name, QLineEdit.Normal, str(self.instr_params[ii]))
                 if ok and text != '':
                     self.instr_params[ii].update(text)
                     self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
             else:
-                pass
+                print(self.instr_params[ii].dtype)
         return callback
 
     def _update_plot_axes(self):
@@ -180,43 +182,82 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.figure.tight_layout()
         self.canvas.draw()
 
-    def update_pb(self):
-        expr = re.compile(r'INFO: (?P<param>[\S.]+): (?P<val>[\d.]+)$')
-        if self.n_points == 1:
-            status = self.sim_process.poll()
-            if status is None:
-                self.time_passed += 1
-                self.progress_dialog.setValue(self.time_passed)
-                self.progress_dialog.setLabelText("Осталось: %d сек" % (self.sim_eta - self.time_passed))
+    def on_timeout(self):
+        status = self.sim_process.poll()
+
+        if status is not None:
+            self.progress_dialog.setValue(self.progress_dialog.maximum())
+            print('Child process returned', status)
+            return
+
+        self.time_passed += 0.2
+
+        self.sim_stdout.flush()
+        self.sim_stderr.flush()
+
+        try:
+            out_line = self.sim_stdout.readline().decode()
+        except IOError:
+            out_line = ''
+
+        try:
+            err_line = self.sim_stderr.readline().decode()
+        except IOError:
+            err_line = ''
+
+        if out_line:
+            print(out_line)
+        if err_line:
+            print(err_line)
+
+        m = re.match(r'Trace ETA (?P<mes>[\d.]+) \[(?P<scale>min|s|h)\]', out_line)
+        if m:
+            if self.sim_status != 'Вычисление':
+                self.sim_status = 'Вычисление'
+                if m.group('scale') == 's':
+                    self.sim_eta = float(m.group('mes'))
+                elif m.group('scale') == 'min':
+                    self.sim_eta = float(m.group('mes')) * 60.
+                elif m.group('scale') == 'h':
+                    self.sim_eta = float(m.group('mes')) * 3600.
             else:
-                print('Child process returned', status)
-                self.progress_dialog.setValue(self.sim_eta)
-        else:
-            line = self.sim_process.stderr.readline().decode()
-            m = expr.match(line)
-            if m:
-                print(line)
-                self.time_passed += 1
-                self.progress_dialog.setValue(self.time_passed)
-                self.progress_dialog.setLabelText("Посчитано: %d / %d шагов" % (self.time_passed, self.n_points))
-            else:
-                status = self.sim_process.poll()
-                if status is not None:
-                    print('Child process returned', status)
-                    self.progress_dialog.setValue(self.n_points)
+                if m.group('scale') == 's':
+                    self.sim_eta = max(self.sim_eta, float(m.group('mes')))
+                elif m.group('scale') == 'min':
+                    self.sim_eta = max(self.sim_eta, float(m.group('mes')) * 60.)
+                elif m.group('scale') == 'h':
+                    self.sim_eta = max(self.sim_eta, float(m.group('mes')) * 3600.)
+
+        if (self.n_points == 1) or (self.sim_status == 'Подготовка'):
+            self.progress_dialog.setValue(int(self.time_passed))
+            self.progress_dialog.setLabelText(self.sim_status + ": %d сек" % (self.sim_eta - int(self.time_passed)))
+
+        m = re.match(r'INFO: (?P<param>[\S.]+): (?P<val>[\d.]+)$', err_line)
+        if m:
+            self.sim_status = 'Вычисление'
+            self.steps_passed += 1
+        if (self.n_points > 1) and (self.sim_status == 'Вычисление'):
+            self.progress_dialog.setValue(int(self.steps_passed))
+            self.progress_dialog.setLabelText(self.sim_status + ": %d / %d шагов" % (int(self.steps_passed), self.n_points))
 
     def await_simulation(self):
         if self.sim_process is None:
             return
+        self.sim_eta = 60
+        self.time_passed = 0.
+        self.steps_passed = 0
+        self.sim_status = 'Подготовка'
+
         if self.n_points == 1:
             self.progress_dialog = QProgressDialog('Ход эксперимента', 'Стоп', 0, self.sim_eta)
-        else:
+        elif self.n_points > 1:
             self.progress_dialog = QProgressDialog('Ход эксперимента', 'Стоп', 0, self.n_points)
+        self.progress_dialog.resize(300, self.progress_dialog.height())
         self.progress_dialog.canceled.connect(self.kill_simulation)
-        self.time_passed = 0
+
         self.timer = QTimer()
-        self.timer.timeout.connect(self.update_pb)
-        self.timer.start(1000)
+        self.timer.timeout.connect(self.on_timeout)
+        self.timer.start(200)
         self.progress_dialog.exec()
         self.timer.stop()
 

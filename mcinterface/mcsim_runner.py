@@ -3,6 +3,7 @@ from .mccode_parsers import McArray, McColumns
 
 from collections import defaultdict
 from subprocess import PIPE, Popen
+import fcntl
 import numpy as np
 import random
 import string
@@ -23,6 +24,7 @@ class McSimulationRunner:
         # TODO: replace with actual ending time or something
         self.sim_eta = None
         self.n_points = None
+        self.sim_stderr, self.sim_stdout = None, None
 
         # initialising variables for storing plotted data
         # noinspection PyTypeChecker
@@ -106,40 +108,12 @@ class McSimulationRunner:
         os.mkdir(self.configuration['Simulation Data Directory'])
 
         self.sim_process = Popen([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params],
-                                 env=env, cwd=self.configuration['Simulation Data Directory'], stdout=PIPE, stderr=PIPE,
-                                 preexec_fn=os.setsid)
+                                 env=env, cwd=self.configuration['Simulation Data Directory'],
+                                 stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid)
 
-        if self.n_points == 1:
-            expr = re.compile(r'Trace ETA (?P<mes>[\d.]+) \[(?P<scale>min|s|h)\]')
-            eta = []
-            while True:
-                line = self.sim_process.stdout.readline()
-                status = self.sim_process.poll()
-                if not line and status is not None:
-                    break
-                elif line:
-                    line = line.decode()
-                    print(line)
-                    m = expr.match(line)
-                    if m:
-                        if m.group('scale') == 's':
-                            eta.append(float(m.group('mes')))
-                        elif m.group('scale') == 'min':
-                            eta.append(float(m.group('mes')) * 60.)
-                        elif m.group('scale') == 'h':
-                            eta.append(float(m.group('mes')) * 3600.)
-                    if len(eta) > 0.5 * self.configuration['MPI nodes'] - 1:
-                        eta = np.mean(eta)
-                        break
-                    if 'Finally' in line:
-                        eta = 0.
-                        break
-                else:
-                    time.sleep(1)
-            if not eta:
-                eta = 0.
-            self.sim_eta = int(eta)
-            print('# ETA %d sec' % self.sim_eta)
+        self.sim_stderr, self.sim_stdout = self.sim_process.stderr, self.sim_process.stdout
+        fcntl.fcntl(self.sim_stdout, fcntl.F_SETFL, fcntl.fcntl(self.sim_stdout, fcntl.F_GETFL) | os.O_NONBLOCK)
+        fcntl.fcntl(self.sim_stderr, fcntl.F_SETFL, fcntl.fcntl(self.sim_stderr, fcntl.F_GETFL) | os.O_NONBLOCK)
 
     def await_simulation(self):
         if self.sim_process is None:

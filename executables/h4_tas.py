@@ -11,7 +11,7 @@ import os
 instrument_params = (
     GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 2.4),
     GUIParameter('Угол рассеяния [град.]', 'scat_angle', float, 10),
-    GUIParameter('Аналитич. угол [град.]', 'an_angle', ValueRange(float), (40, 60)),
+    GUIParameter('Угол анализатора [град.]', 'an_angle', ValueRange(float), (40, 60)),
     GUIParameter('Шаги по ан. углу', 'N_count', int, 100),
     GUIParameter('Статистика нейтронов', 'n_count', int, 1E6),
 )

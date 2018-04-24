@@ -3,6 +3,7 @@ from .mcsim_runner import McSimulationRunner
 from .tfit_app import TFitAppQt
 
 import numpy as np
+import re
 
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPixmap
@@ -180,20 +181,37 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.canvas.draw()
 
     def update_pb(self):
-        status = self.sim_process.poll()
-        if status is None:
-            self.time_passed += 1
-            self.progress_dialog.setValue(self.time_passed)
-            self.progress_dialog.setLabelText("Осталось: %d сек" % (self.sim_eta - self.time_passed))
+        expr = re.compile(r'INFO: (?P<param>[\S.]+): (?P<val>[\d.]+)$')
+        if self.n_points == 1:
+            status = self.sim_process.poll()
+            if status is None:
+                self.time_passed += 1
+                self.progress_dialog.setValue(self.time_passed)
+                self.progress_dialog.setLabelText("Осталось: %d сек" % (self.sim_eta - self.time_passed))
+            else:
+                print('Child process returned', status)
+                self.progress_dialog.setValue(self.sim_eta)
         else:
-            print('Child process returned', status)
-            self.progress_dialog.setValue(self.sim_eta)
+            line = self.sim_process.stderr.readline().decode()
+            m = expr.match(line)
+            if m:
+                print(line)
+                self.time_passed += 1
+                self.progress_dialog.setValue(self.time_passed)
+                self.progress_dialog.setLabelText("Посчитано: %d / %d шагов" % (self.time_passed, self.n_points))
+            else:
+                status = self.sim_process.poll()
+                if status is not None:
+                    print('Child process returned', status)
+                    self.progress_dialog.setValue(self.n_points)
 
     def await_simulation(self):
         if self.sim_process is None:
             return
-
-        self.progress_dialog = QProgressDialog('Ход эксперимента', 'Стоп', 0, self.sim_eta)
+        if self.n_points == 1:
+            self.progress_dialog = QProgressDialog('Ход эксперимента', 'Стоп', 0, self.sim_eta)
+        else:
+            self.progress_dialog = QProgressDialog('Ход эксперимента', 'Стоп', 0, self.n_points)
         self.progress_dialog.canceled.connect(self.kill_simulation)
         self.time_passed = 0
         self.timer = QTimer()

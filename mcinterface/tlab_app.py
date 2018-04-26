@@ -190,7 +190,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
             print('Child process returned', status)
             return
 
-        self.time_passed += 0.2
+        self.time_passed += 0.01
 
         self.sim_stdout.flush()
         self.sim_stderr.flush()
@@ -257,7 +257,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_timeout)
-        self.timer.start(200)
+        self.timer.start(10)
         self.progress_dialog.exec()
         self.timer.stop()
 

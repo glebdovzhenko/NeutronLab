@@ -28,7 +28,7 @@
 * %End
 *******************************************************************************/
 
-DEFINE INSTRUMENT RPN (monok_lambda = 5.2, scat_angle = 0)
+DEFINE INSTRUMENT RPN (monok_lambda = 6.0, scat_angle = 0.3, int sample_index = 0)
 
 DECLARE
 %{
@@ -41,14 +41,14 @@ double lambda_min, lambda_max, cat_angle;
 
 //collimator parameters
 double source_coll_dist = 1.042;
-double guide_width = 0.015, guide_height = 0.12;
+double guide_width = 0.005, guide_height = 0.12;
 double coll_length = 1.005;
 double coll_length_uncoated = 0.305, coll_length_coated;
 double m_left_right = 2, m_top_bottom = 2;
 double wavy = 0.182, R0 = 0.995, Rm2 = 0.93, slope, shutter_length = 0.2;
 
 //bender parameters
-double bender_guide_gap = 0.3, guide_before_length = 4.0, bender_length = 1.5, bender_chan_num = 3;
+double bender_guide_gap = 0.3, guide_before_length = 4.0, bender_length = 1.5, bender_chan_num = 1;
 double source_bender_dist;
 double bender_wall_thick = 0.0004;
 double bender_rot = 0.0252;
@@ -59,7 +59,9 @@ double m_overall = 1, bender_m_left = 2, bender_m_right = 2;
 double guide_length = 8;
 double final_height = 0.05, focusator_m = 2.5;
 
-double monok_d = 3.355, monok_angle, monok_mos = 30, monok_rad = 0, mon_samp_dist = 4.8;
+double monok_d = 3.355, monok_angle, monok_mos = 30, monok_rad = 0, mon_samp_dist = 5.0;
+
+const char * sam_name = NULL;
 
 %}
 
@@ -81,6 +83,21 @@ bender_length = bender_length/bender_piece_num; //now bender length is one piece
 bender_rot = bender_rot*RAD2DEG/bender_piece_num; //now bender piece rotation
 
 monok_angle = asin(monok_lambda/2.0/monok_d)*RAD2DEG;
+
+switch( sample_index )   
+{  
+    case 0:  
+        sam_name = "unmodulated.rfl";
+        break;  
+    case 1:  
+        sam_name = "modulated.rfl";
+        break;  
+    default :
+        printf("Wrong sample conditions! Operating at #0 - unmodulated structure.\n");
+        sam_name = "unmodulated.rfl";
+        break; 
+}
+
 %}
 
 TRACE
@@ -212,14 +229,8 @@ COMPONENT Guide_1 = Guide_gravity(
    ROTATED (0, 2*monok_angle, 0) RELATIVE Monok_Arm
  
  
- COMPONENT Monok_mon = Monitor_nD(
-     options = "x y", xwidth = 0.01,
-     yheight = 0.2, bins = 100, restore_neutron = 1)
-   AT (0, 0, 0.0095) RELATIVE Monok_Arm_2
- 
- 
  COMPONENT Guide_after = Guide_gravity(
-     w1 = guide_width, h1 = guide_height, h2 = final_height, l = 4.3, m = focusator_m, R0 = R0, alpha = slope)
+     w1 = guide_width, h1 = guide_height, h2 = final_height, l = 4.3, mleft = 0, mright = 0, mtop = focusator_m, mbottom = focusator_m, R0 = R0, alpha = slope)
    AT (0, 0, 0.1) RELATIVE Monok_Arm_2
  
 
@@ -242,58 +253,115 @@ EXTEND
 
 
 COMPONENT Dia_sample = Slit(
-    xwidth = 0.015, yheight = 0.12)
-  AT (0, 0, -0.11) RELATIVE Sample_Arm
+    xwidth = 0.005, yheight = 0.12)
+  AT (0, 0, -0.59) RELATIVE Sample_Arm
+/*
+	COMPONENT Sam_xy = Monitor_nD(
+	    xwidth = 0.02, yheight = 0.2, restore_neutron = 1,
+	    options = "x limits=[-0.01 0.01] bins = 100 y limits=[-0.1 0.1] bins=200",
+	    filename = "samxy.xy")
+	  AT (0, 0, 0.005) RELATIVE Dia_sample
+
+	COMPONENT Sam_x = Monitor_nD(
+	    xwidth = 0.02, yheight = 0.2, restore_neutron = 1,
+	    options = "x limits=[-0.01 0.01] bins=100",
+	    filename = "samx.x")
+	  AT (0, 0, 0.005) RELATIVE Dia_sample
+
+	COMPONENT Sam_y = Monitor_nD(
+	    xwidth = 0.02, yheight = 0.2, restore_neutron = 1,
+	    options = "y limits=[-0.1 0.1] bins=200",
+	    filename = "samy.y")
+	  AT (0, 0, 0.005) RELATIVE Dia_sample
+
+	COMPONENT Sam_lam = Monitor_nD(
+	    xwidth = 0.02, yheight = 0.2, restore_neutron = 1,
+	    options = "lambda limits = [4.7 5.7] bins = 100",
+	    filename = "saml.L")
+	  AT (0, 0, 0.005) RELATIVE Dia_sample
+
+	COMPONENT Sam_dx = Monitor_nD(
+	    xwidth = 0.02, yheight = 0.2, restore_neutron = 1,
+	    options = "dx limits=[-1 1] bins=100",
+	    filename = "samdx.dx")
+	  AT (0, 0, 0.005) RELATIVE Dia_sample
+
+	COMPONENT Sam_dy = Monitor_nD(
+	    xwidth = 0.02, yheight = 0.2, restore_neutron = 1,
+	    options = "dy limits=[-2 2] bins=200",
+	    filename = "samdy.dy")
+	  AT (0, 0, 0.005) RELATIVE Dia_sample
+*/
+/*
+COMPONENT Sample1 = Mirror(
+    xwidth = 1.16, yheight = 0.2, R0 = R0, Qc = 0.0219,
+    alpha = 6.07, m = 3.0, W = 0.003, transmit = 0, center = 1)
+  AT (0, 0, 0) RELATIVE Sample_Arm
+  ROTATED (0, 90 - scat_angle, 0) RELATIVE Sample_Arm
+EXTEND
+%{
+if (!SCATTERED) ABSORB;
+%}
+*/
 
 COMPONENT Sample = Mirror(
-    xwidth = 0.2, yheight = 0.2, R0 = R0, Qc = 0.0219,
-    alpha = 6.07, m = 6.0, W = 0.003, transmit = 0)
-  AT (0, 0, 0) RELATIVE Sample_Arm
-  ROTATED (0, scat_angle, 0) RELATIVE Sample_Arm
-
-
-COMPONENT Beanstop = Beamstop(
-    xwidth = 0.02, yheight = 0.2)
-  AT (0, 0, 0.4) RELATIVE Sample_Arm
+    reflect = sam_name, xwidth = 1.16, yheight = 0.2, center = 1)
+  AT (0,0,0) RELATIVE Sample_Arm
+  ROTATED (0, 90.0 - scat_angle, 0) RELATIVE Sample_Arm
+EXTEND
+%{
+if (!SCATTERED) ABSORB;
+%}
 
 COMPONENT Det_Arm = Arm(
     )
   AT (0, 0, 0) RELATIVE Sample_Arm
-  ROTATED (0, 2.0*scat_angle, 0) RELATIVE Sample_Arm
+  ROTATED (0, -2.0*scat_angle, 0) RELATIVE Sample_Arm
 
 COMPONENT Dia_exit = Slit(
-    xwidth = 0.015, yheight = 0.12)
-  AT (0, 0, 0.11) RELATIVE Det_Arm
+    xwidth = 0.005, yheight = 0.12)
+  AT (0, 0, 0.59) RELATIVE Det_Arm
 
 COMPONENT Detector = Monitor_nD(
-    xwidth = 0.1, yheight = 0.2, restore_neutron = 1,
-    options = "x limits=[-0.05 0.05] bins = 100 y limits=[-0.1 0.1] bins=200",
+    xwidth = 0.02, yheight = 0.2, restore_neutron = 1,
+    options = "x limits=[-0.01 0.01] bins = 100 y limits=[-0.1 0.1] bins=200",
     filename = "Detector.xy")
-  AT (0, 0, 0.5) RELATIVE Det_Arm
+  AT (0, 0, 1.5) RELATIVE Det_Arm
 
-
-/*
- COMPONENT Sample = Monitor_nD(
-     options = "x y", xwidth = 0.01,
-     yheight = 0.01, bins = 100, restore_neutron = 1)
-   AT (0, 0, mon_samp_dist) RELATIVE Monok_Arm_2
- 
- COMPONENT Sample_big = Monitor_nD(
-     options = "x y", xwidth = 0.01,
-     yheight = 0.2, bins = 100, restore_neutron = 1)
-   AT (0, 0, mon_samp_dist) RELATIVE Monok_Arm_2
- 
- COMPONENT Sample_very_big = Monitor_nD(
-     options = "x y", xwidth = 0.01,
-     yheight = 1, bins = 100, restore_neutron = 1)
-   AT (0, 0, mon_samp_dist) RELATIVE Monok_Arm_2
-*/
 
 FINALLY
 %{
 %}
 
 END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

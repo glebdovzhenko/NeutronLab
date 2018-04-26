@@ -8,7 +8,7 @@ if __name__ == '__main__':
     sans1d = McColumns().fill('QDetector.dat')
     tas_scan = McColumns(xcolumn='an_angle', ycolumn='befanL_I', yerrcolumn='befanL_ERR',
                          title='Angle scan', xlabel='An angle [deg]', ylabel='Integral intensity')
-    diff_res = McColumns().fill('detector.dat')
+    diff_res = McColumns().fill('/Users/glebdovjenko/Dropbox/PycharmProjects/NeutronLab/mcstas_data/results/h3_rpn/mccode.dat')
     tas_scan.fill('mccode.dat')
 
     plt.figure()

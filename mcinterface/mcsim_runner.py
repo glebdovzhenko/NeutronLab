@@ -110,6 +110,7 @@ class McSimulationRunner:
         self.sim_process = Popen([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params],
                                  env=env, cwd=self.configuration['Simulation Data Directory'],
                                  stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid)
+        print(os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params)
 
         self.sim_stderr, self.sim_stdout = self.sim_process.stderr, self.sim_process.stdout
         fcntl.fcntl(self.sim_stdout, fcntl.F_SETFL, fcntl.fcntl(self.sim_stdout, fcntl.F_GETFL) | os.O_NONBLOCK)

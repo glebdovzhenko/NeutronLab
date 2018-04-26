@@ -1,4 +1,4 @@
-from mcinterface import GUIParameter, TLabAppQt
+from mcinterface import GUIParameter, TLabAppQt, ValueRange
 from config import config
 import sys
 from PyQt5.QtWidgets import QApplication
@@ -10,16 +10,19 @@ import os
 
 instrument_params = (
     GUIParameter('Длина волны источника [\u212B]', 'monok_lambda', float, 5.2),
-    GUIParameter('Угол рассеяния [град.]', 'scat_angle', float, 0),
-    GUIParameter('Статистика нейтронов', 'n_count', int, 1E9),
+    GUIParameter('Угол рассеяния [град.]', 'scat_angle', ValueRange(float), (0.3, 2.5)),
+    GUIParameter('Шаги угла рассеяния', 'N_count', int, 100),
+    GUIParameter('Образец', 'sample_index', int, 0, values=(0, 1), value_names=('0', '1')),
+    GUIParameter('Статистика нейтронов', 'n_count', int, 1E4),
 )
 
 app_config = {
     'Instr filename': os.path.join(config.instr_path, 'H3_RPN.instr'),
     'Simulation Data Directory': config.results_path,
     'Backup Data Directory': os.path.join(config.results_path, 'h3_rpn'),
-    '2D detector file name': 'Detector.xy',
-    '2D title': 'проверка 4', '2D xlabel': 'проверка 5', '2D ylabel': 'проверка 6',
+    '1D detector file name': 'mccode.dat', '1D detector x': 'scat_angle', '1D detector y': 'Detector_I',
+    '1D detector yerr': 'Detector_ERR',
+    '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
     'instrument scheme': os.path.join(config.img_path, 'h3_rpn.tiff'),
     'Plot Width': 900, 'Plot Height': 400,
 }

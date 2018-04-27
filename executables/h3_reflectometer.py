@@ -22,7 +22,8 @@ app_config = {
     'Backup Data Directory': os.path.join(config.results_path, 'h3_rpn'),
     '1D detector file name': 'mccode.dat', '1D detector x': 'scat_angle', '1D detector y': 'Detector_I',
     '1D detector yerr': 'Detector_ERR',
-    '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
+    '1D title': 'Скан интенсивности отражения по углу рассеяния', '1D xlabel': 'Угол рассеяния [град]',
+    '1D ylabel': 'Интенсивность [усл. ед.]',
     'instrument scheme': os.path.join(config.img_path, 'h3_rpn.tiff'),
     'Plot Width': 900, 'Plot Height': 400,
 }

@@ -27,8 +27,8 @@ app_config = {
     'Simulation Data Directory': config.results_path,
     'Backup Data Directory': os.path.join(config.results_path, 'h1_SANS'),
     '2D detector file name': 'Detector2D.dat', '1D detector file name': 'QDetector.dat',
-    '2D title': 'проверка 4', '2D xlabel': 'проверка 5', '2D ylabel': 'проверка 6',
-    '1D title': 'проверка 1', '1D xlabel': 'Волн. вектор q [1/\u212B]', '1D ylabel': 'Интенсивность [усл. ед.]',
+    '2D title': 'Позиционно-чувствительный детектор', '2D xlabel': 'положение x [м]', '2D ylabel': 'положение y [м]',
+    '1D title': 'Результат интегрирования ПЧД', '1D xlabel': 'Волн. вектор q [1/\u212B]', '1D ylabel': 'Интенсивность [усл. ед.]',
     'instrument scheme': os.path.join(config.img_path, 'h1_sans.tiff'),
     'Plot Width': 900, 'Plot Height': 400,
 }
@@ -50,6 +50,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     pinhole_sans_app = TLabAppQt(name='H1 SANS',
                                  env_config=app_config,
-                                 instr_params=instrument_params, dummy=True)
+                                 instr_params=instrument_params, dummy=False)
     pinhole_sans_app.show()
     sys.exit(app.exec_())

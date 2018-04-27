@@ -22,7 +22,8 @@ app_config = {
     'Backup Data Directory': os.path.join(config.results_path, 'h4_tas'),
     '1D detector file name': 'mccode.dat', '1D detector x': 'an_angle',
     '1D detector y': 'befanL_I', '1D detector yerr': 'befanL_ERR',
-    '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
+    '1D title': 'Скан интенсивности отражения по углу анализатора',
+    '1D xlabel': 'Угол анализатора [град]', '1D ylabel': 'Интенсивность [усл. ед.]',
     'instrument scheme': os.path.join(config.img_path, 'h4_tas.tiff'),
     'Plot Width': 900, 'Plot Height': 400,
 }

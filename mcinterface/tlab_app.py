@@ -56,7 +56,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.figure.tight_layout()
 
         # adding plot scale button and registering click callback
-        self.log_by = QPushButton('Лог. ось y')
+        self.log_by = QPushButton('Лог. интенсивность')
         self.log_by.setFixedWidth(0.2 * self.configuration['Plot Width'])
         self.log_by.clicked.connect(self.on_btn_log_y)
         self.sq_bx = QPushButton('Кв. ось x')
@@ -212,6 +212,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
 
         m = re.match(r'Trace ETA (?P<mes>[\d.]+) \[(?P<scale>min|s|h)\]', out_line)
         if m:
+            self.time_passed = 0.
             if self.sim_status != 'Вычисление':
                 self.sim_status = 'Вычисление'
                 if m.group('scale') == 's':
@@ -281,9 +282,9 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.log_scale_y = not self.log_scale_y
 
         if self.log_scale_y:
-            self.log_by.setText('Лин. ось y')
+            self.log_by.setText('Лин. интенсивность')
         else:
-            self.log_by.setText('Лог. ось y')
+            self.log_by.setText('Лог. интенсивность')
 
         self._update_plot_axes()
 

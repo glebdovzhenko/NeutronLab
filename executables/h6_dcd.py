@@ -22,7 +22,8 @@ app_config = {
     'Backup Data Directory': os.path.join(config.results_path, 'h6_dcd'),
     '1D detector file name': 'mccode.dat', '1D detector x': 'rock_angle', '1D detector y': 'Detector_I',
     '1D detector yerr': 'Detector_ERR',
-    '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
+    '1D title': 'Распределение интенсивности по углу качания',
+    '1D xlabel': 'Угол качания [град.]', '1D ylabel': 'Интенсивность [усл. ед.]',
     'instrument scheme': os.path.join(config.img_path, 'h6_dcd.tiff'),
     'Plot Width': 900, 'Plot Height': 400,
 }
@@ -43,6 +44,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     pinhole_sans_app = TLabAppQt(name='Double Crystal Diffractometer',
                                  env_config=app_config,
-                                 instr_params=instrument_params, dummy=True)
+                                 instr_params=instrument_params, dummy=False)
     pinhole_sans_app.show()
     sys.exit(app.exec_())

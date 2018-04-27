@@ -16,6 +16,10 @@ sudo apt-get install git
 cd ~
 git clone -b master https://github.com/glebdovzhenko/NeutronLab.git
 
+# Дополнительные библиотеки
+~/anaconda3/bin/pip install --upgrade pip
+~/anaconda3/bin/pip install -r NeutronLab/requirements.txt --upgrade
+
 # Запуск
 cd NeutronLab
 export PYTHONPATH=$(pwd)':'${PYTHONPATH}

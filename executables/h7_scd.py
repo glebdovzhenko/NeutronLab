@@ -22,7 +22,8 @@ app_config = {
     'Simulation Data Directory': config.results_path,
     'Backup Data Directory': os.path.join(config.results_path, 'h7_scd'),
     '2D detector file name': 'psd.dat',
-    '2D title': 'проверка 4', '2D xlabel': 'проверка 5', '2D ylabel': 'проверка 6',
+    '2D title': 'Позиционно чувствительный детектор', '2D xlabel': 'Угол рассеяния 2$\Theta_{x}$ [град]',
+    '2D ylabel': 'Угол рассеяния 2$\Theta_{y}$ [град]',
     'instrument scheme': os.path.join(config.img_path, 'h7_scd.tiff'),
     'Plot Width': 900, 'Plot Height': 400,
 }

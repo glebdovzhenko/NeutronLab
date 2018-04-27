@@ -28,7 +28,7 @@ app_config = {
     'Backup Data Directory': os.path.join(config.results_path, 'h1_SANS'),
     '2D detector file name': 'Detector2D.dat', '1D detector file name': 'QDetector.dat',
     '2D title': 'проверка 4', '2D xlabel': 'проверка 5', '2D ylabel': 'проверка 6',
-    '1D title': 'проверка 1', '1D xlabel': 'проверка 2', '1D ylabel': 'проверка 3',
+    '1D title': 'проверка 1', '1D xlabel': 'Волн. вектор q [1/\u212B]', '1D ylabel': 'Интенсивность [усл. ед.]',
     'instrument scheme': os.path.join(config.img_path, 'h1_sans.tiff'),
     'Plot Width': 900, 'Plot Height': 400,
 }

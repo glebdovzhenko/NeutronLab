@@ -1,0 +1,216 @@
+McStas simulation description file for H1.
+Date:    Fri Apr 27 15:31:26 2018
+Program: McStas 2.4 - May. 17, 2017
+
+begin instrument: H1
+  File: /home/dovzhenko/mcstas/neutron_lab/results/H1/S4/mccode
+  Source: H1_SANS.instr
+  Parameters:  lambda(double) slit1_w(double) slit2_w(double) slit3_w(double) det_position(int) sample_num(int) dia_type(double)
+  Trace_enabled: no
+  Default_main: yes
+  Embedded_runtime: yes
+end instrument
+
+begin simulation: /home/dovzhenko/mcstas/neutron_lab/results/H1/S4
+  Format: McCode with text headers
+  URL: http://www.mccode.org
+  Creator: McStas 2.4 - May. 17, 2017
+  Instrument: H1_SANS.instr
+  Ncount: 100000000000
+  Trace: no
+  Gravitation: no
+  Seed: 1524845213
+  Directory: /home/dovzhenko/mcstas/neutron_lab/results/H1/S4
+  Nodes: 25
+  Param: lambda=6
+  Param: slit1_w=32
+  Param: slit2_w=16
+  Param: slit3_w=16
+  Param: det_position=2
+  Param: sample_num=4
+  Param: dia_type=1
+end simulation
+
+begin data
+  Date: Fri Apr 27 20:19:34 2018 (1524849574)
+  type: array_1d(250)
+  Source: H1 (H1_SANS.instr)
+  component: Guide_exit_lam
+  position: 0.304611 0 16.4635
+  title: Wavelength [Angs] monitor
+  Ncount: 100000000000
+  filename: Guide_exit_lam_1524832286.L
+  statistics: X0=5.88352; dX=0.680339;
+  signal: Min=0; Max=3.78744e+06; Mean=288740;
+  values: 7.21849e+07 1667.82 6.83172e+09
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [Angs]
+  ylabel: Intensity [n/s/cm2/bin]
+  xlimits: 0 25
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Fri Apr 27 20:19:35 2018 (1524849575)
+  type: array_1d(30)
+  Source: H1 (H1_SANS.instr)
+  component: Guide_exit_divx
+  position: 0.304611 0 16.4635
+  title: Hor. Divergence [deg] monitor
+  Ncount: 100000000000
+  filename: Guide_exit_divx_1524832286.hd
+  statistics: X0=0.00485074; dX=0.326541;
+  signal: Min=1.38337e-22; Max=7.24849e+06; Mean=2.40616e+06;
+  values: 7.21849e+07 1667.82 6.74546e+09
+  xvar: hd
+  yvar: (I,I_err)
+  xlabel: Hor. Divergence [deg]
+  ylabel: Intensity [n/s/cm2/bin]
+  xlimits: -1.5 1.5
+  variables: hd I I_err N
+end data
+
+begin data
+  Date: Fri Apr 27 20:19:35 2018 (1524849575)
+  type: array_1d(30)
+  Source: H1 (H1_SANS.instr)
+  component: Guide_exit_divy
+  position: 0.304611 0 16.4635
+  title: Vert. Divergence [deg] monitor
+  Ncount: 100000000000
+  filename: Guide_exit_divy_1524832286.vd
+  statistics: X0=-8.88606e-08; dX=0.311534;
+  signal: Min=9.05502e-49; Max=7.90091e+06; Mean=2.40616e+06;
+  values: 7.21849e+07 1667.82 6.77857e+09
+  xvar: vd
+  yvar: (I,I_err)
+  xlabel: Vert. Divergence [deg]
+  ylabel: Intensity [n/s/cm2/bin]
+  xlimits: -1.5 1.5
+  variables: vd I I_err N
+end data
+
+begin data
+  Date: Fri Apr 27 20:19:35 2018 (1524849575)
+  type: array_2d(42, 30)
+  Source: H1 (H1_SANS.instr)
+  component: Guide_exit_xdivx
+  position: 0.304611 0 16.4635
+  title:  Intensity Position Divergence Monitor (Square) per bin
+  Ncount: 100000000000
+  filename: Guide_exit_xdivx_1524832286.x_hd
+  statistics: X0=-3.84538e-05; dX=0.0122067; Y0=0.00485074; dY=0.326541;
+  signal: Min=1.72674e-29; Max=205290; Mean=57289.6;
+  values: 7.21849e+07 1667.82 6.74546e+09
+  xvar: x 
+  yvar: Ho
+  xlabel: x [m]
+  ylabel: Hor. Divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.021 0.021 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Fri Apr 27 20:19:35 2018 (1524849575)
+  type: array_1d(30)
+  Source: H1 (H1_SANS.instr)
+  component: Guide_exit_divx_center
+  position: 0.304611 0 16.4635
+  title: Hor. Divergence [deg] monitor
+  Ncount: 100000000000
+  filename: Guide_exit_divx_center_1524832286.hd
+  statistics: X0=0.0014571; dX=0.142668;
+  signal: Min=1.08909e+06; Max=1.27632e+06; Mean=1.15246e+06;
+  values: 3.45737e+07 1198.1 1.69422e+09
+  xvar: hd
+  yvar: (I,I_err)
+  xlabel: Hor. Divergence [deg]
+  ylabel: Intensity [n/s/cm2/bin]
+  xlimits: -0.25 0.25
+  variables: hd I I_err N
+end data
+
+begin data
+  Date: Fri Apr 27 20:19:35 2018 (1524849575)
+  type: array_1d(250)
+  Source: H1 (H1_SANS.instr)
+  component: Selector_exit
+  position: 0.318209 0 16.9634
+  title: Wavelength [Angs] monitor
+  Ncount: 100000000000
+  filename: Selector_exit_1524832286.L
+  statistics: X0=5.98575; dX=0.258604;
+  signal: Min=0; Max=2.21104e+06; Mean=60551.4;
+  values: 1.51378e+07 577.999 2.51892e+09
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [Angs]
+  ylabel: Intensity [n/s/cm2/bin]
+  xlimits: 0 25
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Fri Apr 27 20:19:35 2018 (1524849575)
+  type: array_1d(128)
+  Source: H1 (H1_SANS.instr)
+  component: QMonitor
+  position: 0.554819 0 25.6601
+  title: QMonitor - Radially averaged distribution
+  Ncount: 100000000000
+  filename: RDetector.dat
+  statistics: X0=0.0498899; dX=0.0235668;
+  signal: Min=0; Max=1.25719e+06; Mean=95578;
+  values: 1.2234e+07 30050.9 1.34767e+07
+  xvar: r
+  yvar: (I,I_err)
+  xlabel: Radius [m]
+  ylabel: I(r)
+  xlimits: 0 0.45
+  variables: r I I_err N
+end data
+
+begin data
+  Date: Fri Apr 27 20:19:35 2018 (1524849575)
+  type: array_1d(128)
+  Source: H1 (H1_SANS.instr)
+  component: QMonitor
+  position: 0.554819 0 25.6601
+  title: QMonitor - Distribution in q (Radially averaged)
+  Ncount: 100000000000
+  filename: QDetector.dat
+  statistics: X0=0.0168359; dX=0.00793594;
+  signal: Min=0; Max=5.01238e+06; Mean=346772;
+  values: 4.43868e+07 109130 1.35919e+07
+  xvar: q
+  yvar: (I,I_err)
+  xlabel: q [1 / AA]
+  ylabel: I(q)
+  xlimits: 0 0.167586
+  variables: q I I_err N
+end data
+
+begin data
+  Date: Fri Apr 27 20:19:35 2018 (1524849575)
+  type: array_2d(128, 128)
+  Source: H1 (H1_SANS.instr)
+  component: Detector
+  position: 0.554847 0 25.6611
+  title:  Intensity Position Position Monitor (Square) per bin
+  Ncount: 100000000000
+  filename: Detector2D.dat
+  statistics: X0=3.09938e-05; dX=0.0495731; Y0=-0.00014638; dY=0.0493527;
+  signal: Min=0; Max=17.0626; Mean=0.341304;
+  values: 5591.92 11.0875 8.76778e+06
+  xvar: x 
+  yvar: y 
+  xlabel: x [m]
+  ylabel: y [m]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.32 0.32 -0.32 0.32
+  variables: I I_err N
+end data

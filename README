@@ -25,3 +25,15 @@ cd NeutronLab
 export PYTHONPATH=$(pwd)':'${PYTHONPATH}
 cd executables
 ~/anaconda3/bin/python h1_sans.py
+
+Установка (Windows 10 x64):
+
+# Подготовка системы:
+Следовать инструкциям с https://docs.microsoft.com/en-us/windows/wsl/install-win10
+Установить X-Ming x-сервер: https://sourceforge.net/projects/xming/
+ВНУТРИ приложения Debian под Windows исполнить команду
+export DISPLAY=localhost:0.0
+
+# Установка:
+ВНУТРИ приложения Debian под Windows следовать инструкциям по установке на Ububtu/ Debian
+

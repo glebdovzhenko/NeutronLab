@@ -8,7 +8,7 @@ import re
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QFileDialog, QLineEdit
+from PyQt5.QtWidgets import QDialog, QFileDialog, QLineEdit, QSizePolicy
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
 from PyQt5.QtWidgets import QPushButton, QLabel, QInputDialog, QProgressDialog
 
@@ -122,34 +122,40 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.setWindowTitle(name)
 
     def make_callback(self, ii):
-        def callback():
-            if self.instr_params[ii].value_names:
+        if self.instr_params[ii].value_names:
+            def callback():
                 item, ok = QInputDialog.getItem(self, self.instr_params[ii].gui_name, self.instr_params[ii].gui_name,
                                                 self.instr_params[ii].value_names,
                                                 self.instr_params[ii].values.index(self.instr_params[ii].value), False)
                 if ok:
                     self.instr_params[ii].update_by_name(item)
                     self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
-            elif self.instr_params[ii].dtype == int:
+        elif self.instr_params[ii].dtype == int:
+            def callback():
                 res, ok = QInputDialog.getInt(self, self.instr_params[ii].gui_name, self.instr_params[ii].gui_name,
                                               self.instr_params[ii].value)
                 if ok:
                     self.instr_params[ii].update(res)
                     self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
-            elif self.instr_params[ii].dtype == float:
+        elif self.instr_params[ii].dtype == float:
+            def callback():
                 d, ok = QInputDialog.getDouble(self, self.instr_params[ii].gui_name, self.instr_params[ii].gui_name,
                                                self.instr_params[ii].value)
                 if ok:
                     self.instr_params[ii].update(d)
                     self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
-            elif type(self.instr_params[ii].dtype) == ValueRange:
+        elif type(self.instr_params[ii].dtype) == ValueRange:
+            def callback():
                 text, ok = QInputDialog.getText(self, self.instr_params[ii].gui_name,
                                                 self.instr_params[ii].gui_name, QLineEdit.Normal, str(self.instr_params[ii]))
                 if ok and text != '':
                     self.instr_params[ii].update(text)
                     self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
-            else:
-                print(self.instr_params[ii].dtype)
+        else:
+            def callback():
+                pass
+
+            print(self.instr_params[ii].dtype)
         return callback
 
     def _update_plot_axes(self):

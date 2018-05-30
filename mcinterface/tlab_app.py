@@ -32,6 +32,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.log_scale_y = False
         self.sq_scale_x = False
         self.sim_status = 'Подготовка'
+        self.timer_p_int = 10  # mcsec
 
         if not gui:
             return
@@ -190,7 +191,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
             print('Child process returned', status)
             return
 
-        self.time_passed += 0.01
+        self.time_passed += 1E-3 * self.timer_p_int
 
         self.sim_stdout.flush()
         self.sim_stderr.flush()
@@ -230,7 +231,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
                     self.sim_eta = max(self.sim_eta, float(m.group('mes')) * 3600.)
 
         if (self.n_points == 1) or (self.sim_status == 'Подготовка'):
-            self.progress_dialog.setValue(int(self.time_passed))
+            self.progress_dialog.setValue(int(100. * self.time_passed / self.sim_eta))
             self.progress_dialog.setLabelText(self.sim_status + ": %d сек" % (self.sim_eta - int(self.time_passed)))
 
         m = re.match(r'INFO: (?P<param>[\S.]+): (?P<val>[\d.]+)$', err_line)
@@ -238,7 +239,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
             self.sim_status = 'Вычисление'
             self.steps_passed += 1
         if (self.n_points > 1) and (self.sim_status == 'Вычисление'):
-            self.progress_dialog.setValue(int(self.steps_passed))
+            self.progress_dialog.setValue(int(100. * self.steps_passed / self.n_points))
             self.progress_dialog.setLabelText(self.sim_status + ": %d / %d шагов" % (int(self.steps_passed), self.n_points))
 
     def await_simulation(self):
@@ -249,16 +250,13 @@ class TLabAppQt(QDialog, McSimulationRunner):
         self.steps_passed = 0
         self.sim_status = 'Подготовка'
 
-        if self.n_points == 1:
-            self.progress_dialog = QProgressDialog('Ход эксперимента', 'Стоп', 0, self.sim_eta)
-        elif self.n_points > 1:
-            self.progress_dialog = QProgressDialog('Ход эксперимента', 'Стоп', 0, self.n_points)
+        self.progress_dialog = QProgressDialog('Ход эксперимента', 'Стоп', 0, 100)
         self.progress_dialog.resize(300, self.progress_dialog.height())
         self.progress_dialog.canceled.connect(self.kill_simulation)
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_timeout)
-        self.timer.start(10)
+        self.timer.start(self.timer_p_int)
         self.progress_dialog.exec()
         self.timer.stop()
 

@@ -1,0 +1,29 @@
+from cryptography.fernet import Fernet
+import os
+from config import config
+import pickle
+
+
+if __name__ == '__main__':
+    with open('secret.key', 'r') as f:
+        key = bytes(f.read(), encoding='UTF-8')
+
+    cipher_suite = Fernet(key)
+
+    with open('instruments.locked', 'rb') as f:
+        unlocked = pickle.loads(cipher_suite.decrypt(f.read()))
+
+    for f_name in unlocked:
+        with open(os.path.join(config.instr_path, f_name), 'w') as f:
+            f.write(unlocked[f_name])
+
+    #  #################################################
+    #
+    # success = []
+    # for f_name in os.listdir(config.instr_path):
+    #     with open(os.path.join(config.instr_path, f_name)) as f:
+    #         with open(os.path.join(config.instr_path + '_', f_name)) as f_:
+    #             success.append(f.read() == f_.read())
+    #
+    # if all(success):
+    #     print('Разблокировка успешна')

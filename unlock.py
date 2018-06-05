@@ -13,6 +13,9 @@ if __name__ == '__main__':
     with open('instruments.locked', 'rb') as f:
         unlocked = pickle.loads(cipher_suite.decrypt(f.read()))
 
+    if not os.path.exists(config.instr_path):
+        os.makedirs(config.instr_path)
+
     for f_name in unlocked:
         with open(os.path.join(config.instr_path, f_name), 'w') as f:
             f.write(unlocked[f_name])

@@ -33,6 +33,10 @@ class McSimulationRunner:
             ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
         )
 
+        if not os.path.exists(self.configuration['Instr filename']):
+            raise FileNotFoundError('Вы не разблокировали приложение! Обратитесь к инструкции.')
+
+
         if '1D detector file name' in self.configuration:
             prms = dict(xcolumn=self.configuration['1D detector x'], ycolumn=self.configuration['1D detector y'],
                         yerrcolumn=self.configuration['1D detector yerr'])

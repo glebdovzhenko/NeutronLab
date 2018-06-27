@@ -8,7 +8,7 @@ import re
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QFileDialog, QLineEdit, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QFileDialog, QLineEdit, QSizePolicy, QMainWindow, QWidget
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
 from PyQt5.QtWidgets import QPushButton, QLabel, QInputDialog, QProgressDialog
 
@@ -18,10 +18,10 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
 
-class TLabAppQt(QDialog, McSimulationRunner):
+class TLabAppQt(QMainWindow, McSimulationRunner):
     """"""
     def __init__(self, name, env_config, instr_params, gui=True, dummy=False):
-        QDialog.__init__(self, env_config=env_config, instr_params=instr_params)
+        QMainWindow.__init__(self, env_config=env_config, instr_params=instr_params)
 
         self.gui = gui
         self.dummy = dummy
@@ -87,7 +87,7 @@ class TLabAppQt(QDialog, McSimulationRunner):
 
         # adding instrument scheme picture
         p_map = QPixmap(self.configuration['instrument scheme'])
-        p_map = p_map.scaledToHeight(250, Qt.SmoothTransformation)
+        p_map = p_map.scaledToHeight(200, Qt.SmoothTransformation)
         scheme_label = QLabel()
         scheme_label.setPixmap(p_map)
 
@@ -117,7 +117,10 @@ class TLabAppQt(QDialog, McSimulationRunner):
 
         main_layout.addLayout(param_layout, 0)
         main_layout.addLayout(plot_layout, 1)
-        self.setLayout(main_layout)
+
+        self.widget = QWidget()
+        self.widget.setLayout(main_layout)
+        self.setCentralWidget(self.widget)
 
         self.setWindowTitle(name)
 

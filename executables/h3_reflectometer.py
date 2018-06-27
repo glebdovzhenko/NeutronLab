@@ -9,7 +9,7 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Длина волны источника [\u212B]', 'monok_lambda', float, 5.2),
+    GUIParameter('Длина волны монохроматора [\u212B]', 'monok_lambda', float, 5.2),
     GUIParameter('Угол рассеяния [град.]', 'scat_angle', ValueRange(float), (0.3, 2.5)),
     GUIParameter('Шаги угла рассеяния', 'N_count', int, 100),
     GUIParameter('Образец', 'sample_index', int, 0, values=(0, 1), value_names=('#1', '#2')),

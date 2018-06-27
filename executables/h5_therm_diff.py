@@ -9,7 +9,7 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 1.2),
+    GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 1.2),
     GUIParameter('Диаметр диафрагмы [мм]', 'dia_dia', int, 3, values=(3, 6, 10),
                  value_names=('3', '6', '10')),
     GUIParameter('Образец', 'sample_num', int, 1, values=(1, 2, 3, 4, 5),

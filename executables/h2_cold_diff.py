@@ -9,7 +9,7 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 3),
+    GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 3),
     GUIParameter('Расходимость коллиматора [угл. мин.]', 'div_col', float, 45),
     GUIParameter('Образец', 'sample_num', int, 0, values=(0, ),
                  value_names=('Na2Ca3Al2F14', )),

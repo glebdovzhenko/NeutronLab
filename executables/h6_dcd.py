@@ -9,7 +9,7 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Длина волны источника [\u212B]', 'lambda', float, 2.2),
+    GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 2.2),
     GUIParameter('Угол качания [град.]', 'rock_angle', ValueRange(float), (0, 1)),
     GUIParameter('Шаги угла качания', 'N_count', int, 100),
     GUIParameter('Образец', 'is_sample', int, 1, values=(0, 1), value_names=('Да', 'Нет')),

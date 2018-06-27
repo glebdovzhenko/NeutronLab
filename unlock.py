@@ -5,7 +5,11 @@ import pickle
 
 
 if __name__ == '__main__':
-    with open('secret.key', 'r') as f:
+    for f_name in os.listdir(config.project_root):
+        if 'secret' in f_name and '.key' in f_name:
+            break
+
+    with open(f_name, 'r') as f:
         key = bytes(f.read(), encoding='UTF-8')
 
     cipher_suite = Fernet(key)

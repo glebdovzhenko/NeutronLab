@@ -47,6 +47,7 @@ elif platform.system() == 'Linux':
 
 
 if __name__ == '__main__':
+    print(sys.path)
     app = QApplication(sys.argv)
     pinhole_sans_app = TLabAppQt(name='H1 SANS',
                                  env_config=app_config,

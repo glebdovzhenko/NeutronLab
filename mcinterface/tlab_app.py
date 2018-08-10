@@ -32,7 +32,7 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
         self.log_scale_y = False
         self.sq_scale_x = False
         self.sim_status = 'Подготовка'
-        self.timer_p_int = 10  # mcsec
+        self.timer_p_int = 1000  # mcsec
 
         if not gui:
             return

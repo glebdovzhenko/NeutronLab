@@ -1,7 +1,15 @@
 Установка (Ubuntu / Debian):
 
 # Python:
-https://www.anaconda.com/download/#linux - скачать и запустить установочный скрипт для Python 3.*
+установка bzip2:
+sudo apt-get update && sudo apt-get upgrade
+sudo apt-get install bzip2
+
+установка Python:
+cd ~
+wget https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh --no-check-certificate
+chmod +x Anaconda3-5.2.0-Linux-x86_64.sh
+./Anaconda3-5.2.0-Linux-x86_64.sh
 
 # McStas
 cd /etc/apt/sources.list.d

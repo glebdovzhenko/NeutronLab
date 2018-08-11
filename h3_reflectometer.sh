@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
-export PYTHONPATH=$(pwd)':'${PYTHONPATH}
-cd executables
-python3 h3_reflectometer.py
+export DISPLAY=localhost:0.0
+/root/anaconda3/bin/python h3_reflectometer.py

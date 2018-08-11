@@ -199,4 +199,4 @@ mcstas_data/results/78OBLZXX68/sim/
 
 lock.py
 secret.key
-mcstas_data/instruments/*
+# mcstas_data/instruments/*

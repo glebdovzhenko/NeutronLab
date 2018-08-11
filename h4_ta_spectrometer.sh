@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
-export PYTHONPATH=$(pwd)':'${PYTHONPATH}
-cd executables
-python3 h4_tas.py
+export DISPLAY=localhost:0.0
+/root/anaconda3/bin/python h4_tas.py

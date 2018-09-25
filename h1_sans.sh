@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 export DISPLAY=localhost:0.0
-python3 h1_sans.py
+~/anaconda3/bin/python3 h1_sans.py

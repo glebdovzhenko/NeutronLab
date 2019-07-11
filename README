@@ -16,9 +16,9 @@ sudo wget http://packages.mccode.org/debian/mccode.list
 sudo apt-get update
 sudo apt-get install bzip2
 sudo apt-get install libgl1-mesa-glx
-sudo apt-get install mcstas-2.4.1
-sudo apt-get install mcstas-tools-python-mcrun-2.4.1
-sudo apt-get install mcstas-tools-python-mccodelib-2.4.1
+sudo apt-get install mcstas-2.5
+sudo apt-get install mcstas-tools-python-mcrun-2.5
+sudo apt-get install mcstas-tools-python-mccodelib-2.5
 sudo apt-get install mpich
 
 # Установка Anaconda Python:

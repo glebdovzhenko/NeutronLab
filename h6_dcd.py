@@ -30,13 +30,13 @@ app_config = {
 
 if platform.system() == 'Darwin':
     app_config.update({
-        'Mcrun executable path': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/bin',
-        'Mcstas PYTHONHOME': '/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/miniconda3',
+        'Mcrun executable path': '/Applications/McStas-2.5.app/Contents/Resources/mcstas/2.5/bin',
+        'Mcstas PYTHONHOME': '/Applications/McStas-2.5.app/Contents/Resources/mcstas/2.5/miniconda3',
         'MPI nodes': 8
     })
 elif platform.system() == 'Linux':
     app_config.update({
-        'Mcrun executable path': '/usr/share/mcstas/2.4.1/bin',
+        'Mcrun executable path': '/usr/share/mcstas/2.5/bin',
         'MPI nodes': 4
     })
 
@@ -44,6 +44,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     pinhole_sans_app = TLabAppQt(name='Double Crystal Diffractometer',
                                  env_config=app_config,
-                                 instr_params=instrument_params, dummy=True)
+                                 instr_params=instrument_params, dummy=False)
     pinhole_sans_app.show()
     sys.exit(app.exec_())

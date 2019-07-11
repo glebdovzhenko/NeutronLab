@@ -2,9 +2,9 @@
  * Format:     ANSI C source code
  * Creator:    McStas <http://www.mcstas.org>
  * Instrument: 00_pinhole_SANS.instr (TestSANS)
- * Date:       Wed Apr 25 19:40:58 2018
- * File:       00_pinhole_SANS.c
- * Compile:    cc -o TestSANS.out 00_pinhole_SANS.c 
+ * Date:       Thu Jul 11 08:28:01 2019
+ * File:       ./00_pinhole_SANS.c
+ * Compile:    cc -o TestSANS.out ./00_pinhole_SANS.c 
  * CFLAGS=
  */
 
@@ -13,6 +13,7 @@
 #define FLAVOR "mcstas"
 #define FLAVOR_UPPER "MCSTAS"
 #define MC_USE_DEFAULT_MAIN
+#define MC_TRACE_ENABLED
 #define MC_EMBEDDED_RUNTIME
 
 #line 1 "mccode-r.h"
@@ -687,7 +688,7 @@ NXhandle nxhandle;
 #endif /* MCCODE_R_H */
 /* End of file "mccode-r.h". */
 
-#line 690 "00_pinhole_SANS.c"
+#line 691 "./00_pinhole_SANS.c"
 
 #line 1 "mcstas-r.h"
 /*******************************************************************************
@@ -920,7 +921,7 @@ void mcsetstate(double x, double y, double z, double vx, double vy, double vz,
 #endif /* MCSTAS_R_H */
 /* End of file "mcstas-r.h". */
 
-#line 923 "00_pinhole_SANS.c"
+#line 924 "./00_pinhole_SANS.c"
 
 #line 1 "mccode-r.c"
 /*******************************************************************************
@@ -4852,7 +4853,7 @@ void neutronics_main_(float *inx, float *iny, float *inz, float *invx, float *in
 /* End of file "mccode-r.c". */
 /* End of file "mccode-r.c". */
 
-#line 4855 "00_pinhole_SANS.c"
+#line 4856 "./00_pinhole_SANS.c"
 
 #line 1 "mcstas-r.c"
 /*******************************************************************************
@@ -5212,13 +5213,13 @@ plane_intersect(double *t, double x, double y, double z,
 #endif /* !MCSTAS_H */
 /* End of file "mcstas-r.c". */
 
-#line 5215 "00_pinhole_SANS.c"
+#line 5216 "./00_pinhole_SANS.c"
 #ifdef MC_TRACE_ENABLED
 int mctraceenabled = 1;
 #else
 int mctraceenabled = 0;
 #endif
-#define MCSTAS "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/"
+#define MCSTAS "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../"
 int mcdefaultmain = 1;
 char mcinstrument_name[] = "TestSANS";
 char mcinstrument_source[] = "00_pinhole_SANS.instr";
@@ -5231,7 +5232,7 @@ void mcfinally(void);
 void mcdisplay(void);
 
 /* Shared user declarations for all components 'SANSLiposomes'. */
-#line 56 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/contrib/SANSLiposomes.comp"
+#line 56 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../contrib/SANSLiposomes.comp"
 // Functions used for compution the intensity from a given liposome
 double FormfactorSphere(double q, double R)
 	{
@@ -5261,7 +5262,7 @@ double FormfactorSphere(double q, double R)
 		const double Intensity = pow(AmplitudeHeadOut + AmplitudeTailOut + AmplitudeCH3 + AmplitudeTailIn + AmplitudeHeadIn, 2);
 		return Intensity;
 	}
-#line 5264 "00_pinhole_SANS.c"
+#line 5265 "./00_pinhole_SANS.c"
 
 /* Instrument parameters. */
 MCNUM mcipDistSrcPin1;
@@ -5433,7 +5434,7 @@ MCNUM mccQMonitor_Lambda0;
 #define percent mccOrigin_percent
 #define flag_save mccOrigin_flag_save
 #define minutes mccOrigin_minutes
-#line 44 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/misc/Progress_bar.comp"
+#line 44 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../misc/Progress_bar.comp"
 #ifndef PROGRESS_BAR
 #define PROGRESS_BAR
 #else
@@ -5444,7 +5445,7 @@ double IntermediateCnts;
 time_t StartTime;
 time_t EndTime;
 time_t CurrentTime;
-#line 5447 "00_pinhole_SANS.c"
+#line 5448 "./00_pinhole_SANS.c"
 #undef minutes
 #undef flag_save
 #undef percent
@@ -5477,10 +5478,10 @@ time_t CurrentTime;
 #define flux mccSource_flux
 #define gauss mccSource_gauss
 #define target_index mccSource_target_index
-#line 60 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/sources/Source_simple.comp"
+#line 60 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../sources/Source_simple.comp"
 double pmul, srcArea;
 int square;
-#line 5483 "00_pinhole_SANS.c"
+#line 5484 "./00_pinhole_SANS.c"
 #undef target_index
 #undef gauss
 #undef flux
@@ -5566,7 +5567,7 @@ int square;
 #define zdepth mccSample_zdepth
 #define SampleToDetectorDistance mccSample_SampleToDetectorDistance
 #define DetectorRadius mccSample_DetectorRadius
-#line 89 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/contrib/SANSLiposomes.comp"
+#line 89 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../contrib/SANSLiposomes.comp"
 	// Declarations
 	double Absorption;
 	double q;
@@ -5587,7 +5588,7 @@ int square;
 	double ThicknessOfHead;
 	double ThicknessOfCH2Tail;
 	double ThicknessOfCH3Tail;
-#line 5590 "00_pinhole_SANS.c"
+#line 5591 "./00_pinhole_SANS.c"
 #undef DetectorRadius
 #undef SampleToDetectorDistance
 #undef zdepth
@@ -5648,11 +5649,11 @@ int square;
 #define xwidth mccMonitor_xwidth
 #define yheight mccMonitor_yheight
 #define restore_neutron mccMonitor_restore_neutron
-#line 55 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/monitors/PSD_monitor.comp"
+#line 55 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../monitors/PSD_monitor.comp"
 double PSD_N[nx][ny];
 double PSD_p[nx][ny];
 double PSD_p2[nx][ny];
-#line 5655 "00_pinhole_SANS.c"
+#line 5656 "./00_pinhole_SANS.c"
 #undef restore_neutron
 #undef yheight
 #undef xwidth
@@ -5688,7 +5689,7 @@ double PSD_p2[nx][ny];
 #define DistanceFromSample mccQMonitor_DistanceFromSample
 #define LambdaMin mccQMonitor_LambdaMin
 #define Lambda0 mccQMonitor_Lambda0
-#line 49 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/contrib/SANSQMonitor.comp"
+#line 49 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../contrib/SANSQMonitor.comp"
 // Declarations
 double TwoThetaMax;
 double qMax;
@@ -5700,7 +5701,7 @@ double IofqSquared[NumberOfBins];
 double NofR[NumberOfBins];
 double IofR[NumberOfBins];
 double IofRSquared[NumberOfBins];
-#line 5703 "00_pinhole_SANS.c"
+#line 5704 "./00_pinhole_SANS.c"
 #undef Lambda0
 #undef LambdaMin
 #undef DistanceFromSample
@@ -5784,14 +5785,14 @@ void mcinit(void) {
   mccOrigin_flag_save = 0;
 #line 39 "00_pinhole_SANS.instr"
   mccOrigin_minutes = 0;
-#line 5787 "00_pinhole_SANS.c"
+#line 5788 "./00_pinhole_SANS.c"
 
   SIG_MESSAGE("Origin (Init:Place/Rotate)");
   rot_set_rotation(mcrotaOrigin,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 5794 "00_pinhole_SANS.c"
+#line 5795 "./00_pinhole_SANS.c"
   rot_copy(mcrotrOrigin, mcrotaOrigin);
   mcposaOrigin = coords_set(
 #line 44 "00_pinhole_SANS.instr"
@@ -5800,7 +5801,7 @@ void mcinit(void) {
     0,
 #line 44 "00_pinhole_SANS.instr"
     0);
-#line 5803 "00_pinhole_SANS.c"
+#line 5804 "./00_pinhole_SANS.c"
   mctc1 = coords_neg(mcposaOrigin);
   mcposrOrigin = rot_apply(mcrotaOrigin, mctc1);
   mcDEBUG_COMPONENT("Origin", mcposaOrigin, mcrotaOrigin)
@@ -5837,14 +5838,14 @@ void mcinit(void) {
   mccSource_gauss = 0;
 #line 55 "00_pinhole_SANS.instr"
   mccSource_target_index = + 1;
-#line 5840 "00_pinhole_SANS.c"
+#line 5841 "./00_pinhole_SANS.c"
 
   SIG_MESSAGE("Source (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 5847 "00_pinhole_SANS.c"
+#line 5848 "./00_pinhole_SANS.c"
   rot_mul(mctr1, mcrotaOrigin, mcrotaSource);
   rot_transpose(mcrotaOrigin, mctr1);
   rot_mul(mcrotaSource, mctr1, mcrotrSource);
@@ -5855,7 +5856,7 @@ void mcinit(void) {
     0,
 #line 54 "00_pinhole_SANS.instr"
     0);
-#line 5858 "00_pinhole_SANS.c"
+#line 5859 "./00_pinhole_SANS.c"
   rot_transpose(mcrotaOrigin, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
   mcposaSource = coords_add(mcposaOrigin, mctc2);
@@ -5883,14 +5884,14 @@ void mcinit(void) {
   mccFirstPinhole_xwidth = 0;
 #line 43 "00_pinhole_SANS.instr"
   mccFirstPinhole_yheight = 0;
-#line 5886 "00_pinhole_SANS.c"
+#line 5887 "./00_pinhole_SANS.c"
 
   SIG_MESSAGE("FirstPinhole (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 5893 "00_pinhole_SANS.c"
+#line 5894 "./00_pinhole_SANS.c"
   rot_mul(mctr1, mcrotaSource, mcrotaFirstPinhole);
   rot_transpose(mcrotaSource, mctr1);
   rot_mul(mcrotaFirstPinhole, mctr1, mcrotrFirstPinhole);
@@ -5901,7 +5902,7 @@ void mcinit(void) {
     0,
 #line 59 "00_pinhole_SANS.instr"
     mcipDistSrcPin1);
-#line 5904 "00_pinhole_SANS.c"
+#line 5905 "./00_pinhole_SANS.c"
   rot_transpose(mcrotaSource, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
   mcposaFirstPinhole = coords_add(mcposaSource, mctc2);
@@ -5929,14 +5930,14 @@ void mcinit(void) {
   mccSecondPinhole_xwidth = 0;
 #line 43 "00_pinhole_SANS.instr"
   mccSecondPinhole_yheight = 0;
-#line 5932 "00_pinhole_SANS.c"
+#line 5933 "./00_pinhole_SANS.c"
 
   SIG_MESSAGE("SecondPinhole (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 5939 "00_pinhole_SANS.c"
+#line 5940 "./00_pinhole_SANS.c"
   rot_mul(mctr1, mcrotaSource, mcrotaSecondPinhole);
   rot_transpose(mcrotaFirstPinhole, mctr1);
   rot_mul(mcrotaSecondPinhole, mctr1, mcrotrSecondPinhole);
@@ -5947,7 +5948,7 @@ void mcinit(void) {
     0,
 #line 64 "00_pinhole_SANS.instr"
     mcipDistSrcPin2);
-#line 5950 "00_pinhole_SANS.c"
+#line 5951 "./00_pinhole_SANS.c"
   rot_transpose(mcrotaSource, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
   mcposaSecondPinhole = coords_add(mcposaSource, mctc2);
@@ -5995,14 +5996,14 @@ void mcinit(void) {
   mccSample_SampleToDetectorDistance = mcipDistSampDet;
 #line 110 "00_pinhole_SANS.instr"
   mccSample_DetectorRadius = mcipDetRadius;
-#line 5998 "00_pinhole_SANS.c"
+#line 5999 "./00_pinhole_SANS.c"
 
   SIG_MESSAGE("Sample (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 6005 "00_pinhole_SANS.c"
+#line 6006 "./00_pinhole_SANS.c"
   rot_mul(mctr1, mcrotaSecondPinhole, mcrotaSample);
   rot_transpose(mcrotaSecondPinhole, mctr1);
   rot_mul(mcrotaSample, mctr1, mcrotrSample);
@@ -6013,7 +6014,7 @@ void mcinit(void) {
     0,
 #line 111 "00_pinhole_SANS.instr"
     mcipDistSampDet);
-#line 6016 "00_pinhole_SANS.c"
+#line 6017 "./00_pinhole_SANS.c"
   rot_transpose(mcrotaSecondPinhole, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
   mcposaSample = coords_add(mcposaSecondPinhole, mctc2);
@@ -6041,14 +6042,14 @@ void mcinit(void) {
   mccBeamstop_yheight = 0;
 #line 184 "00_pinhole_SANS.instr"
   mccBeamstop_radius = 0.1;
-#line 6044 "00_pinhole_SANS.c"
+#line 6045 "./00_pinhole_SANS.c"
 
   SIG_MESSAGE("Beamstop (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 6051 "00_pinhole_SANS.c"
+#line 6052 "./00_pinhole_SANS.c"
   rot_mul(mctr1, mcrotaSample, mcrotaBeamstop);
   rot_transpose(mcrotaSample, mctr1);
   rot_mul(mcrotaBeamstop, mctr1, mcrotrBeamstop);
@@ -6059,7 +6060,7 @@ void mcinit(void) {
     0,
 #line 185 "00_pinhole_SANS.instr"
     mcipDistSampDet - 0.000001);
-#line 6062 "00_pinhole_SANS.c"
+#line 6063 "./00_pinhole_SANS.c"
   rot_transpose(mcrotaSample, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
   mcposaBeamstop = coords_add(mcposaSample, mctc2);
@@ -6089,14 +6090,14 @@ void mcinit(void) {
   mccMonitor_yheight = 2.0 * mcipDetRadius;
 #line 196 "00_pinhole_SANS.instr"
   mccMonitor_restore_neutron = 1;
-#line 6092 "00_pinhole_SANS.c"
+#line 6093 "./00_pinhole_SANS.c"
 
   SIG_MESSAGE("Monitor (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 6099 "00_pinhole_SANS.c"
+#line 6100 "./00_pinhole_SANS.c"
   rot_mul(mctr1, mcrotaBeamstop, mcrotaMonitor);
   rot_transpose(mcrotaBeamstop, mctr1);
   rot_mul(mcrotaMonitor, mctr1, mcrotrMonitor);
@@ -6107,7 +6108,7 @@ void mcinit(void) {
     0,
 #line 197 "00_pinhole_SANS.instr"
     0.000001);
-#line 6110 "00_pinhole_SANS.c"
+#line 6111 "./00_pinhole_SANS.c"
   rot_transpose(mcrotaBeamstop, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
   mcposaMonitor = coords_add(mcposaBeamstop, mctc2);
@@ -6129,14 +6130,14 @@ void mcinit(void) {
   mccQMonitor_LambdaMin = mcipLambda;
 #line 204 "00_pinhole_SANS.instr"
   mccQMonitor_Lambda0 = mcipLambda;
-#line 6132 "00_pinhole_SANS.c"
+#line 6133 "./00_pinhole_SANS.c"
 
   SIG_MESSAGE("QMonitor (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 6139 "00_pinhole_SANS.c"
+#line 6140 "./00_pinhole_SANS.c"
   rot_mul(mctr1, mcrotaBeamstop, mcrotaQMonitor);
   rot_transpose(mcrotaMonitor, mctr1);
   rot_mul(mcrotaQMonitor, mctr1, mcrotrQMonitor);
@@ -6147,7 +6148,7 @@ void mcinit(void) {
     0,
 #line 206 "00_pinhole_SANS.instr"
     0.000001000000001);
-#line 6150 "00_pinhole_SANS.c"
+#line 6151 "./00_pinhole_SANS.c"
   rot_transpose(mcrotaBeamstop, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
   mcposaQMonitor = coords_add(mcposaBeamstop, mctc2);
@@ -6172,7 +6173,7 @@ void mcinit(void) {
 #define percent mccOrigin_percent
 #define flag_save mccOrigin_flag_save
 #define minutes mccOrigin_minutes
-#line 57 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/misc/Progress_bar.comp"
+#line 57 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../misc/Progress_bar.comp"
 {
 IntermediateCnts=0;
 StartTime=0;
@@ -6184,7 +6185,7 @@ fprintf(stdout, "[%s] Initialize\n", mcinstrument_name);
     percent=1e5*100.0/mcget_ncount();
   }
 }
-#line 6187 "00_pinhole_SANS.c"
+#line 6188 "./00_pinhole_SANS.c"
 #undef minutes
 #undef flag_save
 #undef percent
@@ -6218,7 +6219,7 @@ fprintf(stdout, "[%s] Initialize\n", mcinstrument_name);
 #define flux mccSource_flux
 #define gauss mccSource_gauss
 #define target_index mccSource_target_index
-#line 64 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/sources/Source_simple.comp"
+#line 64 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../sources/Source_simple.comp"
 {
 square = 0;
 /* Determine source area */
@@ -6274,7 +6275,7 @@ if (radius && !yheight && !xwidth ) {
       exit(0);
   }
 }
-#line 6277 "00_pinhole_SANS.c"
+#line 6278 "./00_pinhole_SANS.c"
 #undef target_index
 #undef gauss
 #undef flux
@@ -6307,7 +6308,7 @@ if (radius && !yheight && !xwidth ) {
 #define radius mccFirstPinhole_radius
 #define xwidth mccFirstPinhole_xwidth
 #define yheight mccFirstPinhole_yheight
-#line 47 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/optics/Slit.comp"
+#line 47 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../optics/Slit.comp"
 {
 if (xwidth > 0)  { xmax=xwidth/2;  xmin=-xmax; }
   if (yheight > 0) { ymax=yheight/2; ymin=-ymax; }
@@ -6315,7 +6316,7 @@ if (xwidth > 0)  { xmax=xwidth/2;  xmin=-xmax; }
     { fprintf(stderr,"Slit: %s: Error: give geometry\n", NAME_CURRENT_COMP); exit(-1); }
 
 }
-#line 6318 "00_pinhole_SANS.c"
+#line 6319 "./00_pinhole_SANS.c"
 #undef yheight
 #undef xwidth
 #undef radius
@@ -6339,7 +6340,7 @@ if (xwidth > 0)  { xmax=xwidth/2;  xmin=-xmax; }
 #define radius mccSecondPinhole_radius
 #define xwidth mccSecondPinhole_xwidth
 #define yheight mccSecondPinhole_yheight
-#line 47 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/optics/Slit.comp"
+#line 47 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../optics/Slit.comp"
 {
 if (xwidth > 0)  { xmax=xwidth/2;  xmin=-xmax; }
   if (yheight > 0) { ymax=yheight/2; ymin=-ymax; }
@@ -6347,7 +6348,7 @@ if (xwidth > 0)  { xmax=xwidth/2;  xmin=-xmax; }
     { fprintf(stderr,"Slit: %s: Error: give geometry\n", NAME_CURRENT_COMP); exit(-1); }
 
 }
-#line 6350 "00_pinhole_SANS.c"
+#line 6351 "./00_pinhole_SANS.c"
 #undef yheight
 #undef xwidth
 #undef radius
@@ -6381,7 +6382,7 @@ if (xwidth > 0)  { xmax=xwidth/2;  xmin=-xmax; }
 #define zdepth mccSample_zdepth
 #define SampleToDetectorDistance mccSample_SampleToDetectorDistance
 #define DetectorRadius mccSample_DetectorRadius
-#line 112 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/contrib/SANSLiposomes.comp"
+#line 112 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../contrib/SANSLiposomes.comp"
 {
 	// Rescale concentration into number of aggregates per m^3 times 10^-4
 	NumberDensity = Concentration * 6.02214129e19;
@@ -6419,7 +6420,7 @@ if (xwidth > 0)  { xmax=xwidth/2;  xmin=-xmax; }
 	ThicknessOfCH2Tail = Thickness * VolumeOfCH2Tail   / (VolumeOfHeadgroup + VolumeOfCH2Tail + VolumeOfCH3Tail);
 	ThicknessOfCH3Tail = Thickness * VolumeOfCH3Tail   / (VolumeOfHeadgroup + VolumeOfCH2Tail + VolumeOfCH3Tail);
 }
-#line 6422 "00_pinhole_SANS.c"
+#line 6423 "./00_pinhole_SANS.c"
 #undef DetectorRadius
 #undef SampleToDetectorDistance
 #undef zdepth
@@ -6453,7 +6454,7 @@ if (xwidth > 0)  { xmax=xwidth/2;  xmin=-xmax; }
 #define xwidth mccBeamstop_xwidth
 #define yheight mccBeamstop_yheight
 #define radius mccBeamstop_radius
-#line 50 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/optics/Beamstop.comp"
+#line 50 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../optics/Beamstop.comp"
 {
 if (xwidth  > 0) { xmax = xwidth/2;  xmin = -xmax; }
   if (yheight > 0) { ymax = yheight/2; ymin = -ymax; }
@@ -6461,7 +6462,7 @@ if (xwidth  > 0) { xmax = xwidth/2;  xmin = -xmax; }
   if (xmin == 0 && xmax == 0 && ymin == 0 & ymax == 0 && radius == 0)
   { fprintf(stderr,"Beamstop: %s: Error: give geometry\n", NAME_CURRENT_COMP); exit(-1); }
 }
-#line 6464 "00_pinhole_SANS.c"
+#line 6465 "./00_pinhole_SANS.c"
 #undef radius
 #undef yheight
 #undef xwidth
@@ -6491,7 +6492,7 @@ if (xwidth  > 0) { xmax = xwidth/2;  xmin = -xmax; }
 #define xwidth mccMonitor_xwidth
 #define yheight mccMonitor_yheight
 #define restore_neutron mccMonitor_restore_neutron
-#line 60 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/monitors/PSD_monitor.comp"
+#line 60 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../monitors/PSD_monitor.comp"
 {
 int i,j;
 
@@ -6513,7 +6514,7 @@ if (xwidth  > 0) { xmax = xwidth/2;  xmin = -xmax; }
       PSD_p2[i][j] = 0;
      }
 }
-#line 6516 "00_pinhole_SANS.c"
+#line 6517 "./00_pinhole_SANS.c"
 #undef restore_neutron
 #undef yheight
 #undef xwidth
@@ -6550,7 +6551,7 @@ if (xwidth  > 0) { xmax = xwidth/2;  xmin = -xmax; }
 #define DistanceFromSample mccQMonitor_DistanceFromSample
 #define LambdaMin mccQMonitor_LambdaMin
 #define Lambda0 mccQMonitor_Lambda0
-#line 63 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/contrib/SANSQMonitor.comp"
+#line 63 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../contrib/SANSQMonitor.comp"
 {
 // Declarations
 int i;
@@ -6565,7 +6566,7 @@ for (i = 0; i < NumberOfBins; ++i) {
 	TwoThetaMax = atan(RadiusDetector / DistanceFromSample);
 	qMax = 4 * PI * sin(TwoThetaMax / 2.0) / LambdaMin;
 }
-#line 6568 "00_pinhole_SANS.c"
+#line 6569 "./00_pinhole_SANS.c"
 #undef Lambda0
 #undef LambdaMin
 #undef DistanceFromSample
@@ -6693,7 +6694,7 @@ char* profile = mccOrigin_profile;
 MCNUM percent = mccOrigin_percent;
 MCNUM flag_save = mccOrigin_flag_save;
 MCNUM minutes = mccOrigin_minutes;
-#line 70 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/misc/Progress_bar.comp"
+#line 70 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../misc/Progress_bar.comp"
 {
   double ncount;
   ncount = mcget_run_num();
@@ -6737,7 +6738,7 @@ MCNUM minutes = mccOrigin_minutes;
     if (flag_save) mcsave(NULL);
   }
 }
-#line 6740 "00_pinhole_SANS.c"
+#line 6741 "./00_pinhole_SANS.c"
 }   /* End of Origin=Progress_bar() SETTING parameter declarations. */
 #undef CurrentTime
 #undef EndTime
@@ -6863,7 +6864,7 @@ MCNUM dlambda = mccSource_dlambda;
 MCNUM flux = mccSource_flux;
 MCNUM gauss = mccSource_gauss;
 int target_index = mccSource_target_index;
-#line 120 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/sources/Source_simple.comp"
+#line 120 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../sources/Source_simple.comp"
 {
  double chi,E,lambda,v,r, xf, yf, rf, dx, dy, pdir;
 
@@ -6908,7 +6909,7 @@ int target_index = mccSource_target_index;
  vy=v*dy/rf;
  vx=v*dx/rf;
 }
-#line 6911 "00_pinhole_SANS.c"
+#line 6912 "./00_pinhole_SANS.c"
 }   /* End of Source=Source_simple() SETTING parameter declarations. */
 #undef srcArea
 #undef square
@@ -7024,7 +7025,7 @@ MCNUM ymax = mccFirstPinhole_ymax;
 MCNUM radius = mccFirstPinhole_radius;
 MCNUM xwidth = mccFirstPinhole_xwidth;
 MCNUM yheight = mccFirstPinhole_yheight;
-#line 56 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/optics/Slit.comp"
+#line 56 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../optics/Slit.comp"
 {
     PROP_Z0;
     if (((radius == 0) && (x<xmin || x>xmax || y<ymin || y>ymax))
@@ -7033,7 +7034,7 @@ MCNUM yheight = mccFirstPinhole_yheight;
     else
         SCATTER;
 }
-#line 7036 "00_pinhole_SANS.c"
+#line 7037 "./00_pinhole_SANS.c"
 }   /* End of FirstPinhole=Slit() SETTING parameter declarations. */
 #undef mccompcurname
 #undef mccompcurtype
@@ -7146,7 +7147,7 @@ MCNUM ymax = mccSecondPinhole_ymax;
 MCNUM radius = mccSecondPinhole_radius;
 MCNUM xwidth = mccSecondPinhole_xwidth;
 MCNUM yheight = mccSecondPinhole_yheight;
-#line 56 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/optics/Slit.comp"
+#line 56 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../optics/Slit.comp"
 {
     PROP_Z0;
     if (((radius == 0) && (x<xmin || x>xmax || y<ymin || y>ymax))
@@ -7155,7 +7156,7 @@ MCNUM yheight = mccSecondPinhole_yheight;
     else
         SCATTER;
 }
-#line 7158 "00_pinhole_SANS.c"
+#line 7159 "./00_pinhole_SANS.c"
 }   /* End of SecondPinhole=Slit() SETTING parameter declarations. */
 #undef mccompcurname
 #undef mccompcurtype
@@ -7278,7 +7279,7 @@ MCNUM yheight = mccSample_yheight;
 MCNUM zdepth = mccSample_zdepth;
 MCNUM SampleToDetectorDistance = mccSample_SampleToDetectorDistance;
 MCNUM DetectorRadius = mccSample_DetectorRadius;
-#line 151 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/contrib/SANSLiposomes.comp"
+#line 151 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../contrib/SANSLiposomes.comp"
 {
 	// Declarations
 	double t0;
@@ -7362,7 +7363,7 @@ MCNUM DetectorRadius = mccSample_DetectorRadius;
 		SCATTER;
 	}
 }
-#line 7365 "00_pinhole_SANS.c"
+#line 7366 "./00_pinhole_SANS.c"
 }   /* End of Sample=SANSLiposomes() SETTING parameter declarations. */
 #undef mccompcurname
 #undef mccompcurtype
@@ -7475,7 +7476,7 @@ MCNUM ymax = mccBeamstop_ymax;
 MCNUM xwidth = mccBeamstop_xwidth;
 MCNUM yheight = mccBeamstop_yheight;
 MCNUM radius = mccBeamstop_radius;
-#line 59 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/optics/Beamstop.comp"
+#line 59 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../optics/Beamstop.comp"
 {
     double Time = t;
     ALLOW_BACKPROP;
@@ -7487,7 +7488,7 @@ MCNUM radius = mccBeamstop_radius;
     else
       RESTORE_NEUTRON(INDEX_CURRENT_COMP, x, y, z, vx, vy, vz, t, sx, sy, sz, p);
 }
-#line 7490 "00_pinhole_SANS.c"
+#line 7491 "./00_pinhole_SANS.c"
 }   /* End of Beamstop=Beamstop() SETTING parameter declarations. */
 #undef mccompcurname
 #undef mccompcurtype
@@ -7606,7 +7607,7 @@ MCNUM ymax = mccMonitor_ymax;
 MCNUM xwidth = mccMonitor_xwidth;
 MCNUM yheight = mccMonitor_yheight;
 MCNUM restore_neutron = mccMonitor_restore_neutron;
-#line 82 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/monitors/PSD_monitor.comp"
+#line 82 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../monitors/PSD_monitor.comp"
 {
     int i,j;
 
@@ -7624,7 +7625,7 @@ MCNUM restore_neutron = mccMonitor_restore_neutron;
       RESTORE_NEUTRON(INDEX_CURRENT_COMP, x, y, z, vx, vy, vz, t, sx, sy, sz, p);
     }
 }
-#line 7627 "00_pinhole_SANS.c"
+#line 7628 "./00_pinhole_SANS.c"
 }   /* End of Monitor=PSD_monitor() SETTING parameter declarations. */
 #undef PSD_p2
 #undef PSD_p
@@ -7749,7 +7750,7 @@ MCNUM RadiusDetector = mccQMonitor_RadiusDetector;
 MCNUM DistanceFromSample = mccQMonitor_DistanceFromSample;
 MCNUM LambdaMin = mccQMonitor_LambdaMin;
 MCNUM Lambda0 = mccQMonitor_Lambda0;
-#line 79 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/contrib/SANSQMonitor.comp"
+#line 79 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../contrib/SANSQMonitor.comp"
 {
 	// Declarations
     int i;
@@ -7824,7 +7825,7 @@ MCNUM Lambda0 = mccQMonitor_Lambda0;
 //		RESTORE_NEUTRON(INDEX_CURRENT_COMP, x, y, z, vx, vy, vz, t, sx, sy, sz, p);
     }
 }
-#line 7827 "00_pinhole_SANS.c"
+#line 7828 "./00_pinhole_SANS.c"
 }   /* End of QMonitor=SANSQMonitor() SETTING parameter declarations. */
 #undef IofRSquared
 #undef IofR
@@ -7926,7 +7927,7 @@ char* profile = mccOrigin_profile;
 MCNUM percent = mccOrigin_percent;
 MCNUM flag_save = mccOrigin_flag_save;
 MCNUM minutes = mccOrigin_minutes;
-#line 115 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/misc/Progress_bar.comp"
+#line 115 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../misc/Progress_bar.comp"
 {
   MPI_MASTER(fprintf(stdout, "\nSave [%s]\n", mcinstrument_name););
   if (profile && strlen(profile) && strcmp(profile,"NULL") && strcmp(profile,"0")) {
@@ -7943,7 +7944,7 @@ MCNUM minutes = mccOrigin_minutes;
 
   }
 }
-#line 7946 "00_pinhole_SANS.c"
+#line 7947 "./00_pinhole_SANS.c"
 }   /* End of Origin=Progress_bar() SETTING parameter declarations. */
 #undef CurrentTime
 #undef EndTime
@@ -7972,7 +7973,7 @@ MCNUM ymax = mccMonitor_ymax;
 MCNUM xwidth = mccMonitor_xwidth;
 MCNUM yheight = mccMonitor_yheight;
 MCNUM restore_neutron = mccMonitor_restore_neutron;
-#line 100 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/monitors/PSD_monitor.comp"
+#line 100 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../monitors/PSD_monitor.comp"
 {
     DETECTOR_OUT_2D(
         "PSD monitor",
@@ -7983,7 +7984,7 @@ MCNUM restore_neutron = mccMonitor_restore_neutron;
         &PSD_N[0][0],&PSD_p[0][0],&PSD_p2[0][0],
         filename);
 }
-#line 7986 "00_pinhole_SANS.c"
+#line 7987 "./00_pinhole_SANS.c"
 }   /* End of Monitor=PSD_monitor() SETTING parameter declarations. */
 #undef PSD_p2
 #undef PSD_p
@@ -8014,7 +8015,7 @@ MCNUM RadiusDetector = mccQMonitor_RadiusDetector;
 MCNUM DistanceFromSample = mccQMonitor_DistanceFromSample;
 MCNUM LambdaMin = mccQMonitor_LambdaMin;
 MCNUM Lambda0 = mccQMonitor_Lambda0;
-#line 155 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/contrib/SANSQMonitor.comp"
+#line 155 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../contrib/SANSQMonitor.comp"
 {
 	// Output I(r)
     DETECTOR_OUT_1D(
@@ -8046,7 +8047,7 @@ MCNUM Lambda0 = mccQMonitor_Lambda0;
         qFilename
 	);
 }
-#line 8049 "00_pinhole_SANS.c"
+#line 8050 "./00_pinhole_SANS.c"
 }   /* End of QMonitor=SANSQMonitor() SETTING parameter declarations. */
 #undef IofRSquared
 #undef IofR
@@ -8083,7 +8084,7 @@ char* profile = mccOrigin_profile;
 MCNUM percent = mccOrigin_percent;
 MCNUM flag_save = mccOrigin_flag_save;
 MCNUM minutes = mccOrigin_minutes;
-#line 133 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/misc/Progress_bar.comp"
+#line 133 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../misc/Progress_bar.comp"
 {
   time_t NowTime;
   time(&NowTime);
@@ -8096,7 +8097,7 @@ MCNUM minutes = mccOrigin_minutes;
     fprintf(stdout, "%g [min] ", difftime(NowTime,StartTime)/60.0);
   fprintf(stdout, "\n");
 }
-#line 8099 "00_pinhole_SANS.c"
+#line 8100 "./00_pinhole_SANS.c"
 }   /* End of Origin=Progress_bar() SETTING parameter declarations. */
 #undef CurrentTime
 #undef EndTime
@@ -8158,11 +8159,11 @@ char* profile = mccOrigin_profile;
 MCNUM percent = mccOrigin_percent;
 MCNUM flag_save = mccOrigin_flag_save;
 MCNUM minutes = mccOrigin_minutes;
-#line 147 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/misc/Progress_bar.comp"
+#line 147 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../misc/Progress_bar.comp"
 {
   magnify("");
 }
-#line 8157 "00_pinhole_SANS.c"
+#line 8158 "./00_pinhole_SANS.c"
 }   /* End of Origin=Progress_bar() SETTING parameter declarations. */
 #undef CurrentTime
 #undef EndTime
@@ -8195,7 +8196,7 @@ MCNUM dlambda = mccSource_dlambda;
 MCNUM flux = mccSource_flux;
 MCNUM gauss = mccSource_gauss;
 int target_index = mccSource_target_index;
-#line 166 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/sources/Source_simple.comp"
+#line 166 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../sources/Source_simple.comp"
 {
   if (square == 1) {
     magnify("xy");
@@ -8211,7 +8212,7 @@ int target_index = mccSource_target_index;
     dashed_line(0,0,0, -focus_xw/2, focus_yh/2,dist, 4);
   }
 }
-#line 8206 "00_pinhole_SANS.c"
+#line 8207 "./00_pinhole_SANS.c"
 }   /* End of Source=Source_simple() SETTING parameter declarations. */
 #undef srcArea
 #undef square
@@ -8234,7 +8235,7 @@ MCNUM ymax = mccFirstPinhole_ymax;
 MCNUM radius = mccFirstPinhole_radius;
 MCNUM xwidth = mccFirstPinhole_xwidth;
 MCNUM yheight = mccFirstPinhole_yheight;
-#line 66 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/optics/Slit.comp"
+#line 66 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../optics/Slit.comp"
 {
   magnify("xy");
   if (radius == 0) {
@@ -8257,7 +8258,7 @@ MCNUM yheight = mccFirstPinhole_yheight;
     circle("xy",0,0,0,radius);
   }
 }
-#line 8252 "00_pinhole_SANS.c"
+#line 8253 "./00_pinhole_SANS.c"
 }   /* End of FirstPinhole=Slit() SETTING parameter declarations. */
 #undef mccompcurname
 #undef mccompcurtype
@@ -8277,7 +8278,7 @@ MCNUM ymax = mccSecondPinhole_ymax;
 MCNUM radius = mccSecondPinhole_radius;
 MCNUM xwidth = mccSecondPinhole_xwidth;
 MCNUM yheight = mccSecondPinhole_yheight;
-#line 66 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/optics/Slit.comp"
+#line 66 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../optics/Slit.comp"
 {
   magnify("xy");
   if (radius == 0) {
@@ -8300,7 +8301,7 @@ MCNUM yheight = mccSecondPinhole_yheight;
     circle("xy",0,0,0,radius);
   }
 }
-#line 8295 "00_pinhole_SANS.c"
+#line 8296 "./00_pinhole_SANS.c"
 }   /* End of SecondPinhole=Slit() SETTING parameter declarations. */
 #undef mccompcurname
 #undef mccompcurtype
@@ -8330,12 +8331,12 @@ MCNUM yheight = mccSample_yheight;
 MCNUM zdepth = mccSample_zdepth;
 MCNUM SampleToDetectorDistance = mccSample_SampleToDetectorDistance;
 MCNUM DetectorRadius = mccSample_DetectorRadius;
-#line 236 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/contrib/SANSLiposomes.comp"
+#line 236 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../contrib/SANSLiposomes.comp"
 {
 	magnify("xyz");
 	box(0, 0, 0, xwidth, yheight, zdepth);
 }
-#line 8330 "00_pinhole_SANS.c"
+#line 8331 "./00_pinhole_SANS.c"
 }   /* End of Sample=SANSLiposomes() SETTING parameter declarations. */
 #undef mccompcurname
 #undef mccompcurtype
@@ -8355,7 +8356,7 @@ MCNUM ymax = mccBeamstop_ymax;
 MCNUM xwidth = mccBeamstop_xwidth;
 MCNUM yheight = mccBeamstop_yheight;
 MCNUM radius = mccBeamstop_radius;
-#line 72 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/optics/Beamstop.comp"
+#line 72 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../optics/Beamstop.comp"
 {
   magnify("xy");
   if (radius != 0)
@@ -8367,7 +8368,7 @@ MCNUM radius = mccBeamstop_radius;
                (double)xmin, (double)ymax, 0.0,
                (double)xmin, (double)ymin, 0.0);
 }
-#line 8362 "00_pinhole_SANS.c"
+#line 8363 "./00_pinhole_SANS.c"
 }   /* End of Beamstop=Beamstop() SETTING parameter declarations. */
 #undef mccompcurname
 #undef mccompcurtype
@@ -8393,7 +8394,7 @@ MCNUM ymax = mccMonitor_ymax;
 MCNUM xwidth = mccMonitor_xwidth;
 MCNUM yheight = mccMonitor_yheight;
 MCNUM restore_neutron = mccMonitor_restore_neutron;
-#line 112 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/monitors/PSD_monitor.comp"
+#line 112 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../monitors/PSD_monitor.comp"
 {
   magnify("xy");
   multiline(5, (double)xmin, (double)ymin, 0.0,
@@ -8402,7 +8403,7 @@ MCNUM restore_neutron = mccMonitor_restore_neutron;
                (double)xmin, (double)ymax, 0.0,
                (double)xmin, (double)ymin, 0.0);
 }
-#line 8397 "00_pinhole_SANS.c"
+#line 8398 "./00_pinhole_SANS.c"
 }   /* End of Monitor=PSD_monitor() SETTING parameter declarations. */
 #undef PSD_p2
 #undef PSD_p
@@ -8434,12 +8435,12 @@ MCNUM RadiusDetector = mccQMonitor_RadiusDetector;
 MCNUM DistanceFromSample = mccQMonitor_DistanceFromSample;
 MCNUM LambdaMin = mccQMonitor_LambdaMin;
 MCNUM Lambda0 = mccQMonitor_Lambda0;
-#line 188 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/contrib/SANSQMonitor.comp"
+#line 188 "/Applications/McStas-2.4.app/Contents/Resources/mcstas/2.4/tools/Python/mcrun/../mccodelib/../../../contrib/SANSQMonitor.comp"
 {
 	magnify("xy");
 	circle("xy", 0, 0, 0, RadiusDetector);
 }
-#line 8434 "00_pinhole_SANS.c"
+#line 8435 "./00_pinhole_SANS.c"
 }   /* End of QMonitor=SANSQMonitor() SETTING parameter declarations. */
 #undef IofRSquared
 #undef IofR
@@ -8464,4 +8465,4 @@ MCNUM Lambda0 = mccQMonitor_Lambda0;
 #undef rectangle
 #undef box
 #undef circle
-/* end of generated C code 00_pinhole_SANS.c */
+/* end of generated C code ./00_pinhole_SANS.c */

@@ -196,3 +196,6 @@ NeutronLabApp/static/
 mcstas_data/results/78OBLZXX68/H2_ColdDif.c
 mcstas_data/results/78OBLZXX68/H2_ColdDif.instr
 mcstas_data/results/78OBLZXX68/sim/
+
+*/.DS_Store
+.DS_Store

@@ -44,6 +44,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     pinhole_sans_app = TLabAppQt(name='Reflectometer',
                                  env_config=app_config,
-                                 instr_params=instrument_params, dummy=False)
+                                 instr_params=instrument_params, dummy=True)
     pinhole_sans_app.show()
     sys.exit(app.exec_())

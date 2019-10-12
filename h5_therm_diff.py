@@ -24,7 +24,7 @@ app_config = {
     '1D detector file name': 'Detector1.th',
     '1D title': 'Угловое распределение интенсивности', '1D xlabel': 'Угол рассеяния 2$\Theta$ [град]',
     '1D ylabel': 'Интенсивность [усл. ед.]',
-    'instrument scheme': os.path.join(config.img_path, 'h5_tnd.tiff'),
+    'instrument scheme': os.path.join(config.img_path, 'h5_thpd.png'),
     'Plot Width': 900, 'Plot Height': 400,
     'VR server uri': 'ws://185.104.249.66:6789/',
 }

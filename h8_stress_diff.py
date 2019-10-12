@@ -22,7 +22,7 @@ app_config = {
     '1D detector file name': 'Detector.dat',
     '1D title': 'Угловое распределение интенсивности', '1D xlabel': 'Угол рассеяния 2$\Theta$ [град]',
     '1D ylabel': 'Интенсивность [усл. ед.]',
-    'instrument scheme': os.path.join(config.img_path, 'h8_sd.tiff'),
+    'instrument scheme': os.path.join(config.img_path, 'h8_sd.png'),
     'Plot Width': 900, 'Plot Height': 400,
     'VR server uri': 'ws://185.104.249.66:6789/',
 }

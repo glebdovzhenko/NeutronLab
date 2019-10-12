@@ -24,7 +24,7 @@ app_config = {
     '1D detector yerr': 'Detector_ERR',
     '1D title': 'Распределение интенсивности по углу качания',
     '1D xlabel': 'Угол качания [град.]', '1D ylabel': 'Интенсивность [усл. ед.]',
-    'instrument scheme': os.path.join(config.img_path, 'h6_dcd.tiff'),
+    'instrument scheme': os.path.join(config.img_path, 'h6_dcd.png'),
     'Plot Width': 900, 'Plot Height': 400,
     'VR server uri': 'ws://185.104.249.66:6789/',
 }

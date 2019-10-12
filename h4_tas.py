@@ -24,7 +24,7 @@ app_config = {
     '1D detector y': 'befanL_I', '1D detector yerr': 'befanL_ERR',
     '1D title': 'Скан интенсивности отражения по углу анализатора',
     '1D xlabel': 'Угол анализатора [град]', '1D ylabel': 'Интенсивность [усл. ед.]',
-    'instrument scheme': os.path.join(config.img_path, 'h4_tas.tiff'),
+    'instrument scheme': os.path.join(config.img_path, 'h4_tas.png'),
     'Plot Width': 900, 'Plot Height': 400,
     'VR server uri': 'ws://185.104.249.66:6789/',
     # 'VR server uri': 'ws://127.0.0.1:6789/'

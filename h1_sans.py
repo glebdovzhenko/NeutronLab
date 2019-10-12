@@ -29,7 +29,7 @@ app_config = {
     '2D detector file name': 'Detector2D.dat', '1D detector file name': 'QDetector.dat',
     '2D title': 'Позиционно-чувствительный детектор', '2D xlabel': 'положение x [м]', '2D ylabel': 'положение y [м]',
     '1D title': 'Результат интегрирования ПЧД', '1D xlabel': 'Переданный импульс q [1/\u212B]', '1D ylabel': 'Интенсивность [усл. ед.]',
-    'instrument scheme': os.path.join(config.img_path, 'h1_sans.tiff'),
+    'instrument scheme': os.path.join(config.img_path, 'h1_sans.png'),
     'Plot Width': 900, 'Plot Height': 400,
     'VR server uri': 'ws://185.104.249.66:6789/',
 }

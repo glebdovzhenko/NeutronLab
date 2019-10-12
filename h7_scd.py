@@ -24,7 +24,7 @@ app_config = {
     '2D detector file name': 'psd.dat',
     '2D title': 'Позиционно чувствительный детектор', '2D xlabel': 'Угол рассеяния 2$\Theta_{x}$ [град]',
     '2D ylabel': 'Угол рассеяния 2$\Theta_{y}$ [град]',
-    'instrument scheme': os.path.join(config.img_path, 'h7_scd.tiff'),
+    'instrument scheme': os.path.join(config.img_path, 'h7_scd.png'),
     'Plot Width': 900, 'Plot Height': 400,
     'VR server uri': 'ws://185.104.249.66:6789/',
 }

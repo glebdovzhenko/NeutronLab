@@ -24,7 +24,7 @@ app_config = {
     '1D detector yerr': 'Detector_ERR',
     '1D title': 'Скан интенсивности отражения по углу рассеяния', '1D xlabel': 'Угол рассеяния [град]',
     '1D ylabel': 'Интенсивность [усл. ед.]',
-    'instrument scheme': os.path.join(config.img_path, 'h3_rpn.tiff'),
+    'instrument scheme': os.path.join(config.img_path, 'h3_rpn.png'),
     'Plot Width': 900, 'Plot Height': 400,
     'VR server uri': 'ws://185.104.249.66:6789/',
 }

@@ -3,7 +3,10 @@ from .mcsim_runner import McSimulationRunner
 from .tfit_app import TFitAppQt
 
 import numpy as np
+import websockets
+import json
 import re
+import asyncio
 
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPixmap
@@ -20,11 +23,12 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 
 class TLabAppQt(QMainWindow, McSimulationRunner):
     """"""
-    def __init__(self, name, env_config, instr_params, gui=True, dummy=False):
+    def __init__(self, name, env_config, instr_params, gui=True, dummy=False, vr_name=''):
         QMainWindow.__init__(self, env_config=env_config, instr_params=instr_params)
 
         self.gui = gui
         self.dummy = dummy
+        self.vr_name = vr_name
         self.progress_dialog = None
         self.timer = None
         self.time_passed = 0.
@@ -124,6 +128,27 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
 
         self.setWindowTitle(name)
 
+    def send_params(self):
+        msg = dict()
+        msg['id'] = self.vr_name
+        for param in self.instr_params:
+            if type(param.dtype) == ValueRange:
+                msg[param.vr_name + 'start'] = param.value.start
+                msg[param.vr_name + 'end'] = param.value.end
+            else:
+                msg[param.vr_name] = param.value
+
+        msg = json.dumps(msg)
+
+        async def send_data(data):
+            async with websockets.connect(self.configuration['VR server uri']) as websocket:
+                await websocket.send(data)
+                print('Sent', self.configuration['VR server uri'], 'data', data)
+        try:
+            asyncio.get_event_loop().run_until_complete(send_data(msg))
+        except OSError as e:
+            print(e)
+
     def make_callback(self, ii):
         if self.instr_params[ii].value_names:
             def callback():
@@ -133,6 +158,7 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
                 if ok:
                     self.instr_params[ii].update_by_name(item)
                     self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
+                    self.send_params()
         elif self.instr_params[ii].dtype == int:
             def callback():
                 res, ok = QInputDialog.getInt(self, self.instr_params[ii].gui_name, self.instr_params[ii].gui_name,
@@ -140,6 +166,7 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
                 if ok:
                     self.instr_params[ii].update(res)
                     self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
+                    self.send_params()
         elif self.instr_params[ii].dtype == float:
             def callback():
                 d, ok = QInputDialog.getDouble(self, self.instr_params[ii].gui_name, self.instr_params[ii].gui_name,
@@ -147,6 +174,7 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
                 if ok:
                     self.instr_params[ii].update(d)
                     self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
+                    self.send_params()
         elif type(self.instr_params[ii].dtype) == ValueRange:
             def callback():
                 text, ok = QInputDialog.getText(self, self.instr_params[ii].gui_name,
@@ -154,6 +182,7 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
                 if ok and text != '':
                     self.instr_params[ii].update(text)
                     self.param_labels[ii].setText("%s" % str(self.instr_params[ii]))
+                    self.send_params()
         else:
             def callback():
                 pass

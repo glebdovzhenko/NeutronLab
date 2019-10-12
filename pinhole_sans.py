@@ -28,6 +28,7 @@ app_config = {
     '1D title': 'I(q)', '1D xlabel': 'Волн. вектор q [1/\u212B]', '1D ylabel': 'Интенсивность [усл. ед.]',
     'instrument scheme': os.path.join(config.img_path, '00_pinhole_SANS.tiff'),
     'Plot Width': 900, 'Plot Height': 400,
+    'VR server uri': 'ws://185.104.249.66:6789/',
 }
 
 if platform.system() == 'Darwin':

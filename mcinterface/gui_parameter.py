@@ -1,9 +1,10 @@
 class GUIParameter:
-    def __init__(self, gui_name, sim_name, data_type, value=None, values=None, value_names=None):
+    def __init__(self, gui_name, sim_name, data_type, value=None, values=None, value_names=None, vr_name=''):
         self._gui_name = gui_name
         self._sim_name = sim_name
         self._type = data_type
         self._value = None
+        self.vr_name = vr_name
 
         if (values is not None) and (value_names is not None) and (len(value_names) != len(values)):
             raise ValueError()

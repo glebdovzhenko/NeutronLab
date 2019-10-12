@@ -31,6 +31,7 @@ app_config = {
     '1D title': 'Результат интегрирования ПЧД', '1D xlabel': 'Переданный импульс q [1/\u212B]', '1D ylabel': 'Интенсивность [усл. ед.]',
     'instrument scheme': os.path.join(config.img_path, 'h1_sans.tiff'),
     'Plot Width': 900, 'Plot Height': 400,
+    'VR server uri': 'ws://185.104.249.66:6789/',
 }
 
 if platform.system() == 'Darwin':

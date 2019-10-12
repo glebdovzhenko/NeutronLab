@@ -6,3 +6,4 @@ pandas
 pyqt5
 lmfit
 cryptography
+websockets

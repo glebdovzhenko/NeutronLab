@@ -24,6 +24,7 @@ app_config = {
     '1D ylabel': 'Интенсивность [усл. ед.]',
     'instrument scheme': os.path.join(config.img_path, 'h8_sd.tiff'),
     'Plot Width': 900, 'Plot Height': 400,
+    'VR server uri': 'ws://185.104.249.66:6789/',
 }
 
 if platform.system() == 'Darwin':

@@ -9,11 +9,11 @@ import os
 """
 
 instrument_params = (
-    GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 2.4),
-    GUIParameter('Угол рассеяния [град.]', 'scat_angle', float, 10),
-    GUIParameter('Угол анализатора [град.]', 'an_angle', ValueRange(float), (40, 60)),
-    GUIParameter('Шаги по ан. углу', 'N_count', int, 100),
-    GUIParameter('Статистика нейтронов', 'n_count', int, 1E6),
+    GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 2.4, vr_name='monohromwavelength'),
+    GUIParameter('Угол рассеяния [град.]', 'scat_angle', float, 10, vr_name='dispersionangle'),
+    GUIParameter('Угол анализатора [град.]', 'an_angle', ValueRange(float), (40, 60), vr_name='analizangle'),
+    GUIParameter('Шаги по ан. углу', 'N_count', int, 100, vr_name='steps'),
+    GUIParameter('Статистика нейтронов', 'n_count', int, 1E6, vr_name='neytronstatistic'),
 )
 
 app_config = {
@@ -26,6 +26,8 @@ app_config = {
     '1D xlabel': 'Угол анализатора [град]', '1D ylabel': 'Интенсивность [усл. ед.]',
     'instrument scheme': os.path.join(config.img_path, 'h4_tas.tiff'),
     'Plot Width': 900, 'Plot Height': 400,
+    'VR server uri': 'ws://185.104.249.66:6789/',
+    # 'VR server uri': 'ws://127.0.0.1:6789/'
 }
 
 if platform.system() == 'Darwin':
@@ -44,6 +46,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     pinhole_sans_app = TLabAppQt(name='Triple Axis Spectrometer',
                                  env_config=app_config,
-                                 instr_params=instrument_params, dummy=False)
+                                 instr_params=instrument_params, dummy=False,
+                                 vr_name='atos')
     pinhole_sans_app.show()
     sys.exit(app.exec_())

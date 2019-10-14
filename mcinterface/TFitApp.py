@@ -1,16 +1,12 @@
 import numpy as np
 from scipy.signal import argrelextrema
+from lmfit.models import GaussianModel
 
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog
-from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout
-from PyQt5.QtWidgets import QPushButton, QLabel, QInputDialog
-
-from lmfit.models import GaussianModel
+from PyQt5.QtWidgets import QDialog, QGridLayout, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QInputDialog
 
 
 class TFitAppQt(QDialog):

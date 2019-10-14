@@ -1,6 +1,6 @@
-from .value_range import ValueRange
-from .mcsim_runner import McSimulationRunner
-from .tfit_app import TFitAppQt
+from .ValueRange import ValueRange
+from .McSimRunner import McSimulationRunner
+from .TFitApp import TFitAppQt
 
 import numpy as np
 import websockets
@@ -15,7 +15,6 @@ from PyQt5.QtWidgets import QFileDialog, QLineEdit,  QMainWindow, QWidget
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
 from PyQt5.QtWidgets import QPushButton, QLabel, QInputDialog, QProgressDialog
 
-from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib import ticker as ticker
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -283,7 +282,7 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
     def await_simulation(self):
         if self.sim_process is None:
             return
-        self.sim_eta = 60
+        self.sim_eta = 160
         self.time_passed = 0.
         self.steps_passed = 0
         self.sim_status = 'Подготовка'

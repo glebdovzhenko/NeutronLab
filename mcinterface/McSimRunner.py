@@ -1,16 +1,14 @@
-from .value_range import ValueRange
-from .mccode_parsers import McArray, McColumns
+from .ValueRange import ValueRange
+from .McCodeParsers import McArray, McColumns
 
 from collections import defaultdict
 from subprocess import PIPE, Popen
 import fcntl
-import numpy as np
 import random
 import string
 import signal
 import shutil
 import time
-import re
 import os
 
 
@@ -113,7 +111,9 @@ class McSimulationRunner:
 
         self.sim_process = Popen([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params],
                                  env=env, cwd=self.configuration['Simulation Data Directory'],
-                                 stdout=PIPE, stderr=PIPE, preexec_fn=os.setsid)
+                                 stdout=PIPE,
+                                 stderr=PIPE,
+                                 preexec_fn=os.setsid)
         print(os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params)
 
         self.sim_stderr, self.sim_stdout = self.sim_process.stderr, self.sim_process.stdout

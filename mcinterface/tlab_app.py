@@ -11,11 +11,12 @@ import asyncio
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QFileDialog, QLineEdit, QSizePolicy, QMainWindow, QWidget
+from PyQt5.QtWidgets import QFileDialog, QLineEdit,  QMainWindow, QWidget
 from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
 from PyQt5.QtWidgets import QPushButton, QLabel, QInputDialog, QProgressDialog
 
 from matplotlib import pyplot as plt
+from matplotlib.figure import Figure
 from matplotlib import ticker as ticker
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -42,7 +43,7 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
             return
 
         # setting up the figure and its canvas for plots
-        self.figure = plt.figure()
+        self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.canvas.setFixedWidth(self.configuration['Plot Width'])
@@ -50,14 +51,13 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
 
         # setting up plot axes
         if ('1D detector file name' in self.configuration) and ('2D detector file name' in self.configuration):
-            self.axes_1d_detector = self.figure.add_subplot(121)
-            self.axes_2d_detector = self.figure.add_subplot(122)
+            self.axes_1d_detector, self.axes_2d_detector = self.canvas.figure.subplots(nrows=1, ncols=2)
         elif '1D detector file name' in self.configuration:
-            self.axes_1d_detector = self.figure.add_subplot(111)
+            self.axes_1d_detector = self.canvas.figure.subplots()
             self.axes_2d_detector = None
         elif '2D detector file name' in self.configuration:
             self.axes_1d_detector = None
-            self.axes_2d_detector = self.figure.add_subplot(111)
+            self.axes_2d_detector = self.canvas.figure.subplots()
         self.figure.tight_layout()
 
         # adding plot scale button and registering click callback

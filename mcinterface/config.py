@@ -11,6 +11,8 @@ app_config = {
     'Simulation Data Directory': results_path,
     'Plot Width': 900, 'Plot Height': 400,
     'VR server uri': 'ws://185.104.249.66:6789/',
+    'Simulation poll timer': 10,  # mcsec
+    'Compilation ETA': 30
 }
 
 if platform.system() == 'Darwin':

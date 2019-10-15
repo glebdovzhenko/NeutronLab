@@ -8,12 +8,10 @@ import json
 import re
 import asyncio
 
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QFileDialog, QLineEdit,  QMainWindow, QWidget
-from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QFrame
-from PyQt5.QtWidgets import QPushButton, QLabel, QInputDialog, QProgressDialog
+from PyQt5.QtWidgets import QFileDialog, QLineEdit,  QMainWindow, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, \
+    QFrame, QPushButton, QLabel, QInputDialog, QProgressDialog
 
 from matplotlib.figure import Figure
 from matplotlib import ticker as ticker
@@ -36,7 +34,7 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
         self.log_scale_y = False
         self.sq_scale_x = False
         self.sim_status = 'Подготовка'
-        self.timer_p_int = 1000  # mcsec
+        self.timer_p_int = self.configuration['Simulation poll timer']  # mcsec
 
         if not gui:
             return
@@ -282,7 +280,7 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
     def await_simulation(self):
         if self.sim_process is None:
             return
-        self.sim_eta = 160
+        self.sim_eta = self.configuration['Compilation ETA']
         self.time_passed = 0.
         self.steps_passed = 0
         self.sim_status = 'Подготовка'

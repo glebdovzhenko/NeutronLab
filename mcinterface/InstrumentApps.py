@@ -37,7 +37,8 @@ class H1SansApp(TLabAppQt):
             'instrument scheme': os.path.join(img_path, 'RU', 'h1_sans.png'),
         })
 
-        TLabAppQt.__init__(self, name='H1 SANS', env_config=config, instr_params=instrument_params, dummy=dummy)
+        TLabAppQt.__init__(self, name='МСН (малоугловой спектрометр нейтронов)',
+                           env_config=config, instr_params=instrument_params, dummy=dummy)
 
 
 class H2ColdApp(TLabAppQt):
@@ -60,8 +61,8 @@ class H2ColdApp(TLabAppQt):
             'instrument scheme': os.path.join(img_path, 'RU', 'h2_cpd.png'),
         })
 
-        TLabAppQt.__init__(self, name='Cold Neutron Diffractometer', env_config=config,
-                           instr_params=instrument_params, dummy=dummy)
+        TLabAppQt.__init__(self, name='ПНД (порошковый нейтронный дифрактометр)',
+                           env_config=config, instr_params=instrument_params, dummy=dummy)
 
 
 class H3ReflApp(TLabAppQt):
@@ -83,7 +84,8 @@ class H3ReflApp(TLabAppQt):
             '1D ylabel': 'Интенсивность [усл. ед.]',
             'instrument scheme': os.path.join(img_path, 'RU', 'h3_rpn.png'),
         })
-        TLabAppQt.__init__(self, name='Reflectometer', env_config=config, instr_params=instrument_params, dummy=dummy)
+        TLabAppQt.__init__(self, name='РПН (рефлектометр поляризованных нейтронов)',
+                           env_config=config, instr_params=instrument_params, dummy=dummy)
 
 
 class H4TasApp(TLabAppQt):
@@ -107,8 +109,8 @@ class H4TasApp(TLabAppQt):
             'instrument scheme': os.path.join(img_path, 'RU', 'h4_tas.png'),
         })
 
-        TLabAppQt.__init__(self, name='Triple Axis Spectrometer', env_config=config,
-                           instr_params=instrument_params, dummy=dummy, vr_name='atos')
+        TLabAppQt.__init__(self, name='АТОС (трёхосный спектрометр)',
+                           env_config=config, instr_params=instrument_params, dummy=dummy, vr_name='atos')
 
 
 class H5ThermApp(TLabAppQt):
@@ -132,8 +134,8 @@ class H5ThermApp(TLabAppQt):
             'instrument scheme': os.path.join(img_path, 'RU', 'h5_thpd.png'),
         })
 
-        TLabAppQt.__init__(self, name='Thermal Powder Diffractometer', env_config=config,
-                           instr_params=instrument_params, dummy=dummy)
+        TLabAppQt.__init__(self, name='ДИСК (дифрактометр высокой светосилы)',
+                           env_config=config, instr_params=instrument_params, dummy=dummy)
 
 
 class H6DcdApp(TLabAppQt):
@@ -156,8 +158,8 @@ class H6DcdApp(TLabAppQt):
             'instrument scheme': os.path.join(img_path, 'RU', 'h6_dcd.png'),
         })
 
-        TLabAppQt.__init__(self, name='Double Crystal Diffractometer',
-                  env_config=config, instr_params=instrument_params, dummy=dummy)
+        TLabAppQt.__init__(self, name='СТОИК (малоугловая установка высокого разрешения)',
+                           env_config=config, instr_params=instrument_params, dummy=dummy)
 
 
 class H7ScdApp(TLabAppQt):
@@ -180,8 +182,8 @@ class H7ScdApp(TLabAppQt):
             'instrument scheme': os.path.join(img_path, 'RU', 'h7_scd.png'),
         })
 
-        TLabAppQt.__init__(self, name='Single Crystal Diffractometer', env_config=config,
-                  instr_params=instrument_params, dummy=dummy)
+        TLabAppQt.__init__(self, name='МОНД (монокристальный дифрактометр)',
+                           env_config=config, instr_params=instrument_params, dummy=dummy)
 
 
 class H8StressApp(TLabAppQt):
@@ -202,8 +204,8 @@ class H8StressApp(TLabAppQt):
             'instrument scheme': os.path.join(img_path, 'RU', 'h8_sd.png'),
         })
 
-        TLabAppQt.__init__(self, name='Stress Diffractometer', env_config=config,
-                           instr_params=instrument_params, dummy=dummy)
+        TLabAppQt.__init__(self, name='СТРЕСС (стресс-дифрактометр)',
+                           env_config=config, instr_params=instrument_params, dummy=dummy)
 
 
 class PinholeSansApp(TLabAppQt):

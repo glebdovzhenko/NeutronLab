@@ -19,10 +19,10 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
 
-class TLabAppQt(QMainWindow, McSimulationRunner):
+class TLabAppQt(QWidget, McSimulationRunner):
     """"""
     def __init__(self, name, env_config, instr_params, gui=True, dummy=False, vr_name=''):
-        QMainWindow.__init__(self, env_config=env_config, instr_params=instr_params)
+        QWidget.__init__(self, env_config=env_config, instr_params=instr_params)
 
         self.gui = gui
         self.dummy = dummy
@@ -119,9 +119,7 @@ class TLabAppQt(QMainWindow, McSimulationRunner):
         main_layout.addLayout(param_layout, 0)
         main_layout.addLayout(plot_layout, 1)
 
-        self.widget = QWidget()
-        self.widget.setLayout(main_layout)
-        self.setCentralWidget(self.widget)
+        self.setLayout(main_layout)
 
         self.setWindowTitle(name)
 

@@ -1,4 +1,7 @@
 import os
+from PyQt5.QtWidgets import QWidget, QGridLayout, QPushButton, QLabel
+from PyQt5.QtGui import QPixmap
+from PyQt5.Qt import Qt
 
 from .TLabApp import TLabAppQt
 from .ValueRange import ValueRange
@@ -62,7 +65,7 @@ class H2ColdApp(TLabAppQt):
 
 
 class H3ReflApp(TLabAppQt):
-    def __init__(self, dummy):
+    def __init__(self, dummy=False):
         instrument_params = (
             GUIParameter('Длина волны монохроматора [\u212B]', 'monok_lambda', float, 5.2),
             GUIParameter('Угол рассеяния [град.]', 'scat_angle', ValueRange(float), (0.3, 2.5)),
@@ -227,3 +230,120 @@ class PinholeSansApp(TLabAppQt):
         })
 
         TLabAppQt.__init__(self, name='Pinhole SANS', env_config=config, instr_params=instrument_params, dummy=dummy)
+
+
+class MainApp(QWidget):
+    def __init__(self, dummy=None):
+        self.dummy = dummy
+        QWidget.__init__(self)
+
+        layout = QGridLayout()
+        self.setLayout(layout)
+
+        self.h1 = QPushButton('СТОИК (малоугловая установка высокого разрешения)')
+        self.h2 = QPushButton('ххх')
+        self.h3 = QPushButton('ххх')
+        self.h4 = QPushButton('АТОС (трёхосный спектрометр)')
+        self.h5 = QPushButton('ххх')
+        self.h6 = QPushButton('ххх')
+        self.h7 = QPushButton('МОНД (монокристальный дифрактометр)')
+        self.h8 = QPushButton('СТРЕСС (стресс-дифрактометр)')
+
+        self.h1.clicked.connect(self.on_h1_click)
+        self.h2.clicked.connect(self.on_h2_click)
+        self.h3.clicked.connect(self.on_h3_click)
+        self.h4.clicked.connect(self.on_h4_click)
+        self.h5.clicked.connect(self.on_h5_click)
+        self.h6.clicked.connect(self.on_h6_click)
+        self.h7.clicked.connect(self.on_h7_click)
+        self.h8.clicked.connect(self.on_h8_click)
+
+
+        self.labels = []
+        for name in ('h1_sans', 'h2_cpd', 'h3_rpn', 'h4_tas', 'h5_thpd', 'h6_dcd', 'h7_scd', 'h8_sd'):
+            pm = QPixmap(os.path.join(img_path, 'RU', name + '.png'))
+            pm = pm.scaledToHeight(150, Qt.SmoothTransformation)
+            self.labels.append(QLabel())
+            self.labels[-1].setPixmap(pm)
+
+        layout.addWidget(self.labels[0], 1, 1)
+        layout.addWidget(self.h1, 2, 1)
+
+        layout.addWidget(self.labels[1], 1, 2)
+        layout.addWidget(self.h2, 2, 2)
+
+        layout.addWidget(self.labels[2], 3, 1)
+        layout.addWidget(self.h3, 4, 1)
+
+        layout.addWidget(self.labels[3], 3, 2)
+        layout.addWidget(self.h4, 4, 2)
+
+        layout.addWidget(self.labels[4], 5, 1)
+        layout.addWidget(self.h5, 6, 1)
+
+        layout.addWidget(self.labels[5], 5, 2)
+        layout.addWidget(self.h6, 6, 2)
+
+        layout.addWidget(self.labels[6], 7, 1)
+        layout.addWidget(self.h7, 8, 1)
+
+        layout.addWidget(self.labels[7], 7, 2)
+        layout.addWidget(self.h8, 8, 2)
+
+        self.setWindowTitle('Выбор установки')
+
+    def on_h1_click(self):
+        if isinstance(self.dummy, bool):
+            app = H1SansApp(dummy=self.dummy)
+        else:
+            app = H1SansApp()
+        app.show()
+
+    def on_h2_click(self):
+        if isinstance(self.dummy, bool):
+            app = H2ColdApp(dummy=self.dummy)
+        else:
+            app = H2ColdApp()
+        app.show()
+
+    def on_h3_click(self):
+        if isinstance(self.dummy, bool):
+            app = H3ReflApp(dummy=self.dummy)
+        else:
+            app = H3ReflApp()
+        app.show()
+
+    def on_h4_click(self):
+        if isinstance(self.dummy, bool):
+            app = H4TasApp(dummy=self.dummy)
+        else:
+            app = H4TasApp()
+        app.show()
+
+    def on_h5_click(self):
+        if isinstance(self.dummy, bool):
+            app = H5ThermApp(dummy=self.dummy)
+        else:
+            app = H5ThermApp()
+        app.show()
+
+    def on_h6_click(self):
+        if isinstance(self.dummy, bool):
+            app = H6DcdApp(dummy=self.dummy)
+        else:
+            app = H6DcdApp()
+        app.show()
+
+    def on_h7_click(self):
+        if isinstance(self.dummy, bool):
+            app = H7ScdApp(dummy=self.dummy)
+        else:
+            app = H7ScdApp()
+        app.show()
+
+    def on_h8_click(self):
+        if isinstance(self.dummy, bool):
+            app = H8StressApp(dummy=self.dummy)
+        else:
+            app = H8StressApp()
+        app.show()

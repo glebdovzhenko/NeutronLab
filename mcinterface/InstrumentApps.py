@@ -240,12 +240,12 @@ class MainApp(QWidget):
         layout = QGridLayout()
         self.setLayout(layout)
 
-        self.h1 = QPushButton('СТОИК (малоугловая установка высокого разрешения)')
-        self.h2 = QPushButton('ххх')
-        self.h3 = QPushButton('ххх')
+        self.h1 = QPushButton('МСН (малоугловой спектрометр нейтронов)')
+        self.h2 = QPushButton('ПНД (порошковый нейтронный дифрактометр)')
+        self.h3 = QPushButton('РПН (рефлектометр поляризованных нейтронов)')
         self.h4 = QPushButton('АТОС (трёхосный спектрометр)')
-        self.h5 = QPushButton('ххх')
-        self.h6 = QPushButton('ххх')
+        self.h5 = QPushButton('ДИСК (дифрактометр высокой светосилы)')
+        self.h6 = QPushButton('СТОИК (малоугловая установка высокого разрешения)')
         self.h7 = QPushButton('МОНД (монокристальный дифрактометр)')
         self.h8 = QPushButton('СТРЕСС (стресс-дифрактометр)')
 

@@ -123,15 +123,18 @@ class TLabAppQt(QWidget, McSimulationRunner):
 
         self.setWindowTitle(name)
 
-    def send_params(self):
+    def send_params(self, status=None):
         msg = dict()
         msg['id'] = self.vr_name
-        for param in self.instr_params:
-            if type(param.dtype) == ValueRange:
-                msg[param.vr_name + 'start'] = param.value.start
-                msg[param.vr_name + 'end'] = param.value.end
-            else:
-                msg[param.vr_name] = param.value
+        if status is None:
+            for param in self.instr_params:
+                if type(param.dtype) == ValueRange:
+                    msg[param.vr_name + 'start'] = param.value.start
+                    msg[param.vr_name + 'end'] = param.value.end
+                else:
+                    msg[param.vr_name] = param.value
+        else:
+            msg['id'] += '_' + status
 
         msg = json.dumps(msg)
 
@@ -301,6 +304,8 @@ class TLabAppQt(QWidget, McSimulationRunner):
             self._update_plot_axes()
             return
 
+        self.send_params(status='experiment')
+
         self.open_simulation(*args, **kwargs)
         self.await_simulation()
 
@@ -308,6 +313,9 @@ class TLabAppQt(QWidget, McSimulationRunner):
             self.update_sim_results()
             self._update_plot_axes()
             self._cleanup()
+            self.send_params(status='experiment_end')
+        else:
+            self.send_params(status='experiment_cancel')
 
     def on_btn_log_y(self, *args):
         self.log_scale_y = not self.log_scale_y

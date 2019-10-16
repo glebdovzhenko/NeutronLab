@@ -141,11 +141,11 @@ class H5ThermApp(TLabAppQt):
 class H6DcdApp(TLabAppQt):
     def __init__(self, dummy=False):
         instrument_params = (
-            GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 2.2),
-            GUIParameter('Угол качания [град.]', 'rock_angle', ValueRange(float), (0, 1)),
-            GUIParameter('Шаги угла качания', 'N_count', int, 100),
-            GUIParameter('Образец', 'is_sample', int, 1, values=(0, 1), value_names=('Да', 'Нет')),
-            GUIParameter('Статистика нейтронов', 'n_count', int, 1E7),
+            GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 2.2, vr_name='monohromwavelength'),
+            GUIParameter('Угол качания [град.]', 'rock_angle', ValueRange(float), (0, 1), vr_name='swingangle'),
+            GUIParameter('Шаги угла качания', 'N_count', int, 100, vr_name='swinganglesteps'),
+            GUIParameter('Образец', 'is_sample', int, 1, values=(0, 1), value_names=('Да', 'Нет'), vr_name='sample'),
+            GUIParameter('Статистика нейтронов', 'n_count', int, 1E7, vr_name='neytronstatistic'),
         )
         config = app_config.copy()
         config.update({
@@ -159,7 +159,7 @@ class H6DcdApp(TLabAppQt):
         })
 
         TLabAppQt.__init__(self, name='СТОИК (малоугловая установка высокого разрешения)',
-                           env_config=config, instr_params=instrument_params, dummy=dummy)
+                           env_config=config, instr_params=instrument_params, dummy=dummy, vr_name='stoik_experiment')
 
 
 class H7ScdApp(TLabAppQt):

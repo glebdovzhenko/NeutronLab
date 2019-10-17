@@ -1,8 +1,7 @@
 # NeutronLab 
 NeutronLab is an educational software package developed for National Research Center 
 "Kurchatov Institute". \
-NeutronLab replicates user interfaces of eight neutron instruments: 
-8 neutron instruments:
+NeutronLab replicates user interfaces of eight neutron instruments:
 * SANS
 * Cold Neutron Diffractometer
 * Polarized Neutron Reflectometer

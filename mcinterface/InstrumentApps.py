@@ -116,12 +116,12 @@ class H4TasApp(TLabAppQt):
 class H5ThermApp(TLabAppQt):
     def __init__(self, dummy=False):
         instrument_params = (
-            GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 1.2),
+            GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 1.2, vr_name='monohromwavelength'),
             GUIParameter('Диаметр диафрагмы [мм]', 'dia_dia', int, 3, values=(3, 6, 10),
-                         value_names=('3', '6', '10')),
+                         value_names=('3', '6', '10'), vr_name='aperturediameter'),
             GUIParameter('Образец', 'sample_num', int, 1, values=(1, 2, 3, 4, 5),
-                         value_names=('Cu', 'Si', 'Ge', 'Al2O3', 'Na2Ca3Al2F14')),
-            GUIParameter('Статистика нейтронов', 'n_count', int, 1E9),
+                         value_names=('Cu', 'Si', 'Ge', 'Al2O3', 'Na2Ca3Al2F14'), vr_name='sample'),
+            GUIParameter('Статистика нейтронов', 'n_count', int, 1E9, vr_name='neytronstatistic'),
         )
 
         config = app_config.copy()
@@ -135,7 +135,7 @@ class H5ThermApp(TLabAppQt):
         })
 
         TLabAppQt.__init__(self, name='ДИСК (дифрактометр высокой светосилы)',
-                           env_config=config, instr_params=instrument_params, dummy=dummy)
+                           env_config=config, instr_params=instrument_params, dummy=dummy, vr_name='disk')
 
 
 class H6DcdApp(TLabAppQt):
@@ -165,12 +165,12 @@ class H6DcdApp(TLabAppQt):
 class H7ScdApp(TLabAppQt):
     def __init__(self, dummy=False):
         instrument_params = (
-            GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 1.2),
-            GUIParameter('Номер образца', 'sample_index', int, 1, values=(1, 2)),
-            GUIParameter('Вращение образца вокруг x', 'rot_x', float, 90),
-            GUIParameter('Вращение образца вокруг y', 'rot_y', float, 0),
-            GUIParameter('Вращение образца вокруг z', 'rot_z', float, 0),
-            GUIParameter('Статистика нейтронов', 'n_count', int, 1E8),
+            GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 1.2, vr_name='monohromvawelength'),
+            GUIParameter('Номер образца', 'sample_index', int, 1, values=(1, 2), vr_name='sample'),
+            GUIParameter('Вращение образца вокруг x', 'rot_x', float, 90, vr_name='rotx'),
+            GUIParameter('Вращение образца вокруг y', 'rot_y', float, 0, vr_name='roty'),
+            GUIParameter('Вращение образца вокруг z', 'rot_z', float, 0, vr_name='rotz'),
+            GUIParameter('Статистика нейтронов', 'n_count', int, 1E8, vr_name='neytronstatistic'),
         )
         config = app_config.copy()
         config.update({
@@ -183,7 +183,7 @@ class H7ScdApp(TLabAppQt):
         })
 
         TLabAppQt.__init__(self, name='МОНД (монокристальный дифрактометр)',
-                           env_config=config, instr_params=instrument_params, dummy=dummy)
+                           env_config=config, instr_params=instrument_params, dummy=dummy, vr_name='mond')
 
 
 class H8StressApp(TLabAppQt):

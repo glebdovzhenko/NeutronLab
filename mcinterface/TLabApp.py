@@ -33,7 +33,7 @@ class TLabAppQt(QWidget, McSimulationRunner):
         self.steps_passed = 0
         self.log_scale_y = False
         self.sq_scale_x = False
-        self.sim_status = 'Подготовка'
+        self.sim_status = '1/2 Подготовка'
         self.timer_p_int = self.configuration['Simulation poll timer']  # mcsec
 
         if not gui:
@@ -250,8 +250,8 @@ class TLabAppQt(QWidget, McSimulationRunner):
         m = re.match(r'Trace ETA (?P<mes>[\d.]+) \[(?P<scale>min|s|h)\]', out_line)
         if m:
             self.time_passed = 0.
-            if self.sim_status != 'Вычисление':
-                self.sim_status = 'Вычисление'
+            if self.sim_status != '2/2 Вычисление':
+                self.sim_status = '2/2 Вычисление'
                 if m.group('scale') == 's':
                     self.sim_eta = float(m.group('mes'))
                 elif m.group('scale') == 'min':
@@ -266,15 +266,15 @@ class TLabAppQt(QWidget, McSimulationRunner):
                 elif m.group('scale') == 'h':
                     self.sim_eta = max(self.sim_eta, float(m.group('mes')) * 3600.)
 
-        if (self.n_points == 1) or (self.sim_status == 'Подготовка'):
+        if (self.n_points == 1) or (self.sim_status == '1/2 Подготовка'):
             self.progress_dialog.setValue(int(100. * self.time_passed / self.sim_eta))
             self.progress_dialog.setLabelText(self.sim_status + ": %d сек" % (self.sim_eta - int(self.time_passed)))
 
         m = re.match(r'INFO: (?P<param>[\S.]+): (?P<val>[\d.]+)$', err_line)
         if m:
-            self.sim_status = 'Вычисление'
+            self.sim_status = '2/2 Вычисление'
             self.steps_passed += 1
-        if (self.n_points > 1) and (self.sim_status == 'Вычисление'):
+        if (self.n_points > 1) and (self.sim_status == '2/2 Вычисление'):
             self.progress_dialog.setValue(int(100. * self.steps_passed / self.n_points))
             self.progress_dialog.setLabelText(self.sim_status + ": %d / %d шагов" % (int(self.steps_passed), self.n_points))
 
@@ -284,7 +284,7 @@ class TLabAppQt(QWidget, McSimulationRunner):
         self.sim_eta = self.configuration['Compilation ETA']
         self.time_passed = 0.
         self.steps_passed = 0
-        self.sim_status = 'Подготовка'
+        self.sim_status = '1/2 Подготовка'
 
         self.progress_dialog = QProgressDialog('Ход эксперимента', 'Стоп', 0, 100)
         self.progress_dialog.resize(300, self.progress_dialog.height())

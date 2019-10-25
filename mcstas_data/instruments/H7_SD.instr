@@ -1,0 +1,252 @@
+/*******************************************************************************
+*         McStas instrument definition URL=http://www.mcstas.org
+*
+* Instrument: test (rename also the example and DEFINE lines below)
+*
+* %Identification
+* Written by: Peter Konik
+* Date: 13.02.2018
+* Origin: PNPI
+* Release: McStas
+* Version: 0.2
+* %INSTRUMENT_SITE: Institution_name_as_a_single word
+*
+* Instrument short description
+* Powder diffractometer model adapted for NICONS school
+* %Description
+* Instrument longer description (type, elements, usage...)
+*
+* Example: mcrun test.instr <parameters=values>
+*
+* %Parameters
+* lambda: [AA] Operating wavelength for an experiment
+* col1: [min] Horizontal divergence set by primary collimator (before monochromator)
+* mon_mos: [min] Monochromator mosaicity
+* col2: [min] Horizontal divergence set by secondary collimator (between monochromator and sample)
+* col3: [min] Horizontal divergence set by radial collimator (sample-to-detector)
+*
+* %Link
+* A reference/HTML link for more information
+*
+* %End
+*******************************************************************************/
+
+/* Change name of instrument and input parameters with default values */
+DEFINE INSTRUMENT SD (lambda = 1.2, int sample_index = 1, rot_x = 0, rot_y = 0, rot_z = 0)
+
+/* The DECLARE section allows us to declare variables or  small      */
+/* functions in C syntax. These may be used in the whole instrument. */
+DECLARE
+%{
+double divx_source = 0.001, divy_source = 0.001;
+double beam_w = 0.03, beam_h = 0.03;
+double lambda_min, lambda_max;
+
+double monok_d = 1.714;
+double monok_angle, col1 = 10, mon_mos = 40, col2=20; 
+const char * sam_name;
+
+double det_R = 2.0;
+%}
+
+/* The INITIALIZE section is executed when the simulation starts     */
+/* (C code). You may use them as component parameter values.         */
+INITIALIZE
+%{
+lambda_min = 0.985*lambda;
+lambda_max = 1.015*lambda;
+//divx_source = 2.0 * col1 / 60.0;
+monok_angle = asin(lambda / 2.0 / monok_d) * RAD2DEG;
+
+switch( sample_index )   
+{  
+    case 1:  
+        sam_name = "C_graphite.lau";  
+        break;  
+    case 2 :  
+        sam_name = "C_diamond.lau";  
+        break;  
+    default :
+        printf("Wrong sample option! Operating at sample #1.\n");
+        sam_name = "C_graphite.lau";  
+        break; 
+}
+%}
+
+/* Here comes the TRACE section, where the actual      */
+/* instrument is defined as a sequence of components.  */
+TRACE
+
+/* The Arm() class component defines reference points and orientations  */
+/* in 3D space. Every component instance must have a unique name. Here, */
+/* Origin is used. This Arm() component is set to define the origin of  */
+/* our global coordinate system (AT (0,0,0) ABSOLUTE). It may be used   */
+/* for further RELATIVE reference, Other useful keywords are : ROTATED  */
+/* EXTEND GROUP PREVIOUS. Also think about adding a neutron source !    */
+/* Progress_bar is an Arm displaying simulation progress.               */
+COMPONENT Origin = Progress_bar()
+  AT (0,0,0) ABSOLUTE
+
+COMPONENT Source = Source_gen(
+    xwidth = beam_w, yheight = beam_h, dist = 5, focus_xw = beam_w, focus_yh = beam_h, Lmin = lambda_min,
+    Lmax=lambda_max, I1 = 1e13, T1=300)
+  AT (0, 0, 0) RELATIVE Origin
+
+	COMPONENT Source_xy = Monitor_nD(
+	    xwidth = 0.06, yheight = 0.16, restore_neutron = 1,
+	    options = "x limits = [-0.03 0.03] bins = 120 y limits = [-0.03 0.03] bins = 120")
+	  AT (0, 0, 5.01) RELATIVE Source
+
+	COMPONENT Source_lambda = L_monitor(
+	    nL = 100, filename = "Sou_lam.L", xwidth = 0.06,
+	    yheight = 0.06, Lmin = lambda_min, Lmax = lambda_max,
+	    restore_neutron = 1)
+	  AT (0, 0, 0) RELATIVE PREVIOUS
+
+	COMPONENT Source_dx = Monitor_nD(
+	    xwidth = 0.06, yheight = 0.06, restore_neutron = 1,
+	    options = "dx limits = [-1 1] bins = 80")
+	  AT (0, 0, 0) RELATIVE PREVIOUS
+
+	COMPONENT Source_dy = Monitor_nD(
+	    xwidth = 0.06, yheight = 0.06, restore_neutron = 1,
+	    options = "dy limits = [-2 2] bins = 80")
+	  AT (0, 0, 0) RELATIVE PREVIOUS
+
+
+COMPONENT Col1 = Collimator_linear(
+    length = 0.5, divergence = col1)
+  AT (0, 0, 5.01) RELATIVE Source
+
+	COMPONENT Col1_dx = Monitor_nD(
+	    xwidth = 0.06, yheight = 0.06, restore_neutron = 1,
+	    options = "dx limits = [-0.5 0.5] bins = 80")
+	  AT (0, 0, 0.55) RELATIVE PREVIOUS
+
+	COMPONENT Col1_dy = Monitor_nD(
+	    xwidth = 0.06, yheight = 0.06, restore_neutron = 1,
+	    options = "dy limits = [-0.5 0.5] bins = 80")
+	  AT (0, 0, 0) RELATIVE PREVIOUS
+
+COMPONENT Monok_Arm = Arm(
+    )
+  AT (0, 0, 0.61) RELATIVE Col1
+  ROTATED (0, 0, 0) RELATIVE Origin
+
+SPLIT COMPONENT Monok = Monochromator_flat(
+    zwidth = 0.2, yheight = 0.2, mosaich = mon_mos,
+    mosaicv = mon_mos, r0 = 1.0, DM = monok_d)
+  AT (0, 0, 0) RELATIVE Monok_Arm
+  ROTATED (0, monok_angle, 0) RELATIVE Monok_Arm
+
+/*
+SPLIT COMPONENT Monok = Monochromator_curved(
+    zwidth = 0.1, yheight = 0.01, NV = 14, mosaich = mon_mos,
+    mosaicv = mon_mos, RV = monok_radius, DM = monok_d)
+  AT (0, 0, 0) RELATIVE Monok_Arm
+  ROTATED (0, monok_angle, 0) RELATIVE Monok_Arm
+*/
+
+COMPONENT Instrument_Arm = Arm(
+    )
+  AT (0, 0, 0) RELATIVE Monok_Arm
+  ROTATED (0, 2.0 * monok_angle, 0) RELATIVE Monok_Arm
+
+	COMPONENT Monok_lambda = L_monitor(
+	    nL = 170, filename = "Monok_lam1.L", xwidth = 0.06,
+	    yheight = 0.06, Lmin = 0.9*lambda, Lmax = 1.1*lambda,
+	    restore_neutron = 1)
+	  AT (0, 0, 0.101) RELATIVE PREVIOUS
+
+
+	COMPONENT Monok_col_dx = Monitor_nD(
+	    xwidth = 0.06, yheight = 0.06, restore_neutron = 1,
+	    options = "dx bins = 80")
+	  AT (0, 0, 0.0000001) RELATIVE PREVIOUS
+
+	COMPONENT Monok_col_dy = Monitor_nD(
+	    xwidth = 0.06, yheight = 0.06, restore_neutron = 1,
+	    options = "dy bins = 80")
+	  AT (0, 0, 0.0000001) RELATIVE PREVIOUS
+
+COMPONENT Col2 = Collimator_linear(
+    length = 1.0, divergence = col2)
+  AT (0, 0, 0.11) RELATIVE Instrument_Arm
+
+	COMPONENT Col2_dx = Monitor_nD(
+	    xwidth = 0.06, yheight = 0.06, restore_neutron = 1,
+	    options = "dx limits = [-0.5 0.5] bins = 80")
+	  AT (0, 0, 1.000001) RELATIVE PREVIOUS
+
+COMPONENT Dia_sample = Slit(
+    xwidth = 0.03, yheight = 0.03)
+  AT (0, 0, 1.01) RELATIVE Col2
+
+	COMPONENT Sample_xy = Monitor_nD(
+	    xwidth = 0.06, yheight = 0.06, restore_neutron = 1,
+	    options = "x limits = [-0.03 0.03] bins = 120 y limits = [-0.03 0.03] bins = 120")
+	  AT (0, 0, 1.011) RELATIVE Col2
+
+	COMPONENT Sample_lambda = L_monitor(
+	    nL = 70, filename = "Sam_lam.L", xwidth = 0.06,
+	    yheight = 0.06, Lmin = 0.94*lambda, Lmax = 1.06*lambda,
+	    restore_neutron = 1)
+	  AT (0, 0, 0) RELATIVE PREVIOUS
+
+	COMPONENT Sample_dx = Monitor_nD(
+	    xwidth = 0.06, yheight = 0.06, restore_neutron = 1,
+	    options = "dx bins = 80")
+	  AT (0, 0, 0) RELATIVE PREVIOUS
+
+	COMPONENT Sample_dy = Monitor_nD(
+	    xwidth = 0.06, yheight = 0.06, restore_neutron = 1,
+	    options = "dy bins = 80")
+	  AT (0, 0, 0) RELATIVE PREVIOUS
+
+SPLIT COMPONENT Sample = Single_crystal(
+          xwidth=0.03, yheight=0.03, zdepth=0.03,
+          mosaic = 5, /*
+          delta_d_d=1e-4, ax = 3.8186, ay = 0,      az = 0,
+          bx = 0,      by = 3.8843, bz = 0,
+          cx = 0,      cy = 0,      cz = 11.6777,*/
+          reflections= sam_name)
+AT (0,0,1.03) RELATIVE Col2
+ROTATED (rot_x, rot_y, rot_z) RELATIVE Col2
+EXTEND %{
+  if (!SCATTERED) ABSORB; /* perfect beam stop */
+%}
+
+
+COMPONENT det= PSD_monitor_4PI(radius=0.5, nx=360,ny=180,filename="psd")
+AT (0,0,0) RELATIVE Sample
+
+
+/* This section is executed when the simulation ends (C code). Other    */
+/* optional sections are : SAVE                                         */
+FINALLY
+%{
+%}
+/* The END token marks the instrument definition end */
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

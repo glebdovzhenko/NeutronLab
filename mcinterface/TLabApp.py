@@ -123,18 +123,20 @@ class TLabAppQt(QWidget, McSimulationRunner):
 
         self.setWindowTitle(name)
 
-    def send_params(self, status=None):
+    def send_params(self, status='', params=True):
         msg = dict()
         msg['id'] = self.vr_name
-        if status is None:
+
+        if status:
+            msg['id'] += '_' + status
+
+        if params:
             for param in self.instr_params:
                 if type(param.dtype) == ValueRange:
                     msg[param.vr_name + 'start'] = param.value.start
                     msg[param.vr_name + 'end'] = param.value.end
                 else:
                     msg[param.vr_name] = param.value
-        else:
-            msg['id'] += '_' + status
 
         msg = json.dumps(msg)
 
@@ -299,12 +301,12 @@ class TLabAppQt(QWidget, McSimulationRunner):
         self.sim_process.wait()
 
     def on_btn_run(self, *args, **kwargs):
-        self.send_params(status='experiment')
+        self.send_params(status='experiment', params=True)
 
         if self.dummy:
             self.update_sim_results(self.configuration['Backup Data Directory'])
             self._update_plot_axes()
-            self.send_params(status='experiment_end')
+            self.send_params(status='experiment_end', params=False)
             return
 
         self.open_simulation(*args, **kwargs)
@@ -314,9 +316,9 @@ class TLabAppQt(QWidget, McSimulationRunner):
             self.update_sim_results()
             self._update_plot_axes()
             self._cleanup()
-            self.send_params(status='experiment_end')
+            self.send_params(status='experiment_end', params=False)
         else:
-            self.send_params(status='experiment_cancel')
+            self.send_params(status='experiment_cancel', params=False)
 
     def on_btn_log_y(self, *args):
         self.log_scale_y = not self.log_scale_y

@@ -159,13 +159,13 @@ class H6DcdApp(TLabAppQt):
         })
 
         TLabAppQt.__init__(self, name='СТОИК (малоугловая установка высокого разрешения)',
-                           env_config=config, instr_params=instrument_params, dummy=dummy, vr_name='stoik_experiment')
+                           env_config=config, instr_params=instrument_params, dummy=dummy, vr_name='stoik')
 
 
 class H7ScdApp(TLabAppQt):
     def __init__(self, dummy=False):
         instrument_params = (
-            GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 1.2, vr_name='monohromvawelength'),
+            GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 1.2, vr_name='monohromwavelength'),
             GUIParameter('Номер образца', 'sample_index', int, 1, values=(1, 2), vr_name='sample'),
             GUIParameter('Вращение образца вокруг x', 'rot_x', float, 90, vr_name='rotx'),
             GUIParameter('Вращение образца вокруг y', 'rot_y', float, 0, vr_name='roty'),

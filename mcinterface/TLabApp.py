@@ -141,9 +141,9 @@ class TLabAppQt(QWidget, McSimulationRunner):
         async def send_data(data):
             async with websockets.connect(self.configuration['VR server uri']) as websocket:
                 await websocket.send(data)
-                print('Sent', self.configuration['VR server uri'], 'data', data)
         try:
             asyncio.get_event_loop().run_until_complete(send_data(msg))
+            print('Sent', self.configuration['VR server uri'], 'data', msg)
         except OSError as e:
             print(e)
 
@@ -299,12 +299,13 @@ class TLabAppQt(QWidget, McSimulationRunner):
         self.sim_process.wait()
 
     def on_btn_run(self, *args, **kwargs):
+        self.send_params(status='experiment')
+
         if self.dummy:
             self.update_sim_results(self.configuration['Backup Data Directory'])
             self._update_plot_axes()
+            self.send_params(status='experiment_end')
             return
-
-        self.send_params(status='experiment')
 
         self.open_simulation(*args, **kwargs)
         self.await_simulation()

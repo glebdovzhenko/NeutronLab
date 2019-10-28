@@ -11,6 +11,7 @@ app_config = {
     'Simulation Data Directory': results_path,
     'Plot Width': 900, 'Plot Height': 400,
     'VR server uri': 'ws://185.104.249.66:6789/',
+    # 'VR server uri': 'ws://127.0.0.1:6789/',
     'Simulation poll timer': 10,  # mcsec
     'Compilation ETA': 50
 }
@@ -23,6 +24,6 @@ if platform.system() == 'Darwin':
     })
 elif platform.system() == 'Linux':
     app_config.update({
-        'Mcrun executable path': '/usr/share/mcstas/2.4.1/bin',
+        'Mcrun executable path': '/usr/share/mcstas/2.5/bin',
         'MPI nodes': 4
     })

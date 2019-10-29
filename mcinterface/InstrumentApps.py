@@ -189,10 +189,11 @@ class H7ScdApp(TLabAppQt):
 class H8StressApp(TLabAppQt):
     def __init__(self, dummy=False):
         instrument_params = (
-            GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 1.727),
+            GUIParameter('Длина волны монохроматора [\u212B]', 'lambda', float, 1.727, vr_name='monohromwavelength'),
             GUIParameter('Нагрузка на образец', 'sample_index', int, 0, values=(0, 1, 2, 3, 4, 5, 6),
-                         value_names=('0 МПа', '75 МПа', '145 МПа', '220 МПа', '290 МПа', '365 МПа', '440 МПа')),
-            GUIParameter('Статистика нейтронов', 'n_count', int, 1E8),
+                         value_names=('0 МПа', '75 МПа', '145 МПа', '220 МПа', '290 МПа', '365 МПа', '440 МПа'),
+                         vr_name='stress'),
+            GUIParameter('Статистика нейтронов', 'n_count', int, 1E8, vr_name='neytronstatistic'),
         )
         config = app_config.copy()
         config.update({
@@ -205,7 +206,7 @@ class H8StressApp(TLabAppQt):
         })
 
         TLabAppQt.__init__(self, name='СТРЕСС (стресс-дифрактометр)',
-                           env_config=config, instr_params=instrument_params, dummy=dummy)
+                           env_config=config, instr_params=instrument_params, dummy=dummy, vr_name='stress')
 
 
 class PinholeSansApp(TLabAppQt):

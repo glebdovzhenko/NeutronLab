@@ -13,7 +13,8 @@ app_config = {
     'VR server uri': 'ws://185.104.249.66:6789/',
     # 'VR server uri': 'ws://127.0.0.1:6789/',
     'Simulation poll timer': 10,  # mcsec
-    'Compilation ETA': 50
+    'Compilation ETA': 50,
+    'Dummy ETA': 10
 }
 
 if platform.system() == 'Darwin':

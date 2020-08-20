@@ -221,6 +221,11 @@ class TLabAppQt(QWidget, McSimulationRunner):
         self.figure.tight_layout()
         self.canvas.draw()
 
+    def on_timeout_dummy(self):
+        self.time_passed += 1E-3 * self.timer_p_int
+        self.progress_dialog.setValue(int(100. * self.time_passed / self.sim_eta))
+        self.progress_dialog.setLabelText(self.sim_status + ": %d сек" % (self.sim_eta - int(self.time_passed)))
+
     def on_timeout(self):
         status = self.sim_process.poll()
 
@@ -305,6 +310,21 @@ class TLabAppQt(QWidget, McSimulationRunner):
 
         if self.dummy:
             self.update_sim_results(self.configuration['Backup Data Directory'])
+
+            self.sim_eta = self.configuration['Dummy ETA']
+            self.time_passed = 0.
+            self.steps_passed = 0
+            self.sim_status = 'Вычисление'
+
+            self.progress_dialog = QProgressDialog('Ход эксперимента', 'Стоп', 0, 100)
+            self.progress_dialog.resize(300, self.progress_dialog.height())
+
+            self.timer = QTimer()
+            self.timer.timeout.connect(self.on_timeout_dummy)
+            self.timer.start(self.timer_p_int)
+            self.progress_dialog.exec()
+            self.timer.stop()
+
             self._update_plot_axes()
             self.send_params(status='experiment_end', params=False)
             return

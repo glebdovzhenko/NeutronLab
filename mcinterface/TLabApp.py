@@ -130,6 +130,15 @@ class TLabAppQt(QWidget, McSimulationRunner):
         if status:
             msg['id'] += '_' + status
 
+        if status == 'nextstep':
+            for param in self.instr_params:
+                if type(param.dtype) == ValueRange:
+                    msg['next' + param.vr_name] = param.value.start + (param.value.end - param.value.start) * \
+                                                  float(self.steps_passed) / self.n_points
+                    if self.vr_name == 'stoik':
+                        msg['curstep'] = self.steps_passed
+                    break
+
         if params:
             for param in self.instr_params:
                 if type(param.dtype) == ValueRange:
@@ -281,6 +290,7 @@ class TLabAppQt(QWidget, McSimulationRunner):
         if m:
             self.sim_status = '2/2 Вычисление'
             self.steps_passed += 1
+            self.send_params(status='nextstep', params=False)
         if (self.n_points > 1) and (self.sim_status == '2/2 Вычисление'):
             self.progress_dialog.setValue(int(100. * self.steps_passed / self.n_points))
             self.progress_dialog.setLabelText(self.sim_status + ": %d / %d шагов" % (int(self.steps_passed), self.n_points))

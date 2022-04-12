@@ -19,9 +19,9 @@ sudo apt-get install bzip2 libgl1-mesa-glx mcstas-2.5 mcstas-tools-python-mcrun-
 
 ### Установка Anaconda Python:
 cd ~
-wget https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh --no-check-certificate
-chmod +x Anaconda3-5.2.0-Linux-x86_64.sh
-./Anaconda3-5.2.0-Linux-x86_64.sh
+wget https://repo.anaconda.com/archive/Anaconda3-2021.11-Linux-x86_64.sh --no-check-certificate
+chmod +x Anaconda3-2021.11-Linux-x86_64.sh
+./Anaconda3-2021.11-Linux-x86_64.sh
 
 ### Установка витруальной лаборатории NeutronLab:
 sudo apt-get install git

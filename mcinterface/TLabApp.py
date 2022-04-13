@@ -124,6 +124,8 @@ class TLabAppQt(QWidget, McSimulationRunner):
         self.setWindowTitle(name)
 
     def send_params(self, status='', params=True):
+        if not self.configuration['Send VR Data']:
+            return
         msg = dict()
         msg['id'] = self.vr_name
 
@@ -155,7 +157,7 @@ class TLabAppQt(QWidget, McSimulationRunner):
         try:
             asyncio.get_event_loop().run_until_complete(send_data(msg))
             print('Sent', self.configuration['VR server uri'], 'data', msg)
-        except OSError as e:
+        except (OSError, asyncio.exceptions.TimeoutError) as e:
             print(e)
 
     def make_callback(self, ii):
@@ -206,7 +208,7 @@ class TLabAppQt(QWidget, McSimulationRunner):
             self.axes_1d_detector.set_xlabel(self.result1d.xlabel)
             self.axes_1d_detector.set_ylabel(self.result1d.ylabel)
             if self.log_scale_y:
-                self.axes_1d_detector.set_yscale('log', nonposy='mask')
+                self.axes_1d_detector.set_yscale('log')
             else:
                 self.axes_1d_detector.set_yscale('linear')
             if self.sq_scale_x:

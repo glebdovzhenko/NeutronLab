@@ -107,7 +107,7 @@ class McSimulationRunner:
             env['PYTHONHOME'] = self.configuration['Mcstas PYTHONHOME']
 
         os.mkdir(self.configuration['Simulation Data Directory'])
-
+        print(exec_params)
         self.sim_process = Popen([os.path.join(self.configuration['Mcrun executable path'], 'mcrun'), exec_params],
                                  env=env, cwd=self.configuration['Simulation Data Directory'],
                                  stdout=PIPE,

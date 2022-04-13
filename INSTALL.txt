@@ -29,7 +29,7 @@ cd ~
 git clone -b master https://github.com/glebdovzhenko/NeutronLab.git
 anaconda3/bin/pip install --upgrade pip
 anaconda3/bin/pip install -r ~/NeutronLab/requirements.txt --upgrade
-sudo apt-get install python-pyqt5
+sudo apt-get install python3-pyqt5
 chmod +x *.sh
 
 ### Запуск:

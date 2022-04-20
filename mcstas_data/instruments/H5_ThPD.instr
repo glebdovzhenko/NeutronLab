@@ -94,7 +94,7 @@ switch( sample_num )
         sample = "Ge.laz";
         break;  
     case 4 :  
-        sample = "Al2O3.laz";
+        sample = "Al2O3_sapphire.laz";
         break;  
     case 5 :  
         sample = "Na2Ca3Al2F14.laz";

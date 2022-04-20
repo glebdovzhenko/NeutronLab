@@ -120,7 +120,7 @@ class H5ThermApp(TLabAppQt):
             GUIParameter('Диаметр диафрагмы [мм]', 'dia_dia', int, 3, values=(3, 6, 10),
                          value_names=('3', '6', '10'), vr_name='aperturediameter'),
             GUIParameter('Образец', 'sample_num', int, 1, values=(1, 2, 3, 4, 5),
-                         value_names=('Cu', 'Si', 'Ge', 'Al2O3', 'Na2Ca3Al2F14'), vr_name='sample'),
+                         value_names=('1', '2', '3', '4', '5'), vr_name='sample'),
             GUIParameter('Статистика нейтронов', 'n_count', int, 1E9, vr_name='neytronstatistic'),
         )
 

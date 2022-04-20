@@ -252,12 +252,12 @@ class TLabAppQt(QWidget, McSimulationRunner):
 
         try:
             out_line = self.sim_stdout.readline().decode()
-        except IOError:
+        except Exception:
             out_line = ''
 
         try:
             err_line = self.sim_stderr.readline().decode()
-        except IOError:
+        except Exception:
             err_line = ''
 
         if out_line:
